@@ -24,13 +24,13 @@
             justify-content: center; 
             min-height: 100vh; 
             margin: 0; 
-            overflow: hidden; 
+            overflow: hidden; /* 기본값 유지 */
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
         }
 
-        /* 버전 표기 스타일 - 폰트 크기 2배 확대 유지 */
+        /* 버전 표기 스타일 */
         #version-tag {
             position: fixed;
             bottom: 1.5vh;
@@ -197,7 +197,6 @@
             animation: floatingCat 4s infinite ease-in-out;
         }
         
-        /* 고양이 둥실둥실 애니메이션 */
         @keyframes floatingCat {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-3vh) rotate(2deg); }
@@ -239,58 +238,59 @@
         @keyframes slide-h { from { transform: translateX(-150%); } to { transform: translateX(150vw); } }
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
-        /* --- 모바일 환경 최적화 코드 수정본 (기능 보완) --- */
+        /* --- 모바일 세로 배치 및 스크롤 강제 최적화 (본문 코드 수정) --- */
         @media screen and (max-width: 768px) {
             body {
-                overflow-y: auto !important; /* 모바일에서만 세로 스크롤 허용 */
-                justify-content: flex-start;
-                padding-top: 3vh;
+                overflow-y: auto !important; /* 모바일에서만 스크롤 허용 */
+                justify-content: flex-start !important;
+                padding-top: 5vh;
             }
 
             .game-container {
-                flex-direction: column !important; /* 강제 세로 배치 */
-                height: auto !important; /* 고정 높이 해제 */
-                gap: 2vh;
-                padding-bottom: 8vh;
+                flex-direction: column !important; /* 무조건 세로 배치 */
+                height: auto !important; /* 고정 높이 75vh 해제 */
+                gap: 5vh !important;
+                width: 95% !important;
+                padding-bottom: 15vh; /* 하단 여백 확보 */
             }
 
-            #game-box, #info-panel {
-                width: 92vw !important; /* 화면 너비에 맞게 조정 */
-                height: auto !important; /* 내용에 맞게 높이 가변 */
-                min-height: 65vh; /* 최소 높이 보장 */
+            #game-box, #info-panel, #setup {
+                width: 90vw !important; /* 너비를 화면에 맞춤 */
+                height: auto !important; /* 고정 높이 해제 */
+                min-height: 70vh !important; /* 최소 높이 보장 */
                 flex-shrink: 0;
+                margin: 0 auto;
             }
 
             #setup {
-                width: 92vw !important;
                 height: auto !important;
-                padding: 4vh 2vh;
-                min-height: 70vh;
+                min-height: 75vh !important;
             }
 
             .setup-cat, .setup-btn, .tutorial-btn, .new-keyhole {
                 width: 80vw !important;
-                max-width: 350px;
             }
 
             .header-title {
-                font-size: 3.2vh !important;
-                letter-spacing: 0.4vh !important;
-                width: 90%;
-            }
-
-            #cand-list {
-                max-height: 35vh !important; /* 리스트 영역 최적화 */
+                font-size: 3.5vh !important;
+                letter-spacing: 0.5vh !important;
+                padding: 1vh 2vh !important;
             }
 
             .panel-center {
-                width: 90vw !important;
-                padding: 3vh !important;
+                width: 85vw !important;
+                padding: 4vh 2vh !important;
+            }
+            
+            #obs-num {
+                width: 70vw !important;
             }
 
-            #obs-num {
-                width: 80% !important;
+            #credit-overlay {
+                flex-direction: column !important;
             }
+            .side-cat-box { height: 20% !important; }
+            #credit-container { width: 100% !important; height: 60% !important; }
         }
     </style>
 </head>
@@ -814,7 +814,7 @@
             statusEl.style.color = "var(--red)";
         } else {
             entBtn.disabled = false;
-            statusEl.innerText = "양자고양이 위치 관측 중...";
+            statusEl.innerText = "고양이 위치 관측 중...";
             statusEl.style.color = "var(--cyan)";
         }
     }
@@ -1038,7 +1038,7 @@
         const turnCounter = document.getElementById('turn-counter');
         if(turnCounter) {
             if (turnCount > 0) {
-                const intensity = (turnCount) * 15; 
+                const intensity = (turnCount) * 1.5; 
                 const tMoveX = (Math.random()-0.5) * intensity;
                 const tMoveY = (Math.random()-0.5) * intensity;
                 turnCounter.style.transform = `translate(${tMoveX}px, ${tMoveY}px)`;
