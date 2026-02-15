@@ -30,6 +30,7 @@
             -webkit-user-select: none;
         }
 
+        /* 버전 표기 스타일 - 폰트 크기 2배 확대 유지 */
         #version-tag {
             position: fixed;
             bottom: 1.5vh;
@@ -196,6 +197,7 @@
             animation: floatingCat 4s infinite ease-in-out;
         }
         
+        /* 고양이 둥실둥실 애니메이션 */
         @keyframes floatingCat {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-3vh) rotate(2deg); }
@@ -236,51 +238,90 @@
         }
         @keyframes slide-h { from { transform: translateX(-150%); } to { transform: translateX(150vw); } }
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
-
+        
+        /* --- 모바일 환경 최적화 코드 수정 --- */
         @media screen and (max-width: 768px) {
             body {
-                overflow-y: auto;
+                overflow-y: auto; 
                 justify-content: flex-start;
-                padding: 2vh 0;
+                padding-top: 2vh;
             }
 
             .game-container {
-                flex-direction: column;
+                flex-direction: column; 
                 height: auto;
                 gap: 2vh;
-                width: 100%;
-                flex-wrap: wrap;
+                padding-bottom: 10vh;
+                width: 95%;
             }
 
             #game-box, #info-panel {
-                width: 90vw;
-                height: auto;
-                min-height: 70vh;
+                width: 100%; 
+                height: auto; 
+                min-height: 65vh;
                 flex-shrink: 0;
+            }
+            
+            #game-box {
+                padding: 2vh;
+                display: none; /* JS에서 제어 */
+            }
+
+            .input-view {
+                height: 8vh;
+                line-height: 8vh;
+                font-size: 4vh;
+                margin-bottom: 1.5vh;
+            }
+
+            .keypad {
+                gap: 0.8vh;
+            }
+
+            .keypad button {
+                padding: 2.5vh 0;
+                font-size: 2.2vh;
+            }
+
+            #log-window {
+                height: 20vh;
+                grid-auto-rows: 7vh;
+                margin-bottom: 1.5vh;
             }
 
             .chance-area {
-                height: auto;
-                min-height: 14vh;
+                height: 12vh;
                 margin-bottom: 2vh;
             }
 
+            .chance-value {
+                font-size: 4.5vh;
+            }
+
+            .prob-cat-container {
+                width: 12vh;
+                height: 12vh;
+            }
+            
+            #turn-counter {
+                font-size: 6vh;
+            }
+
             #cand-list {
-                max-height: 35vh;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
+                max-height: 40vh;
+                grid-template-columns: repeat(4, 1fr);
             }
 
             .header-title {
-                font-size: 3.5vh;
+                font-size: 3vh;
                 letter-spacing: 0.5vh;
-                width: 80%;
+                padding: 1vh 2vh;
             }
 
             #setup {
                 width: 90vw;
                 height: auto;
-                padding: 4vh 2vh;
+                padding: 3vh;
             }
             
             .setup-cat, .setup-btn, .tutorial-btn {
