@@ -28,12 +28,12 @@
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            justify-content: flex-start; /* 상단 정렬로 변경하여 스크롤 대응 */
+            justify-content: flex-start;
             min-height: 100vh; 
             height: auto;
             margin: 0; 
             padding: 0;
-            overflow-y: auto; /* 세로 스크롤 강제 허용 */
+            overflow-y: auto;
             overflow-x: hidden;
             user-select: none;
             -webkit-user-select: none;
@@ -66,20 +66,19 @@
             100% { filter: drop-shadow(0 0 1.5vh var(--purple)) drop-shadow(0 0 3vh var(--purple)); } 
         }
 
-        /* 메인 및 게임 컨테이너 스크롤 범위 최대로 확장 */
         .game-container { 
             display: flex; 
-            flex-wrap: wrap; /* 모바일 대응을 위해 wrap 허용 */
+            flex-wrap: wrap; 
             gap: 3vh; 
             align-items: flex-start; 
             justify-content: center; 
             width: 95%; 
-            height: auto; /* 높이 제한 제거 */
-            min-height: 100vh;
-            padding-bottom: 10vh; /* 하단 여백 확보 */
+            height: auto; 
+            min-height: 70vh;
+            padding-bottom: 10vh; 
         }
         
-        #setup { width: 50vh; min-height: 72vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--cyan); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 5vh; }
+        #setup { width: 50vh; min-height: 60vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--cyan); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 5vh; }
         
         .setup-box-container { position: relative; width: 35vh; margin-bottom: 2vh; }
         .setup-cat { width: 35vh; height: 35vh; border-radius: 4vh; border: 0.4vh solid var(--green); object-fit: cover; animation: neonShift 10s infinite alternate linear; display: block; }
@@ -94,7 +93,6 @@
 
         .new-keyhole { width: 35vh; height: auto; margin-top: 1.5vh; animation: keyholeNeonShift 10s infinite alternate linear; }
 
-        /* 게임 패널 높이 고정 해제 및 최소 높이 설정 */
         #game-box, #info-panel { width: 50vh; min-height: 75vh; height: auto; padding: 2.5vh; border-radius: 2.5vh; box-sizing: border-box; display: flex; flex-direction: column; flex-shrink: 0; margin-bottom: 3vh; }
         #game-box { background: rgba(17, 17, 17, 0.9); border: 0.1vh solid #333; position: relative; display: none; }
         #info-panel { background: rgba(10, 10, 15, 0.9); border: 0.1vh solid #333; display: none; position: relative; }
@@ -258,19 +256,30 @@
         @keyframes slide-h { from { transform: translateX(-150%); } to { transform: translateX(150vw); } }
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
-        /* 모바일 대응 */
+        /* 모바일 대응 및 엔딩 화면 유동성 강화 */
         @media screen and (max-width: 768px) {
-            #setup { width: 90vw; }
-            #game-box, #info-panel { width: 90vw; }
-            .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; }
-            .header-title { font-size: 4vh; letter-spacing: 0.5vh; }
+            body { justify-content: flex-start; }
+            #setup { width: 90vw; min-height: 50vh; padding: 3vh; margin-top: 2vh; }
+            #game-box, #info-panel { width: 90vw; min-height: 65vh; }
+            .setup-cat { width: 70vw; height: 70vw; }
+            .setup-btn, .tutorial-btn, .setup-box-container { width: 70vw; }
+            .header-title { font-size: 3.5vh; letter-spacing: 0.5vh; }
             .panel-center { width: 90vw; padding: 3vh; }
+            .tutorial-msg-box { width: 85vw; }
+
+            /* 엔딩 화면 모바일 최적화 */
+            .end-game-wrapper img { width: 40vh !important; height: 40vh !important; max-width: 80vw; max-height: 80vw; }
+            .end-game-wrapper h1 { font-size: 5vh !important; }
+            .end-game-wrapper h2 { font-size: 3vh !important; }
+            .end-game-wrapper p { font-size: 1.8vh !important; width: 85vw; }
+            .end-game-wrapper .sub-btn-container { width: 85vw !important; }
+            .end-game-wrapper .sub-btn-container button { font-size: 2.2vh !important; }
         }
     </style>
 </head>
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
-<div id="version-tag">1.0 versiontt</div>
+<div id="version-tag">1.1 version</div>
 <div id="flash-overlay"></div>
 
 <div id="sound-control">
@@ -395,9 +404,9 @@
             { title: "실패 시 참고팁 (3/3)", desc: "어느정도 숫자가 특정되면 양자구름에 표시돼있는 숫자들을 보면서 \n측정시도만 해도 2살 아가 먼치킨이 아닌 이상 \n양자고양이를 관측할 수 있을겁니다. 화이팅!" }
         ],
         success: [
-            { title: "성공 시 참고팁 (1/5)", desc: "눈치를 못채셨을 수도 있지만 이 게임은 관측에 성공을 하든 실패를 하든 \nQuatum Collapse 엔딩이 나오죠.\n그렇게 한 것은 두 가지 모두 이 게임의 목표가 아니기 때문입니다." },
+            { title: "성공 시 참고팁 (1/5)", desc: "눈치를 못채셨을 수도 있지만 이 게임은 관측에 성공을 하든 실패를 하든 \nQuantum Collapse 엔딩이 나오죠.\n그렇게 한 것은 성공도 실패도 이 게임의 목표가 아니기 때문입니다." },
             { title: "성공 시 참고팁 (2/5)", desc: "단순히 성공을 하는거 자체는 너무 난이도가 낮으니까요. \n<b style='color:var(--red);'>이 게임은 정확히 6회까지 100%로 양자고양이의 좌표를 특정하고 \n7회차 측정까지 진행해서 양자고양이를 잡는 게임입니다.</b>" },
-            { title: "성공 시 참고팁 (3/5)", desc: "그리고 게임에서 일반 숫자야구의 팁은 큰 도움이 안 될수도 있습니다. \n양자고양이는 계속해서 최대한 안전해보이는 좌표로 도망칩니다. \n정확히는 가능한 후보숫자가 가장 많은 볼카운트 대답한다는 의미죠." },
+            { title: "성공 시 참고팁 (3/5)", desc: "이 게임에서 일반 숫자야구의 팁은 큰 도움이 안 될수도 있습니다. \n양자고양이는 계속해서 최대한 안전해보이는 좌표로 도망칩니다. \n정확히는 가능한 후보숫자가 가장 많은 볼카운트 대답한다는 의미죠." },
             { title: "성공 시 참고팁 (4/5)", desc: "고정된 알고리즘이기 때문에 똑같은 질문을 100번 하면 100번 똑같이 답합니다. \n일정한 빌드를 만들어서 가장 높은 확률을 따라가면 최적화되는 구조입니다. \n숫자를 교차로 배치해서 계속해서 숨을곳을 좁히세요." },
             { title: "성공 시 참고팁 (5/5)", desc: "어차피 깨봤자 개발자의 허접한 감상문 말곤 아무것도 없는데 \n진짜 굳이 패러독스 엔딩을 보겠다는 건가요? 그런분은 정말 환영입니다." }
         ]
@@ -828,7 +837,7 @@
                 }
             }, 6000);
 
-            renderEndGame("Quantum Paradox", "불가능한 세계선", `축하합니다! 당신은 미시세계의 모든 가능성을 부정하고 <br>당신은 고양이의 위치와 운동량을 모두 알아냈습니다`, 'var(--green)', true, true);
+            renderEndGame("Quantum Paradox", "불가능한 세계선", `축하합니다! 당신은 미시세계의 모든 가능성을 부정하고 <br> 고양이의 위치와 운동량을 모두 알아냈습니다`, 'var(--green)', true, true);
             return;
         }
         renderProbabilityCloud();
@@ -886,7 +895,7 @@
         } else {
             const tipType = isWin ? 'success' : 'fail';
             subButtons = `
-                <div style="display:flex; flex-direction:column; gap: 1.5vh; align-items: center; margin-top:3vh; width: 62vh; z-index:100;">
+                <div class="sub-btn-container" style="display:flex; flex-direction:column; gap: 1.5vh; align-items: center; margin-top:3vh; width: 62vh; z-index:100;">
                     <button onclick="window.showTips('${tipType}')" style="width:100%; padding:2.5vh 0; background:#333; color:${color}; border:0.2vh solid ${color}; cursor:pointer; font-size:2.8vh; border-radius:1.5vh; font-weight:bold;">TIPS</button>
                     <div style="display:flex; gap: 2vh; width: 100%;">
                         <button onclick="location.reload()" style="flex:1; padding:2vh 0; background:#222; color:#fff; border:0.2vh solid #444; cursor:pointer; font-size:2.2vh; border-radius:1.5vh;">Main Menu</button>
@@ -896,7 +905,7 @@
         }
 
         document.body.innerHTML = `
-            <div id="version-tag">1.0 versiontt</div>
+            <div id="version-tag">1.1 version</div>
             ${emojiLanes}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
@@ -919,7 +928,7 @@
                     <div id="tut-esc-guide" class="esc-guide" style="display:none;"></div>
                 </div>
             </div>
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; height:auto; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 10vh 0;">
+            <div class="end-game-wrapper" style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; height:auto; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 5vh 0;">
                 <img src="${mediaUrl}" style="border:0.4vh solid ${color}; border-radius:4vh; box-shadow: 0 0 3vh ${color}; width: 45vh; height: 45vh; object-fit: cover; margin-bottom: 2vh;">
                 <h1 style="font-size:7vh; color:${color}; margin: 1vh 0; text-shadow:0 0 2vh ${color};">${type}</h1>
                 <h2 style="font-size:4vh; color:#fff; margin-bottom: 1vh;">${result}</h2>
@@ -980,7 +989,8 @@
             <img src="Aview.png" class="credit-logo">
         `;
         overlay.style.display = 'flex';
-        creditY = window.innerHeight;
+        // 엔딩크레딧이 바로 나오도록 위치를 중앙 정도로 설정
+        creditY = window.innerHeight * 0.1; 
         creditSpeed = 1;
         
         if (creditScrollInterval) clearInterval(creditScrollInterval);
