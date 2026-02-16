@@ -12,7 +12,7 @@
         
         html {
             height: 100%;
-            overflow: hidden;
+            /* 모바일 스크롤 허용을 위해 overflow: hidden 제거 */
         }
 
         body { 
@@ -27,10 +27,10 @@
             flex-direction: column; 
             align-items: center; 
             justify-content: flex-start;
-            height: 100vh;
+            min-height: 100vh; /* height 대신 min-height 사용하여 내용이 길어지면 늘어나게 함 */
             margin: 0; 
             padding: 0;
-            overflow: hidden;
+            /* 모바일 스크롤 허용을 위해 overflow: hidden 제거 */
             user-select: none;
             -webkit-user-select: none;
         }
@@ -69,7 +69,7 @@
             justify-content: center; 
             width: 95%; 
             height: auto; 
-            padding-bottom: 2vh; 
+            padding-bottom: 5vh; /* 모바일에서 하단 여유 공간 확보 */
         }
         
         #setup { width: 50vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--cyan); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1vh; }
@@ -252,23 +252,22 @@
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
         @media screen and (max-width: 768px) {
-            body { overflow-y: auto; }
-            .game-container { padding-top: 2vh; height: auto; }
             #setup { width: 90vw; }
             #game-box, #info-panel { 
                 width: 90vw; 
                 height: auto; 
-                min-height: 65vh; 
-                display: flex !important; /* 모바일에서 무조건 강제 표시 */
-                margin-bottom: 2vh;
+                min-height: 80vh; 
+                flex-shrink: 0; /* 모바일에서 요소가 압축되지 않도록 함 */
             }
-            /* 초기 게임 시작 전에는 숨겨야 하므로 inline style이나 startGame logic에 의해 제어되지만, 
-               게임 중에는 둘 다 표시되도록 flex-wrap 설정이 되어 있음 */
             .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; }
             .header-title { font-size: 4vh; letter-spacing: 0.5vh; }
             .panel-center { width: 90vw; padding: 3vh; }
-            #turn-counter { font-size: 6vh; }
-            .chance-value { font-size: 4.5vh; }
+            
+            /* 모바일 세로 화면에서 정보 패널이 게임 박스 아래로 가도록 설정 */
+            .game-container > div[style*="flex-wrap: wrap"] {
+                flex-direction: column !important;
+                align-items: center !important;
+            }
         }
     </style>
 </head>
@@ -935,10 +934,8 @@
                     <div id="tut-esc-guide" class="esc-guide" style="display:none;"></div>
                 </div>
             </div>
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow: hidden;">
-                <div style="position:relative;">
-                    <img src="${mediaUrl}" style="border:0.4vh solid ${color}; border-radius:4vh; box-shadow: 0 0 3vh ${color}; width: 40vh; height: 40vh; object-fit: cover; margin-bottom: 2vh;">
-                </div>
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow: hidden;">
+                <img src="${mediaUrl}" style="border:0.4vh solid ${color}; border-radius:4vh; box-shadow: 0 0 3vh ${color}; width: 40vh; height: 40vh; object-fit: cover; margin-bottom: 2vh;">
                 <h1 style="font-size:6vh; color:${color}; margin: 1vh 0; text-shadow:0 0 2vh ${color};">${type}</h1>
                 <h2 style="font-size:3.5vh; color:#fff; margin-bottom: 1vh;">${result}</h2>
                 <p style="color:${isParadox ? color : '#aaa'}; font-size:2.2vh; max-width:80vh; line-height:1.4; margin: 1vh 0;">${msg}</p>
