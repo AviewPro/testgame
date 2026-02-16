@@ -72,20 +72,20 @@
             padding-bottom: 2vh; 
         }
         
-        #setup { width: 50vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--green); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1vh; }
+        #setup { width: 50vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--cyan); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1vh; }
         
         .setup-box-container { position: relative; width: 35vh; margin-bottom: 2vh; }
         .setup-cat { width: 35vh; height: 35vh; border-radius: 4vh; border: 0.4vh solid var(--green); object-fit: cover; animation: neonShift 10s infinite alternate linear; display: block; }
         
-        .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; animation: neonShiftBg 10s infinite alternate linear; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
+        .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; animation: neonShiftBg 10s infinite alternate linear; margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
         .setup-btn:hover { transform: scale(1.02); filter: brightness(1.2); }
         .setup-btn:active { transform: scale(0.98); }
 
-        .tutorial-btn { font-family: 'Bebas Neue', cursive; width: 35vh; background: #444; color: #fff; font-weight: 700; height: 5vh; font-size: 2.5vh; border-radius: 1.5vh; cursor: pointer; border: 0.2vh solid #666; margin-bottom: 2vh; transition: 0.2s; letter-spacing: 0.1vh; }
+        .tutorial-btn { font-family: 'Bebas Neue', cursive; width: 35vh; background: #444; color: #fff; font-weight: 700; height: 5vh; font-size: 2.5vh; border-radius: 1.5vh; cursor: pointer; border: 0.2vh solid #666; margin-bottom: 1vh; transition: 0.2s; letter-spacing: 0.1vh; }
         .tutorial-btn:hover { background: #555; transform: scale(1.02); }
         .tutorial-btn:active { transform: scale(0.98); }
 
-        .new-keyhole { width: 35vh; height: auto; margin-top: 2vh; animation: keyholeNeonShift 10s infinite alternate linear; }
+        .new-keyhole { width: 35vh; height: auto; margin-top: 1.5vh; animation: keyholeNeonShift 10s infinite alternate linear; }
 
         #game-box, #info-panel { width: 50vh; height: 75vh; padding: 2.5vh; border-radius: 2.5vh; box-sizing: border-box; display: flex; flex-direction: column; flex-shrink: 0; margin-bottom: 3vh; }
         #game-box { background: rgba(17, 17, 17, 0.9); border: 0.1vh solid #333; position: relative; display: none; }
@@ -567,7 +567,7 @@
             document.querySelectorAll('.key-btn, #zero-btn, #display').forEach(el => el.classList.add('tutorial-highlight'));
         } else if (tutorialStep === 2) {
             title.innerText = "2. 양자고양이 좌표 측정";
-            desc.innerHTML = "입력 패널의 엔터키나 키보 Enter를 통해서 양자 고양이의 좌표를 측정하세요.<br>고양이가 숨어있는 4자리 좌표를 찾으면 됩니다.";
+            desc.innerHTML = "입력 패널의 엔터키나 키보드 Enter를 통해서 양자 고양이의 좌표를 측정하세요.<br>고양이가 숨어있는 4자리 좌표를 찾으면 됩니다.";
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.getElementById('ent-btn').classList.add('tutorial-highlight');
             document.getElementById('clr-btn').classList.add('tutorial-highlight');
@@ -654,35 +654,28 @@
         }
     }
 
-    function aiRespond(_0x1a2b) {
-        const _0x3c4d = {};
-        aiCandidates.forEach(_0x5e6f => {
-            let _0x7a8b = 0, _0x9c0d = 0;
-            for (let _0x1357 = 0; _0x1357 < 4; _0x1357++) {
-                if (_0x1a2b[_0x1357] === _0x5e6f[_0x1357]) _0x7a8b++;
-                else if (_0x5e6f.includes(_0x1a2b[_0x1357])) _0x9c0d++;
-            }
-            const _0x2468 = `${_0x7a8b}S${_0x9c0d}B`;
-            if (!_0x3c4d[_0x2468]) _0x3c4d[_0x2468] = [];
-            _0x3c4d[_0x2468].push(_0x5e6f);
+    function aiRespond(guess) {
+        const outcomes = {};
+        aiCandidates.forEach(cand => {
+            let s=0, b=0;
+            for(let i=0; i<4; i++){ if(guess[i] === cand[i]) s++; else if(cand.includes(guess[i])) b++; }
+            const key = `${s}S${b}B`;
+            if(!outcomes[key]) outcomes[key] = [];
+            outcomes[key].push(cand);
         });
-        let _0xdead = "", _0xbeef = -1;
-        for (let _0xkey in _0x3c4d) {
-            if (_0xkey === "4S0B") continue;
-            if (_0x3c4d[_0xkey].length > _0xbeef) {
-                _0xbeef = _0x3c4d[_0xkey].length;
-                _0xdead = _0xkey;
-            }
+        let bestKey = ""; let maxCount = -1;
+        for(let key in outcomes) {
+            if(key === "4S0B") continue; 
+            if(outcomes[key].length > maxCount) { maxCount = outcomes[key].length; bestKey = key; }
         }
-        if (!_0xdead) {
-            const _0xf1 = Math.floor(Math.random() * 3), _0xf2 = Math.floor(Math.random() * 3);
-            _0xdead = `${_0xf1}S${_0xf2}B`;
-            aiCandidates = aiCandidates.filter(_0xc => _0xc !== _0x1a2b);
-        } else {
-            aiCandidates = _0x3c4d[_0xdead];
-        }
-        const _0xres = _0xdead.match(/(\d)S(\d)B/);
-        return { s: parseInt(_0xres[1]), b: parseInt(_0xres[2]) };
+        if(!bestKey || aiCandidates.length <= 1) {
+            const fakeS = Math.floor(Math.random() * 3);
+            const fakeB = Math.floor(Math.random() * 3);
+            bestKey = `${fakeS}S${fakeB}B`;
+            aiCandidates = aiCandidates.filter(c => c !== guess); 
+        } else { aiCandidates = outcomes[bestKey]; }
+        const match = bestKey.match(/(\d)S(\d)B/);
+        return { s: parseInt(match[1]), b: parseInt(match[2]) };
     }
 
     function startPoisonLoop() {
@@ -706,18 +699,18 @@
     }
 
     function updateUI() {
-        const _0x1 = document.getElementById('turn-counter');
-        _0x1.innerText = turnCount;
-        const _0x2 = aiCandidates.length === 0 ? 0 : (1 / aiCandidates.length * 100);
-        const _0x3 = document.getElementById('chance-val');
-        const _0x4 = document.getElementById('chance-title');
-        const _0x5 = document.getElementById('chance-box');
-        const _0x6 = document.getElementById('prob-cat-img');
-        const _0x7 = document.getElementById('dead-x');
-        const _0x8 = document.getElementById('flash-overlay');
+        const turnCounter = document.getElementById('turn-counter');
+        turnCounter.innerText = turnCount;
+        const prob = aiCandidates.length === 0 ? 0 : (1 / aiCandidates.length * 100);
+        const chanceValEl = document.getElementById('chance-val');
+        const chanceTitleEl = document.getElementById('chance-title');
+        const chanceBoxEl = document.getElementById('chance-box');
+        const catImg = document.getElementById('prob-cat-img');
+        const deadX = document.getElementById('dead-x');
+        const flashOverlay = document.getElementById('flash-overlay');
         
-        if (aiCandidates.length === 0) {
-            if (!paradoxMusicTriggered) {
+        if(aiCandidates.length === 0) {
+            if(!paradoxMusicTriggered) {
                 bgm.pause();
                 bgm = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3");
                 bgm.loop = true;
@@ -725,59 +718,58 @@
                 bgm.play().catch(e => {});
                 paradoxMusicTriggered = true;
             }
-            if (!zeroOverlayTriggered) {
-                _0x8.style.background = 'radial-gradient(circle, rgba(0, 255, 65, 0) 70%, rgba(0, 255, 65, 0.4) 100%)';
-                _0x8.style.opacity = '1';
-                setTimeout(() => { _0x8.style.opacity = '0'; }, 1500);
+            if(!zeroOverlayTriggered) {
+                flashOverlay.style.background = 'radial-gradient(circle, rgba(0, 255, 65, 0) 70%, rgba(0, 255, 65, 0.4) 100%)';
+                flashOverlay.style.opacity = '1';
+                setTimeout(() => { flashOverlay.style.opacity = '0'; }, 1500);
                 zeroOverlayTriggered = true;
                 startPoisonLoop();
             }
-            _0x4.style.display = 'none';
-            _0x5.style.borderColor = 'var(--green)';
-            _0x6.style.opacity = '0'; _0x6.style.filter = 'blur(2vh)';
-            _0x1.style.color = 'var(--green)'; _0x1.style.textShadow = '0 0 2vh var(--green)';
-            _0x7.style.display = 'block'; 
+            chanceTitleEl.style.display = 'none';
+            chanceBoxEl.style.borderColor = 'var(--green)';
+            catImg.style.opacity = '0'; catImg.style.filter = 'blur(2vh)';
+            turnCounter.style.color = 'var(--green)'; turnCounter.style.textShadow = '0 0 2vh var(--green)';
+            deadX.style.display = 'block'; 
         } else {
-            _0x7.style.display = 'none';
-            if (poisonInterval) { clearInterval(poisonInterval); poisonInterval = null; }
+            deadX.style.display = 'none';
+            if(poisonInterval) { clearInterval(poisonInterval); poisonInterval = null; }
 
-            let _0xc1 = 'var(--purple)';
-            let _0xs1 = '0 0 2.5vh var(--purple)';
+            let currentColor = 'var(--purple)';
+            let currentShadow = '0 0 2.5vh var(--purple)';
 
-            if (_0x2 === 100) {
-                _0xc1 = 'var(--red)';
-                _0xs1 = '0 0 2.5vh var(--red)';
-                if (!alarmTriggered) {
+            if (prob === 100) {
+                currentColor = 'var(--red)';
+                currentShadow = '0 0 2.5vh var(--red)';
+                if(!alarmTriggered) {
                     emergencySfx.play().catch(e=>{});
-                    _0x8.style.background = 'radial-gradient(circle, rgba(255, 0, 0, 0) 70%, rgba(255, 0, 0, 0.4) 100%)';
-                    _0x8.style.opacity = '1';
-                    setTimeout(() => { _0x8.style.opacity = '0'; }, 1500);
+                    flashOverlay.style.background = 'radial-gradient(circle, rgba(255, 0, 0, 0) 70%, rgba(255, 0, 0, 0.4) 100%)';
+                    flashOverlay.style.opacity = '1';
+                    setTimeout(() => { flashOverlay.style.opacity = '0'; }, 1500);
                     alarmTriggered = true;
                 }
-            } else if (_0x2 >= 10 && _0x2 <= 51) {
-                _0xc1 = 'var(--cyan)';
-                _0xs1 = '0 0 2.5vh var(--cyan)';
+            } else if (prob >= 10 && prob <= 51) {
+                currentColor = 'var(--cyan)';
+                currentShadow = '0 0 2.5vh var(--cyan)';
                 alarmTriggered = false;
             } else {
                 alarmTriggered = false;
             }
 
-            _0x3.style.color = _0xc1;
-            _0x3.style.textShadow = _0xs1;
+            chanceValEl.style.color = currentColor;
+            chanceValEl.style.textShadow = currentShadow;
             
-            _0x4.style.display = 'block';
-            _0x4.innerText = "Measuring Energy Level";
-            _0x4.style.color = _0xc1;
-            _0x4.style.textShadow = _0xs1;
+            chanceTitleEl.style.display = 'block';
+            chanceTitleEl.style.color = currentColor;
+            chanceTitleEl.style.textShadow = currentShadow;
             
-            _0x3.innerText = _0x2.toFixed(2) + "%";
-            _0x5.style.borderColor = _0xc1;
-            _0x1.style.color = _0xc1;
-            const _0xb1 = Math.max(0, (_0x2 * 0.05));
-            const _0xop1 = Math.max(0.1, 1 - (_0x2 / 100));
-            _0x6.style.display = 'block'; _0x6.style.opacity = _0xop1;
-            _0x6.style.filter = `blur(${_0xb1}vh)`; 
-            _0x6.style.borderColor = _0xc1;
+            chanceValEl.innerText = prob.toFixed(2) + "%";
+            chanceBoxEl.style.borderColor = currentColor;
+            turnCounter.style.color = currentColor;
+            const blurAmount = Math.max(0, (prob * 0.05));
+            const opacityAmount = Math.max(0.1, 1 - (prob / 100));
+            catImg.style.display = 'block'; catImg.style.opacity = opacityAmount;
+            catImg.style.filter = `blur(${blurAmount}vh)`; 
+            catImg.style.borderColor = currentColor;
         }
         
         document.getElementById('log-window').innerHTML = history.map(h => {
@@ -786,22 +778,22 @@
         }).join('');
         document.getElementById('log-window').scrollTop = document.getElementById('log-window').scrollHeight;
 
-        const _0xslice = [...aiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
-        const _0xp1 = _0x2 >= 25 ? 0 : (25 - _0x2) / 35; 
-        document.getElementById('cand-list').innerHTML = _0xslice.map(c => `<div class="cand-item" style="filter: blur(${_0xp1}vh) contrast(180%);">${c}</div>`).join('');
+        const slice = [...aiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
+        const pixelateStrength = prob >= 25 ? 0 : (25 - prob) / 35; 
+        document.getElementById('cand-list').innerHTML = slice.map(c => `<div class="cand-item" style="filter: blur(${pixelateStrength}vh) contrast(180%);">${c}</div>`).join('');
 
-        const _0xst = document.getElementById('status');
-        const _0xeb = document.getElementById('ent-btn');
-        if (turnCount <= 0) {
-            _0xeb.disabled = true;
-            _0xst.innerText = "측정 완료 (관측만 가능)";
-            _0xst.style.animation = "none";
-            _0xst.style.color = "var(--red)";
-            _0xst.style.textShadow = "0 0 1vh var(--red)";
+        const statusEl = document.getElementById('status');
+        const entBtn = document.getElementById('ent-btn');
+        if(turnCount <= 0) {
+            entBtn.disabled = true;
+            statusEl.innerText = "측정 완료 (관측만 가능)";
+            statusEl.style.animation = "none";
+            statusEl.style.color = "var(--red)";
+            statusEl.style.textShadow = "0 0 1vh var(--red)";
         } else {
-            _0xeb.disabled = false;
-            _0xst.innerText = turnCount > 0 ? "고양이 위치 관측 중..." : "준비 완료";
-            _0xst.style.animation = "neonShift 10s infinite alternate linear";
+            entBtn.disabled = false;
+            statusEl.innerText = "양자고양이 좌표 측정 중...";
+            statusEl.style.animation = "neonShift 10s infinite alternate linear";
         }
     }
 
@@ -850,41 +842,99 @@
     }
 
     function submitObs() {
-        const _0xinput = document.getElementById('obs-num').value;
-        if (_0xinput.length === 4) {
+        const guess = document.getElementById('obs-num').value;
+        if(guess.length === 4) {
             playClick();
-            let _0xtarget = aiCandidates[Math.floor(Math.random() * aiCandidates.length)];
-            if (_0xinput === _0xtarget) {
+            let realSecret = aiCandidates[Math.floor(Math.random() * aiCandidates.length)];
+            if(guess === realSecret) {
                 successSfx.play().catch(e=>{});
-                if (successLoopInterval) clearInterval(successLoopInterval);
-                successLoopInterval = setInterval(() => { successSfx.currentTime = 0; successSfx.play().catch(e=>{}); }, 6000);
+                if(successLoopInterval) clearInterval(successLoopInterval);
+                successLoopInterval = setInterval(() => {
+                    successSfx.currentTime = 0;
+                    successSfx.play().catch(e=>{});
+                }, 6000);
+                
                 renderEndGame("Quantum Collapse", "승리", `관측 성공! 당신의 고양이는 살아있었습니다<br>당신은 고양이의 위치만을 알 수 있었습니다`, 'var(--cyan)', true, false);
             } else {
                 failSfx.play().catch(e=>{});
-                if (failLoopInterval) clearInterval(failLoopInterval);
-                failLoopInterval = setInterval(() => { failSfx.currentTime = 0; failSfx.play().catch(e=>{}); }, 6000);
+                if(failLoopInterval) clearInterval(failLoopInterval);
+                failLoopInterval = setInterval(() => {
+                    failSfx.currentTime = 0;
+                    failSfx.play().catch(e=>{});
+                }, 6000);
+                
                 renderEndGame("Quantum Collapse", "패배", `관측 실패! 당신의 고양이는 사라졌습니다<br>당신은 고양이의 운동량만을 알 수 있었습니다`, 'var(--red)', false, false);
             }
         }
     }
 
-    function renderEndGame(_0xa, _0xb, _0xc, _0xd, _0xe, _0xf) {
-        const _0xwin = "cat in the box.gif", _0xpar = "Neon cat 2.gif", _0xlos = "box.gif";
-        let _0xmed = _0xf ? _0xpar : (_0xe ? _0xwin : _0xlos);
-        let _0xlanes = "";
-        if (_0xf) {
-            const _0xlong = "🐈 ".repeat(22);
-            _0xlanes = `<div class="emoji-lane" style="top:15vh; animation: slide-h 24s linear infinite;">${_0xlong}</div><div class="emoji-lane" style="bottom:15vh; animation: slide-h 29s linear infinite reverse;">${_0xlong}</div>`;
+    function renderEndGame(type, result, msg, color, isWin, isParadox) {
+        const winGif = "cat in the box.gif";
+        const paradoxGif = "Neon cat 2.gif";
+        const loseImg = "box.gif";
+        let mediaUrl = isParadox ? paradoxGif : (isWin ? winGif : loseImg);
+        
+        let emojiLanes = "";
+        if(isParadox) {
+            const longLane = "🐈 ".repeat(22);
+            emojiLanes = `
+                <div class="emoji-lane" style="top:15vh; animation: slide-h 24s linear infinite; animation-delay: -3s;">${longLane}</div>
+                <div class="emoji-lane" style="bottom:15vh; animation: slide-h 29s linear infinite reverse; animation-delay: -7s;">${longLane}</div>
+                <div class="emoji-lane" style="left:10vw; animation: slide-v 22s linear infinite; animation-delay: -12s;">${longLane.split(' ').join('<br>')}</div>
+                <div class="emoji-lane" style="right:10vw; animation: slide-v 26s linear infinite reverse; animation-delay: -1s;">${longLane.split(' ').join('<br>')}</div>
+            `;
         }
-        let _0xsub = "";
-        if (_0xf) {
-            _0xsub = `<button onclick="window.showCredits()" style="font-family:'Bebas Neue';width:65vh;padding:2vh 0;margin-top:5vh;background:#222;color:${_0xd};border:0.4vh solid ${_0xd};cursor:pointer;font-size:5vh;border-radius:2vh;box-shadow:0 0 2vh ${_0xd};">Credits</button>`;
+
+        let subButtons = "";
+        if (isParadox) {
+            subButtons = `<button onclick="window.showCredits()" style="font-family: 'Bebas Neue', cursive; width:65vh; padding:2vh 0; margin-top:5vh; background:#222; color:${color}; border:0.4vh solid ${color}; cursor:pointer; font-size:5vh; border-radius:2vh; font-weight:bold; box-shadow: 0 0 2vh ${color}; z-index:100; letter-spacing:0.3vh;">Credits</button>`;
         } else {
-            const _0xtip = _0xe ? 'success' : 'fail';
-            _0xsub = `<div style="display:flex;flex-direction:column;gap:2vh;align-items:center;margin-top:4vh;width:62vh;"><button onclick="window.showTips('${_0xtip}')" style="font-family:'Bebas Neue';width:100%;padding:1.2vh 0;background:#333;color:${_0xd};border:0.2vh solid ${_0xd};cursor:pointer;font-size:4vh;border-radius:1.5vh;">TIPS</button><div style="display:flex;gap:2.5vh;width:100%;"><button onclick="location.reload()" style="font-family:'Bebas Neue';flex:1;padding:1.2vh 0;background:#222;color:#fff;border:0.2vh solid #444;cursor:pointer;font-size:3.2vh;border-radius:1.5vh;">Main Menu</button><button onclick="restartDirectly()" style="font-family:'Bebas Neue';flex:2;padding:1.2vh 0;background:#222;color:#fff;border:0.2vh solid ${_0xd};cursor:pointer;font-size:3.2vh;border-radius:1.5vh;">Restart</button></div></div>`;
+            const tipType = isWin ? 'success' : 'fail';
+            subButtons = `
+                <div style="display:flex; flex-direction:column; gap: 2vh; align-items: center; margin-top:4vh; width: 62vh; z-index:100;">
+                    <button onclick="window.showTips('${tipType}')" style="font-family: 'Bebas Neue', cursive; width:100%; padding:1.2vh 0; background:#333; color:${color}; border:0.2vh solid ${color}; cursor:pointer; font-size:4vh; border-radius:1.5vh; font-weight:bold; letter-spacing:0.2vh;">TIPS</button>
+                    <div style="display:flex; gap: 2.5vh; width: 100%;">
+                        <button onclick="location.reload()" style="font-family: 'Bebas Neue', cursive; flex:1; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid #444; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Main Menu</button>
+                        <button onclick="restartDirectly()" style="font-family: 'Bebas Neue', cursive; flex:2; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid ${color}; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Restart</button>
+                    </div>
+                </div>`;
         }
-        document.body.innerHTML = `<div id="version-tag">1.1 version</div>${_0xlanes}<div id="sound-control" style="z-index:20000;"><span class="sound-icon">♪</span><input type="range" id="volume-slider-end" min="0" max="1" step="0.01" value="${currentVolume}" oninput="adjustVolume(this.value)"><span class="sound-icon" style="font-size:1vh;">VOL</span></div><div id="credit-overlay"><div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img"></div><div id="credit-container" onmousedown="accelerateCredits(event)" onmouseup="normalizeCredits(event)"><div id="credit-content"></div></div><div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay:-2s;"></div><div class="credit-esc">Press ESC to Close</div></div><div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;height:100vh;text-align:center;padding:3vh 0;overflow:hidden;position:relative;z-index:50;"><img src="${_0xmed}" style="border:0.4vh solid ${_0xd};border-radius:4vh;box-shadow:0 0 3vh ${_0xd};width:40vh;height:40vh;object-fit:cover;margin-bottom:2vh;"><h1 style="font-size:6vh;color:${_0xd};margin:1vh 0;text-shadow:0 0 2vh ${_0xd};">${_0xa}</h1><h2 style="font-size:3.5vh;color:#fff;margin-bottom:1vh;">${_0xb}</h2><p style="color:${_0xf?_0xd:'#aaa'};font-size:2.2vh;max-width:80vh;line-height:1.4;margin:1vh 0;">${_0xc}</p>${_0xsub}</div>`;
-        document.getElementById('volume-slider-end').addEventListener('input', (e) => { adjustVolume(e.target.value); });
+
+        document.body.innerHTML = `
+            <div id="version-tag">1.1 version</div>
+            ${emojiLanes}
+            <div id="sound-control" style="z-index:20000;">
+                <span class="sound-icon">♪</span>
+                <input type="range" id="volume-slider-end" min="0" max="1" step="0.01" value="${currentVolume}" oninput="adjustVolume(this.value)">
+                <span class="sound-icon" style="font-size:1vh;">VOL</span>
+            </div>
+            <div id="credit-overlay">
+                <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img"></div>
+                <div id="credit-container" onmousedown="accelerateCredits(event)" onmouseup="normalizeCredits(event)">
+                    <div id="credit-content"></div>
+                </div>
+                <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;"></div>
+                <div class="credit-esc">Press ESC to Close</div>
+            </div>
+            <div id="tutorial-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:5000; flex-direction:column; align-items:center; justify-content:center;">
+                <div class="tutorial-msg-box">
+                    <h3 id="tut-title"></h3>
+                    <p id="tut-desc"></p>
+                    <button id="tut-next-btn" onclick="handleTutNext()">확인</button>
+                    <div id="tut-esc-guide" class="esc-guide" style="display:none;"></div>
+                </div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow: hidden;">
+                <img src="${mediaUrl}" style="border:0.4vh solid ${color}; border-radius:4vh; box-shadow: 0 0 3vh ${color}; width: 40vh; height: 40vh; object-fit: cover; margin-bottom: 2vh;">
+                <h1 style="font-size:6vh; color:${color}; margin: 1vh 0; text-shadow:0 0 2vh ${color};">${type}</h1>
+                <h2 style="font-size:3.5vh; color:#fff; margin-bottom: 1vh;">${result}</h2>
+                <p style="color:${isParadox ? color : '#aaa'}; font-size:2.2vh; max-width:80vh; line-height:1.4; margin: 1vh 0;">${msg}</p>
+                ${subButtons}
+            </div>`;
+            
+        document.getElementById('volume-slider-end').addEventListener('input', (e) => {
+            adjustVolume(e.target.value);
+        });
     }
 
     let creditScrollInterval = null;
