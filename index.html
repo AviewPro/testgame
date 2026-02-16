@@ -275,13 +275,13 @@
 
 <div id="sound-control">
     <span class="sound-icon">♪</span>
-    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.15" oninput="adjustVolume(this.value)">
+    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.15" oninput="_0x3f2a(this.value)">
     <span class="sound-icon" style="font-size:1vh;">VOL</span>
 </div>
 
 <div id="credit-overlay">
     <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img"></div>
-    <div id="credit-container" onmousedown="accelerateCredits(event)" onmouseup="normalizeCredits(event)">
+    <div id="credit-container" onmousedown="_0x8c21(event)" onmouseup="_0x7d4e(event)">
         <div id="credit-content"></div>
     </div>
     <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;"></div>
@@ -292,7 +292,7 @@
     <div class="tutorial-msg-box">
         <h3 id="tut-title">튜토리얼</h3>
         <p id="tut-desc">내용</p>
-        <button id="tut-next-btn" onclick="handleTutNext()">확인</button>
+        <button id="tut-next-btn" onclick="_0x5a1b()">확인</button>
         <div id="tut-esc-guide" class="esc-guide">ESC를 누르면 언제든지 메인화면으로 돌아갑니다.</div>
     </div>
 </div>
@@ -307,8 +307,8 @@
         <div class="setup-box-container">
             <img src="Neon cat.gif" class="setup-cat">
         </div>
-        <button onclick="startTutorial()" class="tutorial-btn">How to Play</button>
-        <button onclick="startGame()" class="setup-btn">Start Single Mode</button>
+        <button onclick="_0x1d2e()" class="tutorial-btn">How to Play</button>
+        <button onclick="_0x4c5b()" class="setup-btn">Start Single Mode</button>
         <img src="Aview.png" class="new-keyhole">
     </div>
     <div id="setup-footer">
@@ -322,13 +322,13 @@
             <div id="log-window"></div>
             <div class="input-view" id="display">----</div>
             <div class="keypad" id="main-keypad">
-                <button class="key-btn" data-key="7" onclick="press('7')">7</button><button class="key-btn" data-key="8" onclick="press('8')">8</button><button class="key-btn" data-key="9" onclick="press('9')">9</button>
-                <button id="obs-btn" class="btn-obs" onclick="clickObs()">OBS</button>
-                <button class="key-btn" data-key="4" onclick="press('4')">4</button><button class="key-btn" data-key="5" onclick="press('5')">5</button><button class="key-btn" data-key="6" onclick="press('6')">6</button>
-                <button id="clr-btn" class="btn-clr" onclick="clickSpecial('CLR')">CLR</button>
-                <button class="key-btn" data-key="1" onclick="press('1')">1</button><button class="key-btn" data-key="2" onclick="press('2')">2</button><button class="key-btn" data-key="3" onclick="press('3')">3</button>
-                <button id="ent-btn" class="btn-ent" onclick="clickSpecial('ENT')">ENT</button>
-                <button id="zero-btn" data-key="0" style="grid-column: span 3" onclick="press('0')">0</button>
+                <button class="key-btn" data-key="7" onclick="_0x9b8a('7')">7</button><button class="key-btn" data-key="8" onclick="_0x9b8a('8')">8</button><button class="key-btn" data-key="9" onclick="_0x9b8a('9')">9</button>
+                <button id="obs-btn" class="btn-obs" onclick="_0x2f1e()">OBS</button>
+                <button class="key-btn" data-key="4" onclick="_0x9b8a('4')">4</button><button class="key-btn" data-key="5" onclick="_0x9b8a('5')">5</button><button class="key-btn" data-key="6" onclick="_0x9b8a('6')">6</button>
+                <button id="clr-btn" class="btn-clr" onclick="_0x7c3d('CLR')">CLR</button>
+                <button class="key-btn" data-key="1" onclick="_0x9b8a('1')">1</button><button class="key-btn" data-key="2" onclick="_0x9b8a('2')">2</button><button class="key-btn" data-key="3" onclick="_0x9b8a('3')">3</button>
+                <button id="ent-btn" class="btn-ent" onclick="_0x7c3d('ENT')">ENT</button>
+                <button id="zero-btn" data-key="0" style="grid-column: span 3" onclick="_0x9b8a('0')">0</button>
             </div>
         </div>
 
@@ -360,79 +360,79 @@
         <input type="tel" id="obs-num" maxlength="4" autocomplete="off"
                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                style="background:#000; color:#fff; font-family: 'Orbitron', sans-serif; font-size: 5vh; text-align:center; width:35vh; margin:4vh 0; border:0.3vh solid var(--purple); border-radius:1.5vh; letter-spacing:1.5vh; text-shadow: 0 0 1vh var(--purple);">
-        <button onclick="submitObs()" style="padding:1.5vh 8vh; background:var(--purple); color:#fff; font-weight:bold; font-size:4vh; border-radius:1.5vh; letter-spacing:0.2vh;">관측 실행</button>
+        <button onclick="_0x6f5a()" style="padding:1.5vh 8vh; background:var(--purple); color:#fff; font-weight:bold; font-size:4vh; border-radius:1.5vh; letter-spacing:0.2vh;">관측 실행</button>
     </div>
 </div>
 
 <script>
-    let textData = null;
+    let _0xtextData = null;
     fetch('textdata.json')
         .then(response => response.json())
-        .then(data => { textData = data; })
+        .then(data => { _0xtextData = data; })
         .catch(error => console.error('Error loading textdata:', error));
 
     const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
 
-    let aiCandidates = [], history = [], inputStr = "", turnCount = 7;
-    let isTutorial = false, tutorialStep = 0, currentTipType = "";
-    let paradoxMusicTriggered = false, alarmTriggered = false, zeroOverlayTriggered = false;
-    let currentVolume = 0.15;
-    let failLoopInterval = null; 
-    let successLoopInterval = null; 
-    let meowLoopInterval = null; 
-    let meowCount = 0; 
+    let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 7;
+    let _0xisTutorial = false, _0xtutorialStep = 0, _0xcurrentTipType = "";
+    let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
+    let _0xcurrentVolume = 0.15;
+    let _0xfailLoopInterval = null; 
+    let _0xsuccessLoopInterval = null; 
+    let _0xmeowLoopInterval = null; 
+    let _0xmeowCount = 0; 
     
-    let bgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
-    bgm.loop = true;
-    bgm.playbackRate = 2.0;
-    const clickSfx = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
-    const specialClickSfx = new Audio("Click.mp3");
-    const meowSfx = new Audio("moeeza3-kitten-cat-meow-437244.mp3");
-    const emergencySfx = new Audio("비상알람.mp3");
-    const failSfx = new Audio("띠용.mp3");
-    const successSfx = new Audio("고양이 코골이_[cut_5sec].mp3");
-    const nyaBgmSfx = new Audio("냥이 브금.mp3");
+    let _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
+    _0xbgm.loop = true;
+    _0xbgm.playbackRate = 2.0;
+    const _0xclickSfx = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+    const _0xspecialClickSfx = new Audio("Click.mp3");
+    const _0xmeowSfx = new Audio("moeeza3-kitten-cat-meow-437244.mp3");
+    const _0xemergencySfx = new Audio("비상알람.mp3");
+    const _0xfailSfx = new Audio("띠용.mp3");
+    const _0xsuccessSfx = new Audio("고양이 코골이_[cut_5sec].mp3");
+    const _0xnyaBgmSfx = new Audio("냥이 브금.mp3");
 
-    const originalBodyContent = document.body.innerHTML;
+    const _0xoriginalBodyContent = document.body.innerHTML;
 
-    let poisonInterval = null;
+    let _0xpoisonInterval = null;
 
-    function adjustVolume(val) { 
-        currentVolume = parseFloat(val);
-        if (bgm.src.includes("SoundHelix-Song-8.mp3")) {
-            bgm.volume = Math.min(1.0, currentVolume * 0.5616);
+    function _0x3f2a(val) { 
+        _0xcurrentVolume = parseFloat(val);
+        if (_0xbgm.src.includes("SoundHelix-Song-8.mp3")) {
+            _0xbgm.volume = Math.min(1.0, _0xcurrentVolume * 0.5616);
         } else {
-            bgm.volume = currentVolume; 
+            _0xbgm.volume = _0xcurrentVolume; 
         }
-        meowSfx.volume = Math.min(1.0, currentVolume * 1.17); 
-        emergencySfx.volume = Math.min(1.0, currentVolume * 4.0); 
-        failSfx.volume = Math.min(1.0, currentVolume * 3.0); 
-        successSfx.volume = currentVolume;
-        specialClickSfx.volume = Math.min(1.0, currentVolume * 3.0);
-        nyaBgmSfx.volume = currentVolume;
+        _0xmeowSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.17); 
+        _0xemergencySfx.volume = Math.min(1.0, _0xcurrentVolume * 4.0); 
+        _0xfailSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0); 
+        _0xsuccessSfx.volume = _0xcurrentVolume;
+        _0xspecialClickSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0);
+        _0xnyaBgmSfx.volume = _0xcurrentVolume;
     }
     
-    adjustVolume(0.15);
+    _0x3f2a(0.15);
 
-    function playClick() { 
-        const sc = clickSfx.cloneNode(); 
-        sc.volume = Math.min(1.0, currentVolume * 8.0); 
+    function _0xplayClick() { 
+        const sc = _0xclickSfx.cloneNode(); 
+        sc.volume = Math.min(1.0, _0xcurrentVolume * 8.0); 
         sc.play().catch(e=>{}); 
-        if(bgm.paused) bgm.play().catch(e=>{}); 
+        if(_0xbgm.paused) _0xbgm.play().catch(e=>{}); 
     }
 
-    function playSpecialClick() { 
-        const sc = specialClickSfx.cloneNode(); 
-        sc.volume = Math.min(1.0, currentVolume * 3.0);
+    function _0xplaySpecialClick() { 
+        const sc = _0xspecialClickSfx.cloneNode(); 
+        sc.volume = Math.min(1.0, _0xcurrentVolume * 3.0);
         sc.play().catch(e=>{}); 
     }
 
-    function playNyaBgm() {
-        nyaBgmSfx.currentTime = 0;
-        nyaBgmSfx.play().catch(e=>{});
+    function _0xplayNyaBgm() {
+        _0xnyaBgmSfx.currentTime = 0;
+        _0xnyaBgmSfx.play().catch(e=>{});
     }
 
-    function simulateButtonPress(btnId) {
+    function _0xsimBtn(btnId) {
         const btn = document.getElementById(btnId);
         if (btn) {
             btn.classList.add('active');
@@ -440,114 +440,114 @@
         }
     }
 
-    function clickSpecial(type) {
+    function _0x7c3d(type) {
         if(type === 'CLR') {
-            simulateButtonPress('clr-btn');
-            playSpecialClick();
-            clearIn(true);
+            _0xsimBtn('clr-btn');
+            _0xplaySpecialClick();
+            _0xclrIn(true);
         }
         if(type === 'ENT') {
-            simulateButtonPress('ent-btn');
-            playSpecialClick();
-            clickEnter(true);
+            _0xsimBtn('ent-btn');
+            _0xplaySpecialClick();
+            _0xentCli(true);
         }
     }
 
-    function startGame() {
-        playClick();
-        if(failLoopInterval) { clearInterval(failLoopInterval); failLoopInterval = null; }
-        if(successLoopInterval) { clearInterval(successLoopInterval); successLoopInterval = null; }
-        if(meowLoopInterval) { clearInterval(meowLoopInterval); meowLoopInterval = null; }
+    function _0x4c5b() {
+        _0xplayClick();
+        if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
+        if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
+        if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
         document.getElementById('setup').style.display = 'none';
         document.getElementById('setup-footer').style.display = 'none';
         document.getElementById('game-box').style.display = 'flex';
         document.getElementById('info-panel').style.display = 'flex';
-        resetGameState();
+        _0xresGm();
     }
 
-    function resetGameState() {
-        aiCandidates = []; history = []; inputStr = ""; turnCount = 7; meowCount = 0;
-        paradoxMusicTriggered = false; alarmTriggered = false; zeroOverlayTriggered = false;
-        if(poisonInterval) { clearInterval(poisonInterval); poisonInterval = null; }
+    function _0xresGm() {
+        _0xaiCandidates = []; _0xhistory = []; _0xinputStr = ""; _0xturnCount = 7; _0xmeowCount = 0;
+        _0xparadoxMusicTriggered = false; _0xalarmTriggered = false; _0xzeroOverlayTriggered = false;
+        if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
         for(let i=0; i<=9999; i++){
             let n = i.toString().padStart(4, '0');
-            if(new Set(n).size === 4) aiCandidates.push(n);
+            if(new Set(n).size === 4) _0xaiCandidates.push(n);
         }
-        updateUI();
+        _0xupUI();
     }
 
-    function restartDirectly() {
-        playClick();
-        if(failLoopInterval) { clearInterval(failLoopInterval); failLoopInterval = null; }
-        if(successLoopInterval) { clearInterval(successLoopInterval); successLoopInterval = null; }
-        if(meowLoopInterval) { clearInterval(meowLoopInterval); meowLoopInterval = null; }
-        bgm.pause();
-        bgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
-        bgm.loop = true;
-        bgm.playbackRate = 2.0;
-        document.body.innerHTML = originalBodyContent;
-        adjustVolume(document.getElementById('volume-slider')?.value || 0.15);
-        startGame();
+    function _0xresDir() {
+        _0xplayClick();
+        if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
+        if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
+        if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
+        _0xbgm.pause();
+        _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
+        _0xbgm.loop = true;
+        _0xbgm.playbackRate = 2.0;
+        document.body.innerHTML = _0xoriginalBodyContent;
+        _0x3f2a(document.getElementById('volume-slider')?.value || 0.15);
+        _0x4c5b();
     }
 
-    function startTutorial() {
-        if(!textData) return;
-        isTutorial = true; currentTipType = ""; tutorialStep = 1;
-        startGame();
+    function _0x1d2e() {
+        if(!_0xtextData) return;
+        _0xisTutorial = true; _0xcurrentTipType = ""; _0xtutorialStep = 1;
+        _0x4c5b();
         document.getElementById('obs-btn').disabled = true;
         document.getElementById('tutorial-overlay').style.display = 'flex';
-        applyTutorialEffect();
+        _0xappTut();
     }
 
     window.showTips = function(type) {
-        if(!textData) return;
-        playClick();
-        isTutorial = false;
-        currentTipType = type;
-        tutorialStep = 0;
+        if(!_0xtextData) return;
+        _0xplayClick();
+        _0xisTutorial = false;
+        _0xcurrentTipType = type;
+        _0xtutorialStep = 0;
         const tutOverlay = document.getElementById('tutorial-overlay');
         if (tutOverlay) {
             tutOverlay.style.display = 'flex';
             document.getElementById('tut-esc-guide').style.display = 'none';
-            applyTipEffect();
+            _0xappTip();
         }
     };
 
-    function handleTutNext() {
-        playClick();
-        if (currentTipType) {
-            tutorialStep++;
-            if (tutorialStep >= textData.tips[currentTipType].length) {
+    function _0x5a1b() {
+        _0xplayClick();
+        if (_0xcurrentTipType) {
+            _0xtutorialStep++;
+            if (_0xtutorialStep >= _0xtextData.tips[_0xcurrentTipType].length) {
                 document.getElementById('tutorial-overlay').style.display = 'none';
                 return;
             }
-            applyTipEffect();
+            _0xappTip();
         } else {
-            nextTutorialStep();
+            _0xnxtTut();
         }
     }
 
-    function applyTipEffect() {
+    function _0xappTip() {
         const title = document.getElementById('tut-title');
         const desc = document.getElementById('tut-desc');
         if (title && desc) {
-            const tip = textData.tips[currentTipType][tutorialStep];
+            const tip = _0xtextData.tips[_0xcurrentTipType][_0xtutorialStep];
             title.innerText = tip.title;
             desc.innerHTML = tip.desc.replace(/\n/g, "<br>"); 
         }
     }
 
-    function nextTutorialStep() {
-        if (tutorialStep === 1 || tutorialStep === 2) {
+    function _0xnxtTut() {
+        if (_0xtutorialStep === 1 || _0xtutorialStep === 2) {
             document.getElementById('tutorial-overlay').style.display = 'none';
             return;
         }
-        tutorialStep++;
-        if (tutorialStep > 6) { location.reload(); return; }
-        applyTutorialEffect();
+        _0xtutorialStep++;
+        if (_0xtutorialStep > 6) { location.reload(); return; }
+        _0xappTut();
     }
 
-    function applyTutorialEffect() {
+    function _0xappTut() {
         const title = document.getElementById('tut-title');
         const desc = document.getElementById('tut-desc');
         const nextBtn = document.getElementById('tut-next-btn');
@@ -560,97 +560,97 @@
         turnCounter.classList.remove('tutorial-highlight-turn');
         nextBtn.classList.remove('btn-cyan');
 
-        const stepData = textData.tutorial.steps.find(s => s.step === tutorialStep);
+        const stepData = _0xtextData.tutorial.steps.find(s => s.step === _0xtutorialStep);
         if (stepData) {
             title.innerText = stepData.title;
             desc.innerHTML = stepData.desc;
         }
 
-        if (tutorialStep === 1) {
+        if (_0xtutorialStep === 1) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.querySelectorAll('.key-btn, #zero-btn, #display').forEach(el => el.classList.add('tutorial-highlight'));
-        } else if (tutorialStep === 2) {
+        } else if (_0xtutorialStep === 2) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.getElementById('ent-btn').classList.add('tutorial-highlight');
             document.getElementById('clr-btn').classList.add('tutorial-highlight');
-        } else if (tutorialStep === 3) {
+        } else if (_0xtutorialStep === 3) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             const firstLog = document.querySelector('.log-item');
             if(firstLog) firstLog.classList.add('tutorial-highlight');
-        } else if (tutorialStep === 4) {
+        } else if (_0xtutorialStep === 4) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             document.getElementById('candidates-box').classList.add('tutorial-highlight');
-        } else if (tutorialStep === 5) {
+        } else if (_0xtutorialStep === 5) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             chanceBox.classList.add('tutorial-highlight');
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.getElementById('obs-btn').classList.add('tutorial-highlight');
-        } else if (tutorialStep === 6) {
+        } else if (_0xtutorialStep === 6) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             turnCounter.classList.add('tutorial-highlight-turn');
             nextBtn.classList.add('btn-cyan');
-            nextBtn.innerText = textData.tutorial.button_finish;
+            nextBtn.innerText = _0xtextData.tutorial.button_finish;
         }
     }
 
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            if (document.getElementById('credit-overlay')?.style.display === 'flex') { closeCredits(); return; }
-            if (isTutorial) location.reload();
+            if (document.getElementById('credit-overlay')?.style.display === 'flex') { _0xclsCr(); return; }
+            if (_0xisTutorial) location.reload();
             if (document.getElementById('obs-overlay')?.style.display === 'flex') { document.getElementById('obs-overlay').style.display = 'none'; }
             return;
         }
         if (document.getElementById('obs-overlay')?.style.display === 'flex') {
-            if (e.key === 'Enter') submitObs(); return;
+            if (e.key === 'Enter') _0x6f5a(); return;
         }
         
         if (e.key === 'Enter') {
             e.preventDefault();
-            clickSpecial('ENT');
+            _0x7c3d('ENT');
             return;
         }
         
         if (e.key >= '0' && e.key <= '9') {
             const btn = document.querySelector(e.key === '0' ? '#zero-btn' : `.key-btn[data-key="${e.key}"]`);
             if(btn) { btn.classList.add('active'); setTimeout(() => btn.classList.remove('active'), 100); }
-            press(e.key);
+            _0x9b8a(e.key);
             return;
         }
         
         if (e.key === 'Delete' || e.key === 'Backspace') {
-            clickSpecial('CLR');
+            _0x7c3d('CLR');
             return;
         }
     });
 
-    function press(n) { 
-        playClick(); 
-        if(inputStr.length < 4 && !inputStr.includes(n)) { 
-            inputStr += n; 
-            document.getElementById('display').innerText = inputStr; 
-            if (isTutorial && tutorialStep === 1 && inputStr.length === 4) {
-                setTimeout(() => { tutorialStep = 2; document.getElementById('tutorial-overlay').style.display = 'flex'; applyTutorialEffect(); }, 300);
+    function _0x9b8a(n) { 
+        _0xplayClick(); 
+        if(_0xinputStr.length < 4 && !_0xinputStr.includes(n)) { 
+            _0xinputStr += n; 
+            document.getElementById('display').innerText = _0xinputStr; 
+            if (_0xisTutorial && _0xtutorialStep === 1 && _0xinputStr.length === 4) {
+                setTimeout(() => { _0xtutorialStep = 2; document.getElementById('tutorial-overlay').style.display = 'flex'; _0xappTut(); }, 300);
             }
         } 
     }
 
-    function clearIn(isSpecial) { if(!isSpecial) playClick(); inputStr = ""; document.getElementById('display').innerText = "----"; }
+    function _0xclrIn(isSpecial) { if(!isSpecial) _0xplayClick(); _0xinputStr = ""; document.getElementById('display').innerText = "----"; }
     
-    function clickEnter(isSpecial) {
-        if(inputStr.length === 4 && turnCount > 0) {
-            if(!isSpecial) playClick();
-            const res = aiRespond(inputStr);
-            history.push({ n: inputStr, s: res.s, b: res.b });
-            turnCount--; clearIn(true); updateUI();
-            if (isTutorial && tutorialStep === 2) {
-                setTimeout(() => { tutorialStep = 3; document.getElementById('tutorial-overlay').style.display = 'flex'; applyTutorialEffect(); }, 500);
+    function _0xentCli(isSpecial) {
+        if(_0xinputStr.length === 4 && _0xturnCount > 0) {
+            if(!isSpecial) _0xplayClick();
+            const res = _0xaiRes(_0xinputStr);
+            _0xhistory.push({ n: _0xinputStr, s: res.s, b: res.b });
+            _0xturnCount--; _0xclrIn(true); _0xupUI();
+            if (_0xisTutorial && _0xtutorialStep === 2) {
+                setTimeout(() => { _0xtutorialStep = 3; document.getElementById('tutorial-overlay').style.display = 'flex'; _0xappTut(); }, 500);
             }
         }
     }
 
-    function aiRespond(guess) {
+    function _0xaiRes(guess) {
         const outcomes = {};
-        aiCandidates.forEach(cand => {
+        _0xaiCandidates.forEach(cand => {
             let s=0, b=0;
             for(let i=0; i<4; i++){ if(guess[i] === cand[i]) s++; else if(cand.includes(guess[i])) b++; }
             const key = `${s}S${b}B`;
@@ -662,24 +662,24 @@
             if(key === "4S0B") continue; 
             if(outcomes[key].length > maxCount) { maxCount = outcomes[key].length; bestKey = key; }
         }
-        if(!bestKey || aiCandidates.length <= 1) {
+        if(!bestKey || _0xaiCandidates.length <= 1) {
             const fakeS = Math.floor(Math.random() * 3);
             const fakeB = Math.floor(Math.random() * 3);
             bestKey = `${fakeS}S${fakeB}B`;
-            aiCandidates = aiCandidates.filter(c => c !== guess); 
-        } else { aiCandidates = outcomes[bestKey]; }
+            _0xaiCandidates = _0xaiCandidates.filter(c => c !== guess); 
+        } else { _0xaiCandidates = outcomes[bestKey]; }
         const match = bestKey.match(/(\d)S(\d)B/);
         return { s: parseInt(match[1]), b: parseInt(match[2]) };
     }
 
-    function startPoisonLoop() {
-        if(poisonInterval) return;
+    function _0xstPsL() {
+        if(_0xpoisonInterval) return;
         const targetText = "Cat is Poisoned in the Box";
         const el = document.getElementById('chance-val');
         let index = targetText.length;
         let isDeleting = true;
 
-        poisonInterval = setInterval(() => {
+        _0xpoisonInterval = setInterval(() => {
             if (isDeleting) {
                 el.innerHTML = `<span class="poison-text" style="color:var(--green); text-shadow: 0 0 1.5vh var(--green);">${targetText.substring(0, index)}</span>`;
                 index--;
@@ -692,10 +692,10 @@
         }, 150);
     }
 
-    function updateUI() {
+    function _0xupUI() {
         const turnCounter = document.getElementById('turn-counter');
-        turnCounter.innerText = turnCount;
-        const prob = aiCandidates.length === 0 ? 0 : (1 / aiCandidates.length * 100);
+        turnCounter.innerText = _0xturnCount;
+        const prob = _0xaiCandidates.length === 0 ? 0 : (1 / _0xaiCandidates.length * 100);
         const chanceValEl = document.getElementById('chance-val');
         const chanceTitleEl = document.getElementById('chance-title');
         const chanceBoxEl = document.getElementById('chance-box');
@@ -703,21 +703,21 @@
         const deadX = document.getElementById('dead-x');
         const flashOverlay = document.getElementById('flash-overlay');
         
-        if(aiCandidates.length === 0) {
-            if(!paradoxMusicTriggered) {
-                bgm.pause();
-                bgm = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3");
-                bgm.loop = true;
-                bgm.volume = Math.min(1.0, currentVolume * 0.5616);
-                bgm.play().catch(e => {});
-                paradoxMusicTriggered = true;
+        if(_0xaiCandidates.length === 0) {
+            if(!_0xparadoxMusicTriggered) {
+                _0xbgm.pause();
+                _0xbgm = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3");
+                _0xbgm.loop = true;
+                _0xbgm.volume = Math.min(1.0, _0xcurrentVolume * 0.5616);
+                _0xbgm.play().catch(e => {});
+                _0xparadoxMusicTriggered = true;
             }
-            if(!zeroOverlayTriggered) {
+            if(!_0xzeroOverlayTriggered) {
                 flashOverlay.style.background = 'radial-gradient(circle, rgba(0, 255, 65, 0) 70%, rgba(0, 255, 65, 0.4) 100%)';
                 flashOverlay.style.opacity = '1';
                 setTimeout(() => { flashOverlay.style.opacity = '0'; }, 1500);
-                zeroOverlayTriggered = true;
-                startPoisonLoop();
+                _0xzeroOverlayTriggered = true;
+                _0xstPsL();
             }
             chanceTitleEl.style.display = 'none';
             chanceBoxEl.style.borderColor = 'var(--green)';
@@ -726,7 +726,7 @@
             deadX.style.display = 'block'; 
         } else {
             deadX.style.display = 'none';
-            if(poisonInterval) { clearInterval(poisonInterval); poisonInterval = null; }
+            if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
 
             let currentColor = 'var(--purple)';
             let currentShadow = '0 0 2.5vh var(--purple)';
@@ -734,19 +734,19 @@
             if (prob === 100) {
                 currentColor = 'var(--red)';
                 currentShadow = '0 0 2.5vh var(--red)';
-                if(!alarmTriggered) {
-                    emergencySfx.play().catch(e=>{});
+                if(!_0xalarmTriggered) {
+                    _0xemergencySfx.play().catch(e=>{});
                     flashOverlay.style.background = 'radial-gradient(circle, rgba(255, 0, 0, 0) 70%, rgba(255, 0, 0, 0.4) 100%)';
                     flashOverlay.style.opacity = '1';
                     setTimeout(() => { flashOverlay.style.opacity = '0'; }, 1500);
-                    alarmTriggered = true;
+                    _0xalarmTriggered = true;
                 }
             } else if (prob >= 10 && prob <= 51) {
                 currentColor = 'var(--cyan)';
                 currentShadow = '0 0 2.5vh var(--cyan)';
-                alarmTriggered = false;
+                _0xalarmTriggered = false;
             } else {
-                alarmTriggered = false;
+                _0xalarmTriggered = false;
             }
 
             chanceValEl.style.color = currentColor;
@@ -766,13 +766,13 @@
             catImg.style.borderColor = currentColor;
         }
         
-        document.getElementById('log-window').innerHTML = history.map(h => {
+        document.getElementById('log-window').innerHTML = _0xhistory.map(h => {
             const resultText = (h.s === 0 && h.b === 0) ? `<span class="log-out">OUT</span>` : `${h.s}S / ${h.b}B`;
             return `<div class="log-item"><span class="log-n">${h.n}</span><span class="log-sb">${resultText}</span></div>`;
         }).join('');
         document.getElementById('log-window').scrollTop = document.getElementById('log-window').scrollHeight;
 
-        const slice = [...aiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
+        const slice = [..._0xaiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
         
         let pixelateStrength = 0;
         if (prob >= 25) {
@@ -789,7 +789,7 @@
 
         const statusEl = document.getElementById('status');
         const entBtn = document.getElementById('ent-btn');
-        if(turnCount <= 0) {
+        if(_0xturnCount <= 0) {
             entBtn.disabled = true;
             statusEl.innerText = "측정 완료 (관측만 가능)";
             statusEl.style.animation = "none";
@@ -802,11 +802,11 @@
         }
     }
 
-    function renderProbabilityCloud() {
+    function _0xrndPrCl() {
         const field = document.getElementById('quantum-field');
         field.innerHTML = "";
         const neons = ['var(--cyan)', 'var(--purple)', 'var(--green)', 'var(--red)'];
-        const list = aiCandidates.length > 0 ? aiCandidates : ["ERROR", "VOID", "0000"];
+        const list = _0xaiCandidates.length > 0 ? _0xaiCandidates : ["ERROR", "VOID", "0000"];
         list.slice(0, 80).forEach(num => {
             const span = document.createElement('span');
             span.className = 'bg-candidate';
@@ -820,63 +820,63 @@
         });
     }
 
-    function clickObs() {
-        if(isTutorial || !textData) return;
-        playSpecialClick();
-        if(aiCandidates.length === 0) {
-            meowCount = 0; 
-            meowSfx.play().catch(e=>{}); 
-            meowCount++;
-            if(meowLoopInterval) clearInterval(meowLoopInterval);
-            meowLoopInterval = setInterval(() => {
-                if(meowCount < 10) {
-                    meowSfx.currentTime = 0;
-                    meowSfx.play().catch(e=>{});
-                    meowCount++;
+    function _0x2f1e() {
+        if(_0xisTutorial || !_0xtextData) return;
+        _0xplaySpecialClick();
+        if(_0xaiCandidates.length === 0) {
+            _0xmeowCount = 0; 
+            _0xmeowSfx.play().catch(e=>{}); 
+            _0xmeowCount++;
+            if(_0xmeowLoopInterval) clearInterval(_0xmeowLoopInterval);
+            _0xmeowLoopInterval = setInterval(() => {
+                if(_0xmeowCount < 10) {
+                    _0xmeowSfx.currentTime = 0;
+                    _0xmeowSfx.play().catch(e=>{});
+                    _0xmeowCount++;
                 } else {
-                    clearInterval(meowLoopInterval);
+                    clearInterval(_0xmeowLoopInterval);
                 }
             }, 6000);
 
-            const ed = textData.endings.paradox;
-            renderEndGame(ed.type, ed.result, ed.message, 'var(--green)', true, true);
+            const ed = _0xtextData.endings.paradox;
+            _0xrnEG(ed.type, ed.result, ed.message, 'var(--green)', true, true);
             return;
         }
-        renderProbabilityCloud();
+        _0xrndPrCl();
         document.getElementById('obs-overlay').style.display = 'flex';
         setTimeout(() => { const obsInput = document.getElementById('obs-num'); if(obsInput){ obsInput.value = ""; obsInput.focus(); } }, 10);
     }
 
-    function submitObs() {
+    function _0x6f5a() {
         const guess = document.getElementById('obs-num').value;
         if(guess.length === 4) {
-            playClick();
-            let realSecret = aiCandidates[Math.floor(Math.random() * aiCandidates.length)];
+            _0xplayClick();
+            let realSecret = _0xaiCandidates[Math.floor(Math.random() * _0xaiCandidates.length)];
             if(guess === realSecret) {
-                successSfx.play().catch(e=>{});
-                if(successLoopInterval) clearInterval(successLoopInterval);
-                successLoopInterval = setInterval(() => {
-                    successSfx.currentTime = 0;
-                    successSfx.play().catch(e=>{});
+                _0xsuccessSfx.play().catch(e=>{});
+                if(_0xsuccessLoopInterval) clearInterval(_0xsuccessLoopInterval);
+                _0xsuccessLoopInterval = setInterval(() => {
+                    _0xsuccessSfx.currentTime = 0;
+                    _0xsuccessSfx.play().catch(e=>{});
                 }, 6000);
                 
-                const ed = textData.endings.win;
-                renderEndGame(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
+                const ed = _0xtextData.endings.win;
+                _0xrnEG(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
             } else {
-                failSfx.play().catch(e=>{});
-                if(failLoopInterval) clearInterval(failLoopInterval);
-                failLoopInterval = setInterval(() => {
-                    failSfx.currentTime = 0;
-                    failSfx.play().catch(e=>{});
+                _0xfailSfx.play().catch(e=>{});
+                if(_0xfailLoopInterval) clearInterval(_0xfailLoopInterval);
+                _0xfailLoopInterval = setInterval(() => {
+                    _0xfailSfx.currentTime = 0;
+                    _0xfailSfx.play().catch(e=>{});
                 }, 6000);
                 
-                const ed = textData.endings.lose;
-                renderEndGame(ed.type, ed.result, ed.message, 'var(--red)', false, false);
+                const ed = _0xtextData.endings.lose;
+                _0xrnEG(ed.type, ed.result, ed.message, 'var(--red)', false, false);
             }
         }
     }
 
-    function renderEndGame(type, result, msg, color, isWin, isParadox) {
+    function _0xrnEG(type, result, msg, color, isWin, isParadox) {
         const winGif = "cat in the box.gif";
         const paradoxGif = "Neon cat 2.gif";
         const loseImg = "box.gif";
@@ -903,7 +903,7 @@
                     <button onclick="window.showTips('${tipType}')" style="font-family: 'Bebas Neue', cursive; width:100%; padding:1.2vh 0; background:#333; color:${color}; border:0.2vh solid ${color}; cursor:pointer; font-size:4vh; border-radius:1.5vh; font-weight:bold; letter-spacing:0.2vh;">TIPS</button>
                     <div style="display:flex; gap: 2.5vh; width: 100%;">
                         <button onclick="location.reload()" style="font-family: 'Bebas Neue', cursive; flex:1; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid #444; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Main Menu</button>
-                        <button onclick="restartDirectly()" style="font-family: 'Bebas Neue', cursive; flex:2; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid ${color}; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Restart</button>
+                        <button onclick="_0xresDir()" style="font-family: 'Bebas Neue', cursive; flex:2; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid ${color}; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Restart</button>
                     </div>
                 </div>`;
         }
@@ -913,12 +913,12 @@
             ${emojiLanes}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
-                <input type="range" id="volume-slider-end" min="0" max="1" step="0.01" value="${currentVolume}" oninput="adjustVolume(this.value)">
+                <input type="range" id="volume-slider-end" min="0" max="1" step="0.01" value="${_0xcurrentVolume}" oninput="_0x3f2a(this.value)">
                 <span class="sound-icon" style="font-size:1vh;">VOL</span>
             </div>
             <div id="credit-overlay">
                 <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img"></div>
-                <div id="credit-container" onmousedown="accelerateCredits(event)" onmouseup="normalizeCredits(event)">
+                <div id="credit-container" onmousedown="_0x8c21(event)" onmouseup="_0x7d4e(event)">
                     <div id="credit-content"></div>
                 </div>
                 <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;"></div>
@@ -928,7 +928,7 @@
                 <div class="tutorial-msg-box">
                     <h3 id="tut-title"></h3>
                     <p id="tut-desc"></p>
-                    <button id="tut-next-btn" onclick="handleTutNext()">확인</button>
+                    <button id="tut-next-btn" onclick="_0x5a1b()">확인</button>
                     <div id="tut-esc-guide" class="esc-guide" style="display:none;"></div>
                 </div>
             </div>
@@ -941,48 +941,48 @@
             </div>`;
             
         document.getElementById('volume-slider-end').addEventListener('input', (e) => {
-            adjustVolume(e.target.value);
+            _0x3f2a(e.target.value);
         });
     }
 
-    let creditScrollInterval = null;
-    let creditY = 0;
-    let creditSpeed = 0.55;
+    let _0xcrdScrInt = null;
+    let _0xcrdY = 0;
+    let _0xcrdSpd = 0.55;
 
     window.showCredits = function() {
-        if(!textData) return;
+        if(!_0xtextData) return;
         const overlay = document.getElementById('credit-overlay');
         const content = document.getElementById('credit-content');
         if (!overlay || !content) return;
         
-        const text = textData.dev_story.join("\n");
+        const text = _0xtextData.dev_story.join("\n");
         
         content.innerHTML = `
             <div>${text}</div>
-            <img src="귀여운고양이.jpg" onclick="playNyaBgm()" style="width:67.5vh; height:auto; margin-top:5vh; border-radius:2vh; border:0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); cursor:pointer;">
+            <img src="귀여운고양이.jpg" onclick="_0xplayNyaBgm()" style="width:67.5vh; height:auto; margin-top:5vh; border-radius:2vh; border:0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); cursor:pointer;">
             <img src="Aview.png" class="credit-logo">
         `;
         overlay.style.display = 'flex';
-        creditY = window.innerHeight * 0.1;
-        creditSpeed = 0.55;
+        _0xcrdY = window.innerHeight * 0.1;
+        _0xcrdSpd = 0.55;
         
-        if (creditScrollInterval) clearInterval(creditScrollInterval);
-        creditScrollInterval = setInterval(() => {
-            creditY -= creditSpeed;
-            content.style.transform = `translateY(${creditY}px)`;
-            if (creditY < -(content.scrollHeight + 100)) {
-                clearInterval(creditScrollInterval);
+        if (_0xcrdScrInt) clearInterval(_0xcrdScrInt);
+        _0xcrdScrInt = setInterval(() => {
+            _0xcrdY -= _0xcrdSpd;
+            content.style.transform = `translateY(${_0xcrdY}px)`;
+            if (_0xcrdY < -(content.scrollHeight + 100)) {
+                clearInterval(_0xcrdScrInt);
             }
         }, 16);
     };
 
-    window.accelerateCredits = function(e) { if(e) e.stopPropagation(); creditSpeed = 4.5; };
-    window.normalizeCredits = function(e) { if(e) e.stopPropagation(); creditSpeed = 0.55; };
-    window.closeCredits = function() {
+    window._0x8c21 = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 4.5; };
+    window._0x7d4e = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 0.55; };
+    window._0xclsCr = function() {
         const overlay = document.getElementById('credit-overlay');
         if(overlay) {
             overlay.style.display = 'none';
-            if (creditScrollInterval) clearInterval(creditScrollInterval);
+            if (_0xcrdScrInt) clearInterval(_0xcrdScrInt);
         }
     };
 
@@ -993,7 +993,7 @@
         });
         const turnCounter = document.getElementById('turn-counter');
         if(turnCounter) {
-            if (turnCount > 0) {
+            if (_0xturnCount > 0) {
                 const intensity = 15; 
                 const tMoveX = (Math.random()-0.5) * intensity;
                 const tMoveY = (Math.random()-0.5) * intensity;
