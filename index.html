@@ -418,7 +418,7 @@
     const _0xfailSfx = new Audio("띠용.mp3");
     const _0xsuccessSfx = new Audio("고양이 코골이_[cut_5sec].mp3");
     const _0xnyaBgmSfx = new Audio("냥이 브금.mp3");
-    _0xnyaBgmSfx.loop = true; // 브금으로 쓰기 위해 루프 설정
+    _0xnyaBgmSfx.loop = true; 
     const _0xlightsOffSfx = new Audio("소등.mp3");
 
     const _0xoriginalBodyContent = document.body.innerHTML;
@@ -433,11 +433,11 @@
             _0xbgm.volume = _0xcurrentVolume; 
         }
         _0xmeowSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.17); 
-        _0xemergencySfx.volume = Math.min(1.0, _0xcurrentVolume * 3.2); // 비상알람 음량 20% 감소 (4.0 -> 3.2)
+        _0xemergencySfx.volume = Math.min(1.0, _0xcurrentVolume * 2.56); // 비상알람 음량 추가 20% 감소 (3.2 -> 2.56)
         _0xfailSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0); 
         _0xsuccessSfx.volume = _0xcurrentVolume;
         _0xspecialClickSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0);
-        _0xnyaBgmSfx.volume = _0xcurrentVolume;
+        _0xnyaBgmSfx.volume = _0xcurrentVolume * 0.6; // 냥이브금 음량 40% 감소
         _0xlightsOffSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
     }
     
@@ -457,10 +457,9 @@
     }
 
     function _0xplayNyaBgm() {
-        // 기존 bgm 정지 후 냥이 브금을 메인 bgm으로 교체하여 재생
         if(_0xbgm) _0xbgm.pause();
         _0xbgm = _0xnyaBgmSfx;
-        _0xbgm.volume = _0xcurrentVolume;
+        _0xbgm.volume = _0xcurrentVolume * 0.6; // 40% 감소 반영
         _0xbgm.currentTime = 0;
         _0xbgm.play().catch(e=>{});
     }
@@ -639,7 +638,10 @@
         
         if (e.key === 'Enter') {
             e.preventDefault();
-            _0x7c3d('ENT');
+            // 메인 메뉴 화면(game-box가 none인 상태)에서는 엔터키 비활성화
+            if (document.getElementById('game-box').style.display === 'flex') {
+                _0x7c3d('ENT');
+            }
             return;
         }
         
@@ -799,7 +801,7 @@
                 currentShadow = '0 0 2.5vh var(--cyan)';
                 _0xalarmTriggered = false;
             } else {
-                _0xalarmTriggered = false;
+                _0alarmTriggered = false;
             }
 
             chanceValEl.style.color = currentColor;
@@ -914,7 +916,8 @@
                 }, 6000);
                 
                 const ed = _0xtextData.endings.win;
-                _0xrnEG(ed.type, ed.result, ed.message, 'var(--green)', true, false);
+                // 승리 화면 초록색을 하늘색(var(--cyan))으로 변경
+                _0xrnEG(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
             } else {
                 _0xfailSfx.play().catch(e=>{});
                 if(_0xfailLoopInterval) clearInterval(_0xfailLoopInterval);
@@ -1047,7 +1050,7 @@
         const turnCounter = document.getElementById('turn-counter');
         if(turnCounter) {
             if (_0xturnCount > 0) {
-                const intensity = 25; // 턴 카운트 인텐시티를 25로 변경
+                const intensity = 25; 
                 const tMoveX = (Math.random()-0.5) * intensity;
                 const tMoveY = (Math.random()-0.5) * intensity;
                 turnCounter.style.transform = `translate(${tMoveX}px, ${tMoveY}px)`;
