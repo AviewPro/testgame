@@ -245,7 +245,7 @@
         .credit-esc { position: fixed; bottom: 3vh; right: 3vh; color: #666; font-size: 1.5vh; z-index: 15003; }
 
         #flash-overlay { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 20000; opacity: 0; transition: opacity 1.5s ease;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 20000; opacity: 0;
         }
         #dead-x { display: none; position: absolute; top: 62%; left: 50%; transform: translate(-50%, -50%); font-size: 30vh; color: var(--green); text-shadow: 0 0 4vh var(--green), 0 0 8vh var(--green); font-weight: 900; opacity: 0.8; z-index: 100; pointer-events: none; }
 
@@ -276,7 +276,7 @@
 </head>
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
-<div id="version-tag">1.2 version</div>
+<div id="version-tag">1.3 version</div>
 <div id="flash-overlay"></div>
 
 <div id="sound-control">
@@ -418,7 +418,7 @@
         _0xsuccessSfx.volume = _0xcurrentVolume;
         _0xspecialClickSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0);
         _0xnyaBgmSfx.volume = _0xcurrentVolume;
-        _0xlightsOutSfx.volume = _0xcurrentVolume;
+        _0xlightsOutSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5); // 기존 대비 50% 키움
     }
     
     _0x3f2a(0.15);
@@ -717,20 +717,25 @@
                 _0xbgm.pause();
                 _0xlightsOutSfx.play().catch(e=>{});
                 
-                flashOverlay.style.background = '#000';
+                // 초록색 비네트와 소등 효과 연출
+                flashOverlay.style.background = 'radial-gradient(circle, rgba(0, 0, 0, 0) 40%, rgba(0, 255, 65, 0.3) 85%, rgba(0, 0, 0, 1) 100%)';
                 flashOverlay.style.transition = 'none';
                 flashOverlay.style.opacity = '1';
+
                 setTimeout(() => {
+                    // 3초 뒤부터 천천히 밝아짐
                     flashOverlay.style.transition = 'opacity 3s ease';
                     flashOverlay.style.opacity = '0';
-                }, 100);
+                }, 3000);
 
                 const paradoxImg = document.getElementById('paradox-img');
                 if(paradoxImg) {
                     paradoxImg.style.opacity = '1';
                     setTimeout(() => {
+                        // 8초 뒤부터 4초에 걸쳐 서서히 소멸
+                        paradoxImg.style.transition = 'opacity 4s ease';
                         paradoxImg.style.opacity = '0';
-                    }, 4000);
+                    }, 8000);
                 }
 
                 setTimeout(() => {
@@ -936,7 +941,7 @@
         }
 
         document.body.innerHTML = `
-            <div id="version-tag">1.2 version</div>
+            <div id="version-tag">1.3 version</div>
             ${emojiLanes}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
