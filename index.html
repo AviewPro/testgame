@@ -228,14 +228,14 @@
         }
         #credit-content {
             position: absolute; top: 100%; width: 90%; text-align: center; color: #ddd;
-            font-size: 2.1vh; line-height: 2.2; white-space: pre-wrap; padding: 10vh 0 2vh 0;
+            font-size: 2.1vh; line-height: 2.2; white-space: pre-wrap; padding: 10vh 0;
             transition: none;
             pointer-events: none;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .credit-logo { width: 20.25vh; height: auto; margin-top: 3vh; margin-bottom: 0; filter: brightness(0) invert(1); opacity: 0.8; }
+        .credit-logo { width: 20.25vh; height: auto; margin-top: 3vh; filter: brightness(0) invert(1); opacity: 0.8; }
         .credit-esc { position: fixed; bottom: 3vh; right: 3vh; color: #666; font-size: 1.5vh; z-index: 15003; }
 
         #flash-overlay { 
@@ -307,7 +307,7 @@
         <div class="setup-box-container">
             <img src="Neon cat.gif" class="setup-cat">
         </div>
-        <button onclick="startTutorial()" class="tutorial-btn" id="main-tutorial-btn">How to Play</button>
+        <button onclick="startTutorial()" class="tutorial-btn">How to Play</button>
         <button onclick="startGame()" class="setup-btn">Start Single Mode</button>
         <img src="Aview.png" class="new-keyhole">
     </div>
@@ -368,10 +368,7 @@
     let textData = null;
     fetch('textdata.json')
         .then(response => response.json())
-        .then(data => { 
-            textData = data;
-            console.log("textData loaded");
-        })
+        .then(data => { textData = data; })
         .catch(error => console.error('Error loading textdata:', error));
 
     const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
@@ -494,10 +491,7 @@
     }
 
     function startTutorial() {
-        if(!textData) {
-            alert("데이터 로드 중입니다. 잠시만 기다려주세요.");
-            return;
-        }
+        if(!textData) return;
         isTutorial = true; currentTipType = ""; tutorialStep = 1;
         startGame();
         document.getElementById('obs-btn').disabled = true;
@@ -810,7 +804,6 @@
 
     function renderProbabilityCloud() {
         const field = document.getElementById('quantum-field');
-        if(!field) return;
         field.innerHTML = "";
         const neons = ['var(--cyan)', 'var(--purple)', 'var(--green)', 'var(--red)'];
         const list = aiCandidates.length > 0 ? aiCandidates : ["ERROR", "VOID", "0000"];
@@ -828,14 +821,8 @@
     }
 
     function clickObs() {
-        if(isTutorial) return;
-        if(!textData) {
-            alert("데이터 로드 중입니다. 잠시만 기다려주세요.");
-            return;
-        }
-
+        if(isTutorial || !textData) return;
         playSpecialClick();
-        
         if(aiCandidates.length === 0) {
             meowCount = 0; 
             meowSfx.play().catch(e=>{}); 
@@ -855,7 +842,6 @@
             renderEndGame(ed.type, ed.result, ed.message, 'var(--green)', true, true);
             return;
         }
-        
         renderProbabilityCloud();
         document.getElementById('obs-overlay').style.display = 'flex';
         setTimeout(() => { const obsInput = document.getElementById('obs-num'); if(obsInput){ obsInput.value = ""; obsInput.focus(); } }, 10);
@@ -954,8 +940,9 @@
                 ${subButtons}
             </div>`;
             
-        const vEnd = document.getElementById('volume-slider-end');
-        if(vEnd) vEnd.addEventListener('input', (e) => { adjustVolume(e.target.value); });
+        document.getElementById('volume-slider-end').addEventListener('input', (e) => {
+            adjustVolume(e.target.value);
+        });
     }
 
     let creditScrollInterval = null;
