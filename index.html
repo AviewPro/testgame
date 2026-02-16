@@ -121,7 +121,6 @@
         #cand-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1vh; overflow-y: hidden; overflow-x: hidden; font-family: 'Consolas', monospace; font-size: 1.8vh; color: #fff; flex-grow: 1; align-content: start; }
         .cand-item { padding: 0.4vh 0.2vh; height: 3vh; line-height: 3vh; text-align: center; background: rgba(255,255,255,0.07); border-radius: 0.6vh; transition: none; will-change: transform; }
 
-        /* 추가: 양자 구름 오버레이 이미지 스타일 */
         #paradox-cat-overlay {
             position: absolute;
             top: 0;
@@ -261,7 +260,11 @@
         #flash-overlay { 
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 20000; opacity: 0; transition: opacity 1.5s ease;
         }
-        #dead-x { display: none; position: absolute; top: 62%; left: 50%; transform: translate(-50%, -50%); font-size: 30vh; color: var(--green); text-shadow: 0 0 4vh var(--green), 0 0 8vh var(--green); font-weight: 900; opacity: 0.8; z-index: 100; pointer-events: none; }
+        #dead-x { 
+            display: none; position: absolute; top: 62%; left: 50%; transform: translate(-50%, -50%); 
+            font-size: 30vh; color: var(--green); text-shadow: 0 0 4vh var(--green), 0 0 8vh var(--green); 
+            font-weight: 900; opacity: 0.8; z-index: 150; pointer-events: none; 
+        }
 
         .emoji-lane {
             position: fixed; white-space: nowrap; font-size: 5vh; pointer-events: none; z-index: 5; opacity: 0.6;
@@ -735,15 +738,13 @@
                 _0xparadoxMusicTriggered = true;
             }
             if(!_0xzeroOverlayTriggered) {
-                flashOverlay.style.background = 'radial-gradient(circle, rgba(0, 255, 65, 0) 70%, rgba(0, 255, 65, 0.4) 100%)';
+                flashOverlay.style.background = '#000';
                 flashOverlay.style.opacity = '1';
-                setTimeout(() => { flashOverlay.style.opacity = '0'; }, 1500);
+                setTimeout(() => { flashOverlay.style.opacity = '0'; }, 3000);
                 
-                // cat footage3.jpg 표시 제어
                 if(paradoxOverlay) {
                     paradoxOverlay.style.display = 'block';
                     paradoxOverlay.style.opacity = '1';
-                    // 8초 뒤부터 8초에 걸쳐 사라지게 설정
                     paradoxOverlay.style.animation = "fadeOutLong 16s forwards";
                 }
 
