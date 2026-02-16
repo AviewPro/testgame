@@ -970,7 +970,7 @@
         creditScrollInterval = setInterval(() => {
             creditY -= creditSpeed;
             content.style.transform = `translateY(${creditY}px)`;
-            if (creditY < -(content.scrollHeight + 100)) {
+            if (creditY < -(content.scrollHeight + 50)) {
                 clearInterval(creditScrollInterval);
             }
         }, 16);
