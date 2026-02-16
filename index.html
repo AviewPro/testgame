@@ -121,21 +121,11 @@
         #cand-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1vh; overflow-y: hidden; overflow-x: hidden; font-family: 'Consolas', monospace; font-size: 1.8vh; color: #fff; flex-grow: 1; align-content: start; }
         .cand-item { padding: 0.4vh 0.2vh; height: 3vh; line-height: 3vh; text-align: center; background: rgba(255,255,255,0.07); border-radius: 0.6vh; transition: none; will-change: transform; }
 
-        /* cat footage3 전용 스타일 */
-        #zero-prob-cat {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%; height: auto;
-            border-radius: 2vh;
-            z-index: 100;
-            display: none;
-            pointer-events: none;
-            opacity: 0;
-        }
-        @keyframes fadeOutCat {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
+        /* 0% 확률 시 나타날 고양이 이미지 스타일 */
+        #zero-cat-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; z-index: 100; opacity: 0; pointer-events: none;
+            border-radius: 1vh; transition: opacity 8s linear;
         }
 
         .input-view { 
@@ -362,7 +352,7 @@
                 </div>
             </div>
             <div id="candidates-box">
-                <img id="zero-prob-cat" src="cat footage3.jpg">
+                <img id="zero-cat-overlay" src="cat footage3.jpg">
                 <div class="cand-title">Quantum Cloud</div>
                 <div id="cand-list"></div>
             </div>
@@ -720,9 +710,10 @@
         const catImg = document.getElementById('prob-cat-img');
         const deadX = document.getElementById('dead-x');
         const flashOverlay = document.getElementById('flash-overlay');
-        const zeroCatImg = document.getElementById('zero-prob-cat');
+        const zeroCat = document.getElementById('zero-cat-overlay');
         
         if(_0xaiCandidates.length === 0) {
+            // 0% 되는 순간 즉시 실행
             if(!_0xparadoxMusicTriggered) {
                 _0xbgm.pause();
                 _0xbgm = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3");
@@ -735,17 +726,17 @@
                 flashOverlay.style.background = 'radial-gradient(circle, rgba(0, 255, 65, 0) 70%, rgba(0, 255, 65, 0.4) 100%)';
                 flashOverlay.style.opacity = '1';
                 setTimeout(() => { flashOverlay.style.opacity = '0'; }, 1500);
+                
+                // cat footage3.jpg 즉시 표시 후 8초 뒤 8초간 사라짐
+                zeroCat.style.transition = 'none';
+                zeroCat.style.opacity = '1';
+                setTimeout(() => {
+                    zeroCat.style.transition = 'opacity 8s linear';
+                    zeroCat.style.opacity = '0';
+                }, 8000);
+
                 _0xzeroOverlayTriggered = true;
                 _0xstPsL();
-
-                // cat footage3 이미지 즉시 표시 및 8초 후 사라지기 로직
-                if(zeroCatImg) {
-                    zeroCatImg.style.display = 'block';
-                    zeroCatImg.style.opacity = '1';
-                    setTimeout(() => {
-                        zeroCatImg.style.animation = 'fadeOutCat 8s forwards';
-                    }, 8000);
-                }
             }
             chanceTitleEl.style.display = 'none';
             chanceBoxEl.style.borderColor = 'var(--green)';
@@ -754,7 +745,7 @@
             deadX.style.display = 'block'; 
         } else {
             deadX.style.display = 'none';
-            if(zeroCatImg) { zeroCatImg.style.display = 'none'; zeroCatImg.style.animation = 'none'; zeroCatImg.style.opacity = '0'; }
+            zeroCat.style.opacity = '0'; // 확률이 생기면 다시 숨김
             if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
 
             let currentColor = 'var(--purple)';
@@ -826,7 +817,7 @@
             statusEl.style.textShadow = "0 0 1vh var(--red)";
         } else {
             entBtn.disabled = false;
-            statusEl.innerText = "양자고양이 위치 관측 중...";
+            statusEl.innerText = "양자고양이 좌표 측정 중...";
             statusEl.style.animation = "neonShift 10s infinite alternate linear";
         }
     }
