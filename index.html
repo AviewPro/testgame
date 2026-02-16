@@ -12,6 +12,7 @@
         
         html {
             height: 100%;
+            overflow: hidden;
         }
 
         body { 
@@ -26,9 +27,10 @@
             flex-direction: column; 
             align-items: center; 
             justify-content: flex-start;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0; 
             padding: 0;
+            overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
         }
@@ -67,7 +69,7 @@
             justify-content: center; 
             width: 95%; 
             height: auto; 
-            padding-bottom: 5vh;
+            padding-bottom: 2vh; 
         }
         
         #setup { width: 50vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--cyan); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1vh; }
@@ -251,26 +253,16 @@
 
         @media screen and (max-width: 768px) {
             #setup { width: 90vw; }
-            #game-box, #info-panel { 
-                width: 90vw; 
-                height: auto; 
-                min-height: 80vh; 
-                flex-shrink: 0;
-            }
+            #game-box, #info-panel { width: 90vw; height: auto; min-height: 80vh; }
             .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; }
             .header-title { font-size: 4vh; letter-spacing: 0.5vh; }
             .panel-center { width: 90vw; padding: 3vh; }
-            
-            .game-container > div[style*="flex-wrap: wrap"] {
-                flex-direction: column !important;
-                align-items: center !important;
-            }
         }
     </style>
 </head>
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
-<div id="version-tag">1.2 version</div>
+<div id="version-tag">1.1 version</div>
 <div id="flash-overlay"></div>
 
 <div id="sound-control">
@@ -402,7 +394,7 @@
             { title: "성공 시 참고팁 (2/5)", desc: "단순히 성공을 하는거 자체는 너무 난이도가 낮으니까요. \n<b style='color:var(--red);'>이 게임은 정확히 6회까지 100%로 양자고양이의 좌표를 특정하고 \n7회차 측정까지 진행해서 양자고양이를 잡는 게임입니다.</b>" },
             { title: "성공 시 참고팁 (3/5)", desc: "이 게임에서 일반 숫자야구의 팁은 큰 도움이 안 될수도 있습니다. \n양자고양이는 계속해서 최대한 안전해보이는 좌표로 도망칩니다. \n정확히는 가능한 후보숫자가 가장 많은 볼카운트 대답한다는 의미죠." },
             { title: "성공 시 참고팁 (4/5)", desc: "고정된 알고리즘이기 때문에 똑같은 질문을 100번 하면 100번 똑같이 답합니다. \n일정한 빌드를 만들어서 가장 높은 확률을 따라가면 최적화되는 구조입니다. \n측정용 숫자를 교차로 배치해서 계속해서 숨을곳을 좁히세요." },
-            { title: "성공 시 참고팁 (5/5)", desc: "어차피 깨봤자 개발자의 허접한 감상문 말곤 아무것도 없는데 \n진짜 굳이 패러독스 엔딩을 보겠다는 건가요? 그런분은 정말 환영입니다. \n힌트를 드리면 제 클리어 루트는 네번째 측정에서 4.17%가 됩니다. 포기하는걸 포기하세요. " }
+            { title: "성공 시 참고팁 (5/5)", desc: "어차피 깨봤자 개발자의 허접한 감상문 말곤 아무것도 없는데 \n진짜 굳이 패러독스 엔딩을 보겠다는 건가요? 그런분은 정말 환영입니다." }
         ]
     };
 
@@ -680,6 +672,9 @@
             const fakeB = Math.floor(Math.random() * 3);
             bestKey = `${fakeS}S${fakeB}B`;
             aiCandidates = aiCandidates.filter(c => c !== guess); 
+            // AI 거짓말 시 문구 줄바꿈 적용
+            const statusEl = document.getElementById('status');
+            if(statusEl) statusEl.innerHTML = "포기하는 것을<br>포기하세요";
         } else { aiCandidates = outcomes[bestKey]; }
         const match = bestKey.match(/(\d)S(\d)B/);
         return { s: parseInt(match[1]), b: parseInt(match[2]) };
@@ -786,7 +781,8 @@
         document.getElementById('log-window').scrollTop = document.getElementById('log-window').scrollHeight;
 
         const slice = [...aiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
-        const pixelateStrength = prob >= 25 ? 0 : (25 - prob) / 35; 
+        // 모자이크(Blur) 강도를 약하게 조정
+        const pixelateStrength = prob >= 25 ? 0 : (25 - prob) / 70; 
         document.getElementById('cand-list').innerHTML = slice.map(c => `<div class="cand-item" style="filter: blur(${pixelateStrength}vh) contrast(180%);">${c}</div>`).join('');
 
         const statusEl = document.getElementById('status');
@@ -798,8 +794,8 @@
             statusEl.style.color = "var(--red)";
             statusEl.style.textShadow = "0 0 1vh var(--red)";
         } else {
-            entBtn.disabled = false;
-            statusEl.innerText = "양자고양이 좌표 측정 중...";
+            // [2026-02-14] 요청 반영: '고양이 위치 관측 중...'
+            statusEl.innerText = "고양이 위치 관측 중...";
             statusEl.style.animation = "neonShift 10s infinite alternate linear";
         }
     }
@@ -908,7 +904,7 @@
         }
 
         document.body.innerHTML = `
-            <div id="version-tag">1.2 version</div>
+            <div id="version-tag">1.1 version</div>
             ${emojiLanes}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
@@ -931,7 +927,7 @@
                     <div id="tut-esc-guide" class="esc-guide" style="display:none;"></div>
                 </div>
             </div>
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow: hidden;">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow: hidden;">
                 <img src="${mediaUrl}" style="border:0.4vh solid ${color}; border-radius:4vh; box-shadow: 0 0 3vh ${color}; width: 40vh; height: 40vh; object-fit: cover; margin-bottom: 2vh;">
                 <h1 style="font-size:6vh; color:${color}; margin: 1vh 0; text-shadow:0 0 2vh ${color};">${type}</h1>
                 <h2 style="font-size:3.5vh; color:#fff; margin-bottom: 1vh;">${result}</h2>
@@ -946,7 +942,7 @@
 
     let creditScrollInterval = null;
     let creditY = 0;
-    let creditSpeed = 0.55;
+    let creditSpeed = 1;
 
     window.showCredits = function() {
         const overlay = document.getElementById('credit-overlay');
@@ -992,21 +988,22 @@
             <img src="Aview.png" class="credit-logo">
         `;
         overlay.style.display = 'flex';
-        creditY = window.innerHeight * 0.45;
-        creditSpeed = 0.55;
+        // 엔딩 크레딧의 시작점을 위로 많이 올림 (기존 window.innerHeight에서 상향 조정)
+        creditY = window.innerHeight / 2;
+        creditSpeed = 1;
         
         if (creditScrollInterval) clearInterval(creditScrollInterval);
         creditScrollInterval = setInterval(() => {
             creditY -= creditSpeed;
             content.style.transform = `translateY(${creditY}px)`;
-            if (creditY < -(content.scrollHeight + 100)) {
+            if (creditY < -content.scrollHeight) {
                 clearInterval(creditScrollInterval);
             }
         }, 16);
     };
 
-    window.accelerateCredits = function(e) { if(e) e.stopPropagation(); creditSpeed = 4.5; };
-    window.normalizeCredits = function(e) { if(e) e.stopPropagation(); creditSpeed = 0.55; };
+    window.accelerateCredits = function(e) { if(e) e.stopPropagation(); creditSpeed = 5; };
+    window.normalizeCredits = function(e) { if(e) e.stopPropagation(); creditSpeed = 1; };
     window.closeCredits = function() {
         const overlay = document.getElementById('credit-overlay');
         if(overlay) {
@@ -1023,6 +1020,7 @@
         const turnCounter = document.getElementById('turn-counter');
         if(turnCounter) {
             if (turnCount > 0) {
+                // [2026-02-14] 턴 카운터 움직임 계수 15 반영
                 const intensity = 15; 
                 const tMoveX = (Math.random()-0.5) * intensity;
                 const tMoveY = (Math.random()-0.5) * intensity;
