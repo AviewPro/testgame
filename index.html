@@ -252,24 +252,22 @@
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
         @media screen and (max-width: 768px) {
-            body { 
-                overflow-y: auto; 
-                height: auto; 
-                min-height: 100vh; 
-            }
-            html { overflow-y: auto; }
-            #setup { width: 90vw; }
-            #game-box, #info-panel { width: 95vw; height: auto; min-height: calc(100vh - 15vh); margin-bottom: 1.5vh; }
+            body { overflow-y: auto; justify-content: flex-start; }
+            .game-container { width: 100%; padding-bottom: 5vh; justify-content: flex-start; }
+            #setup { width: 90vw; margin-top: 2vh; }
+            #game-box, #info-panel { width: 95vw; height: auto; min-height: 60vh; margin-bottom: 2vh; }
+            #info-panel { order: -1; min-height: 45vh; } /* 모바일에서 정보패널을 먼저 보여주어 확률 확인 우선 */
             .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; }
-            .header-title { font-size: 4vh; letter-spacing: 0.5vh; }
+            .header-title { font-size: 3.5vh; letter-spacing: 0.5vh; padding: 1vh 2vh; }
             .panel-center { width: 90vw; padding: 3vh; }
-            .game-container { padding-bottom: 5vh; }
+            #log-window { height: 20vh; }
+            #cand-list { grid-template-columns: repeat(5, 1fr); height: 20vh; overflow-y: auto; }
         }
     </style>
 </head>
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
-<div id="version-tag">1.2 version</div>
+<div id="version-tag">1.1 version</div>
 <div id="flash-overlay"></div>
 
 <div id="sound-control">
@@ -307,7 +305,7 @@
             <img src="Neon cat.gif" class="setup-cat">
         </div>
         <button onclick="startTutorial()" class="tutorial-btn">How to Play</button>
-        <button onclick="startGame()" class="setup-btn">Start Single Mode</button>
+        <button onclick="startGame()" class="setup-btn" style="background: var(--green); color: #000; box-shadow: 0 0 1.5vh var(--green); border: none; animation: none;">Start Single Mode</button>
         <img src="Aview.png" class="new-keyhole">
     </div>
     <div id="setup-footer">
@@ -765,6 +763,7 @@
             chanceValEl.style.textShadow = currentShadow;
             
             chanceTitleEl.style.display = 'block';
+            chanceTitleEl.innerText = "Measuring Energy Level";
             chanceTitleEl.style.color = currentColor;
             chanceTitleEl.style.textShadow = currentShadow;
             
@@ -798,7 +797,7 @@
             statusEl.style.textShadow = "0 0 1vh var(--red)";
         } else {
             entBtn.disabled = false;
-            statusEl.innerText = "양자고양이 좌표 측정 중...";
+            statusEl.innerText = "고양이 위치 관측 중...";
             statusEl.style.animation = "neonShift 10s infinite alternate linear";
         }
     }
@@ -907,7 +906,7 @@
         }
 
         document.body.innerHTML = `
-            <div id="version-tag">1.2 version</div>
+            <div id="version-tag">1.1 version</div>
             ${emojiLanes}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
@@ -930,7 +929,7 @@
                     <div id="tut-esc-guide" class="esc-guide" style="display:none;"></div>
                 </div>
             </div>
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow: hidden;">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow-y: auto;">
                 <img src="${mediaUrl}" style="border:0.4vh solid ${color}; border-radius:4vh; box-shadow: 0 0 3vh ${color}; width: 40vh; height: 40vh; object-fit: cover; margin-bottom: 2vh;">
                 <h1 style="font-size:6vh; color:${color}; margin: 1vh 0; text-shadow:0 0 2vh ${color};">${type}</h1>
                 <h2 style="font-size:3.5vh; color:#fff; margin-bottom: 1vh;">${result}</h2>
