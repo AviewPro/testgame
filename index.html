@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Schrödinger Baseball - Single Mode</title>
-    <link rel="icon" type="image/png" href="Neoncat Icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -32,6 +31,7 @@
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
+            transition: background 8s ease-in-out;
         }
 
         #version-tag {
@@ -71,7 +71,7 @@
             padding-bottom: 5vh;
         }
         
-        #setup { width: 50vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--green); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1vh; }
+        #setup { width: 50vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--cyan); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1vh; }
         
         .setup-box-container { position: relative; width: 35vh; margin-bottom: 2vh; }
         .setup-cat { width: 35vh; height: 35vh; border-radius: 4vh; border: 0.4vh solid var(--green); object-fit: cover; animation: neonShift 10s infinite alternate linear; display: block; }
@@ -121,11 +121,6 @@
         .cand-title { font-family: 'Bebas Neue', cursive; font-size: 3vh; color:#fff; margin-bottom: 1.5vh; font-weight:bold; text-align: center; padding: 1vh 0; border-top: 0.1vh solid #333; border-bottom: 0.1vh solid #333; }
         #cand-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1vh; overflow-y: hidden; overflow-x: hidden; font-family: 'Consolas', monospace; font-size: 1.8vh; color: #fff; flex-grow: 1; align-content: start; }
         .cand-item { padding: 0.4vh 0.2vh; height: 3vh; line-height: 3vh; text-align: center; background: rgba(255,255,255,0.07); border-radius: 0.6vh; transition: none; will-change: transform; }
-
-        #paradox-img {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            object-fit: cover; opacity: 0; transition: opacity 4s ease; pointer-events: none; z-index: 10;
-        }
 
         .input-view { 
             background: #000; font-family: 'Orbitron', sans-serif; font-size: 4.5vh; text-align: center; height: 9vh; 
@@ -245,7 +240,7 @@
         .credit-esc { position: fixed; bottom: 3vh; right: 3vh; color: #666; font-size: 1.5vh; z-index: 15003; }
 
         #flash-overlay { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 20000; opacity: 0;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 20000; opacity: 0; transition: opacity 1.5s ease;
         }
         #dead-x { display: none; position: absolute; top: 62%; left: 50%; transform: translate(-50%, -50%); font-size: 30vh; color: var(--green); text-shadow: 0 0 4vh var(--green), 0 0 8vh var(--green); font-weight: 900; opacity: 0.8; z-index: 100; pointer-events: none; }
 
@@ -276,7 +271,7 @@
 </head>
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
-<div id="version-tag">1.3 version</div>
+<div id="version-tag">1.2 version</div>
 <div id="flash-overlay"></div>
 
 <div id="sound-control">
@@ -353,7 +348,6 @@
             <div id="candidates-box">
                 <div class="cand-title">Quantum Cloud</div>
                 <div id="cand-list"></div>
-                <img id="paradox-img" src="cat footage3.jpg">
             </div>
         </div>
     </div>
@@ -418,7 +412,7 @@
         _0xsuccessSfx.volume = _0xcurrentVolume;
         _0xspecialClickSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0);
         _0xnyaBgmSfx.volume = _0xcurrentVolume;
-        _0xlightsOutSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5); // 기존 대비 50% 키움
+        _0xlightsOutSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
     }
     
     _0x3f2a(0.15);
@@ -716,40 +710,25 @@
             if(!_0xparadoxMusicTriggered) {
                 _0xbgm.pause();
                 _0xlightsOutSfx.play().catch(e=>{});
-                
-                // 초록색 비네트와 소등 효과 연출
-                flashOverlay.style.background = 'radial-gradient(circle, rgba(0, 0, 0, 0) 40%, rgba(0, 255, 65, 0.3) 85%, rgba(0, 0, 0, 1) 100%)';
-                flashOverlay.style.transition = 'none';
-                flashOverlay.style.opacity = '1';
-
-                setTimeout(() => {
-                    // 3초 뒤부터 천천히 밝아짐
-                    flashOverlay.style.transition = 'opacity 3s ease';
-                    flashOverlay.style.opacity = '0';
-                }, 3000);
-
-                const paradoxImg = document.getElementById('paradox-img');
-                if(paradoxImg) {
-                    paradoxImg.style.opacity = '1';
-                    setTimeout(() => {
-                        // 8초 뒤부터 4초에 걸쳐 서서히 소멸
-                        paradoxImg.style.transition = 'opacity 4s ease';
-                        paradoxImg.style.opacity = '0';
-                    }, 8000);
-                }
-
                 setTimeout(() => {
                     _0xbgm = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3");
                     _0xbgm.loop = true;
                     _0xbgm.volume = Math.min(1.0, _0xcurrentVolume * 0.5616);
                     _0xbgm.play().catch(e => {});
-                }, 3000);
-
+                }, 4000);
                 _0xparadoxMusicTriggered = true;
             }
             if(!_0xzeroOverlayTriggered) {
+                flashOverlay.style.background = 'radial-gradient(circle, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.3) 70%, transparent 100%)';
+                flashOverlay.style.opacity = '1';
+                setTimeout(() => { flashOverlay.style.opacity = '0'; }, 1500);
                 _0xzeroOverlayTriggered = true;
                 _0xstPsL();
+                document.body.style.backgroundImage = "linear-gradient(rgba(5, 5, 7, 0.8), rgba(5, 5, 7, 0.8)), url('cat footage3.jpg')";
+                setTimeout(() => {
+                    document.body.style.backgroundImage = "none";
+                    document.body.style.backgroundColor = "black";
+                }, 8000);
             }
             chanceTitleEl.style.display = 'none';
             chanceBoxEl.style.borderColor = 'var(--green)';
@@ -941,7 +920,7 @@
         }
 
         document.body.innerHTML = `
-            <div id="version-tag">1.3 version</div>
+            <div id="version-tag">1.2 version</div>
             ${emojiLanes}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
