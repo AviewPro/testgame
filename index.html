@@ -252,18 +252,24 @@
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
         @media screen and (max-width: 768px) {
-            html, body { overflow: auto !important; height: auto !important; min-height: 100vh; }
+            body { 
+                overflow-y: auto; 
+                height: auto; 
+                min-height: 100vh; 
+            }
+            html { overflow-y: auto; }
             #setup { width: 90vw; }
-            #game-box, #info-panel { width: 90vw; height: auto; min-height: 80vh; }
+            #game-box, #info-panel { width: 95vw; height: auto; min-height: calc(100vh - 15vh); margin-bottom: 1.5vh; }
             .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; }
             .header-title { font-size: 4vh; letter-spacing: 0.5vh; }
             .panel-center { width: 90vw; padding: 3vh; }
+            .game-container { padding-bottom: 5vh; }
         }
     </style>
 </head>
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
-<div id="version-tag">1.1 version</div>
+<div id="version-tag">1.2 version</div>
 <div id="flash-overlay"></div>
 
 <div id="sound-control">
@@ -901,7 +907,7 @@
         }
 
         document.body.innerHTML = `
-            <div id="version-tag">1.1 version</div>
+            <div id="version-tag">1.2 version</div>
             ${emojiLanes}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
