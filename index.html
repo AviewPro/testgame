@@ -12,7 +12,6 @@
         
         html {
             height: 100%;
-            overflow: hidden;
         }
 
         body { 
@@ -27,10 +26,9 @@
             flex-direction: column; 
             align-items: center; 
             justify-content: flex-start;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0; 
             padding: 0;
-            overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
         }
@@ -69,7 +67,7 @@
             justify-content: center; 
             width: 95%; 
             height: auto; 
-            padding-bottom: 2vh; 
+            padding-bottom: 5vh;
         }
         
         #setup { width: 50vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--cyan); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1vh; }
@@ -230,14 +228,14 @@
         }
         #credit-content {
             position: absolute; top: 100%; width: 90%; text-align: center; color: #ddd;
-            font-size: 2.1vh; line-height: 2.2; white-space: pre-wrap; padding: 10vh 0;
+            font-size: 2.1vh; line-height: 2.2; white-space: pre-wrap; padding: 10vh 0 2vh 0;
             transition: none;
             pointer-events: none;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .credit-logo { width: 20.25vh; height: auto; margin-top: 3vh; filter: brightness(0) invert(1); opacity: 0.8; }
+        .credit-logo { width: 20.25vh; height: auto; margin-top: 3vh; margin-bottom: 0; filter: brightness(0) invert(1); opacity: 0.8; }
         .credit-esc { position: fixed; bottom: 3vh; right: 3vh; color: #666; font-size: 1.5vh; z-index: 15003; }
 
         #flash-overlay { 
@@ -253,16 +251,26 @@
 
         @media screen and (max-width: 768px) {
             #setup { width: 90vw; }
-            #game-box, #info-panel { width: 90vw; height: auto; min-height: 80vh; }
+            #game-box, #info-panel { 
+                width: 90vw; 
+                height: auto; 
+                min-height: 80vh; 
+                flex-shrink: 0;
+            }
             .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; }
             .header-title { font-size: 4vh; letter-spacing: 0.5vh; }
             .panel-center { width: 90vw; padding: 3vh; }
+            
+            .game-container > div[style*="flex-wrap: wrap"] {
+                flex-direction: column !important;
+                align-items: center !important;
+            }
         }
     </style>
 </head>
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
-<div id="version-tag">1.1 version</div>
+<div id="version-tag">1.2 version</div>
 <div id="flash-overlay"></div>
 
 <div id="sound-control">
@@ -299,7 +307,7 @@
         <div class="setup-box-container">
             <img src="Neon cat.gif" class="setup-cat">
         </div>
-        <button onclick="startTutorial()" class="tutorial-btn">How to Play</button>
+        <button onclick="startTutorial()" class="tutorial-btn" id="main-tutorial-btn">How to Play</button>
         <button onclick="startGame()" class="setup-btn">Start Single Mode</button>
         <img src="Aview.png" class="new-keyhole">
     </div>
@@ -357,6 +365,15 @@
 </div>
 
 <script>
+    let textData = null;
+    fetch('textdata.json')
+        .then(response => response.json())
+        .then(data => { 
+            textData = data;
+            console.log("textData loaded");
+        })
+        .catch(error => console.error('Error loading textdata:', error));
+
     const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
 
     let aiCandidates = [], history = [], inputStr = "", turnCount = 7;
@@ -382,21 +399,6 @@
     const originalBodyContent = document.body.innerHTML;
 
     let poisonInterval = null;
-
-    const tipsData = {
-        fail: [
-            { title: "실패 시 참고팁 (1/3)", desc: "이 게임은 처음에 1234, 5678을 입력하고 나머지는 아무렇게나 입력해도 \n마지막 관측확률이 체감상 30%정도 되는 것 같았습니다." },
-            { title: "실패 시 참고팁 (2/3)", desc: "그리고 고양이의 알고리즘 상 초반에는 계속 Ball 판정을 주기 때문에 \n의심되는 숫자들을 최대한 모든 자리수에 돌려가며 배치하다보면 \n5~6회 사이에는 금새 가능성이 좁혀지게 됩니다." },
-            { title: "실패 시 참고팁 (3/3)", desc: "어느정도 숫자가 특정되면 양자구름에 표시돼있는 숫자들을 보면서 \n측정시도만 해도 2살 아가 먼치킨이 아닌 이상 \n양자고양이를 관측할 수 있을겁니다. 화이팅!" }
-        ],
-        success: [
-            { title: "성공 시 참고팁 (1/5)", desc: "눈치를 못채셨을 수도 있지만 이 게임은 관측에 성공을 하든 실패를 하든 \nQuantum Collapse 엔딩이 나오죠.\n그렇게 한 것은 성공도 실패도 이 게임의 목표가 아니기 때문입니다." },
-            { title: "성공 시 참고팁 (2/5)", desc: "단순히 성공을 하는거 자체는 너무 난이도가 낮으니까요. \n<b style='color:var(--red);'>이 게임은 정확히 6회까지 100%로 양자고양이의 좌표를 특정하고 \n7회차 측정까지 진행해서 양자고양이를 잡는 게임입니다.</b>" },
-            { title: "성공 시 참고팁 (3/5)", desc: "이 게임에서 일반 숫자야구의 팁은 큰 도움이 안 될수도 있습니다. \n양자고양이는 계속해서 최대한 안전해보이는 좌표로 도망칩니다. \n정확히는 가능한 후보숫자가 가장 많은 볼카운트 대답한다는 의미죠." },
-            { title: "성공 시 참고팁 (4/5)", desc: "고정된 알고리즘이기 때문에 똑같은 질문을 100번 하면 100번 똑같이 답합니다. \n일정한 빌드를 만들어서 가장 높은 확률을 따라가면 최적화되는 구조입니다. \n측정용 숫자를 교차로 배치해서 계속해서 숨을곳을 좁히세요." },
-            { title: "성공 시 참고팁 (5/5)", desc: "어차피 깨봤자 개발자의 허접한 감상문 말곤 아무것도 없는데 \n진짜 굳이 패러독스 엔딩을 보겠다는 건가요? 그런분은 정말 환영입니다." }
-        ]
-    };
 
     function adjustVolume(val) { 
         currentVolume = parseFloat(val);
@@ -492,23 +494,19 @@
     }
 
     function startTutorial() {
-        playClick();
-        isTutorial = true; 
-        currentTipType = ""; 
-        tutorialStep = 1;
-        // 게임화면 구성요소 즉시 활성화
-        document.getElementById('setup').style.display = 'none';
-        document.getElementById('setup-footer').style.display = 'none';
-        document.getElementById('game-box').style.display = 'flex';
-        document.getElementById('info-panel').style.display = 'flex';
-        resetGameState();
-        
+        if(!textData) {
+            alert("데이터 로드 중입니다. 잠시만 기다려주세요.");
+            return;
+        }
+        isTutorial = true; currentTipType = ""; tutorialStep = 1;
+        startGame();
         document.getElementById('obs-btn').disabled = true;
         document.getElementById('tutorial-overlay').style.display = 'flex';
         applyTutorialEffect();
     }
 
     window.showTips = function(type) {
+        if(!textData) return;
         playClick();
         isTutorial = false;
         currentTipType = type;
@@ -525,7 +523,7 @@
         playClick();
         if (currentTipType) {
             tutorialStep++;
-            if (tutorialStep >= tipsData[currentTipType].length) {
+            if (tutorialStep >= textData.tips[currentTipType].length) {
                 document.getElementById('tutorial-overlay').style.display = 'none';
                 return;
             }
@@ -539,7 +537,7 @@
         const title = document.getElementById('tut-title');
         const desc = document.getElementById('tut-desc');
         if (title && desc) {
-            const tip = tipsData[currentTipType][tutorialStep];
+            const tip = textData.tips[currentTipType][tutorialStep];
             title.innerText = tip.title;
             desc.innerHTML = tip.desc.replace(/\n/g, "<br>"); 
         }
@@ -568,42 +566,36 @@
         turnCounter.classList.remove('tutorial-highlight-turn');
         nextBtn.classList.remove('btn-cyan');
 
+        const stepData = textData.tutorial.steps.find(s => s.step === tutorialStep);
+        if (stepData) {
+            title.innerText = stepData.title;
+            desc.innerHTML = stepData.desc;
+        }
+
         if (tutorialStep === 1) {
-            title.innerText = "1. 숫자 입력";
-            desc.innerHTML = "입력 패널의 버튼을 눌러서 입력하거나 키보드 숫자키를 활용해<br>임의의 4자리 수를 입력해보세요.";
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.querySelectorAll('.key-btn, #zero-btn, #display').forEach(el => el.classList.add('tutorial-highlight'));
         } else if (tutorialStep === 2) {
-            title.innerText = "2. 양자고양이 좌표 측정";
-            desc.innerHTML = "입력 패널의 엔터키나 키보드 Enter를 통해서 양자 고양이의 좌표를 측정하세요.<br>고양이가 숨어있는 4자리 좌표를 찾으면 됩니다.";
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.getElementById('ent-btn').classList.add('tutorial-highlight');
             document.getElementById('clr-btn').classList.add('tutorial-highlight');
         } else if (tutorialStep === 3) {
-            title.innerText = "3. 결과 표시 판넬";
-            desc.innerHTML = "S는 숫자와 위치가 모두 맞는 숫자의 개수이며<br>B는 숫자는 맞지만 위치는 틀린 숫자의 개수입니다.";
             document.getElementById('game-box').classList.remove('tutorial-dim');
             const firstLog = document.querySelector('.log-item');
             if(firstLog) firstLog.classList.add('tutorial-highlight');
         } else if (tutorialStep === 4) {
-            title.innerText = "4. 양자 구름의 의미";
-            desc.innerHTML = "좌표 측정을 진행하다 보면 양자고양이가 위치할 가능성이 있는 좌표들이<br>점차 선명히 보이기 시작합니다.";
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             document.getElementById('candidates-box').classList.add('tutorial-highlight');
         } else if (tutorialStep === 5) {
-            title.innerText = "5. 관측 확률";
-            desc.innerHTML = "지금까지 판정결과에 부합하는 임의의 숫자로 관측했을 때 찾을 확률입니다.<br>관측은 입력패널의 우상단 보라색 버튼을 통해 진행합니다.";
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             chanceBox.classList.add('tutorial-highlight');
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.getElementById('obs-btn').classList.add('tutorial-highlight');
         } else if (tutorialStep === 6) {
-            title.innerText = "6. 횟수 제한 및 엔딩";
-            desc.innerHTML = "양자고양이는 언제나 가장 잘 숨을 수 있는 좌표로 도망칩니다.<br><span style='color:var(--red); font-weight:bold;'>7회의 좌표 측정만으로 고양이의 좌표를 찾아보세요!</span><br>고양이의 좌표를 정확히 측정하면 색다른 엔딩이 나올지도?";
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             turnCounter.classList.add('tutorial-highlight-turn');
             nextBtn.classList.add('btn-cyan');
-            nextBtn.innerText = "게임하러 가기";
+            nextBtn.innerText = textData.tutorial.button_finish;
         }
     }
 
@@ -787,7 +779,18 @@
         document.getElementById('log-window').scrollTop = document.getElementById('log-window').scrollHeight;
 
         const slice = [...aiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
-        const pixelateStrength = prob >= 25 ? 0 : (25 - prob) / 35; 
+        
+        let pixelateStrength = 0;
+        if (prob >= 25) {
+            pixelateStrength = 0; 
+        } else if (prob >= 5) {
+            pixelateStrength = 0.05; 
+        } else if (prob >= 1) {
+            pixelateStrength = 0.15; 
+        } else {
+            pixelateStrength = 0.25; 
+        }
+
         document.getElementById('cand-list').innerHTML = slice.map(c => `<div class="cand-item" style="filter: blur(${pixelateStrength}vh) contrast(180%);">${c}</div>`).join('');
 
         const statusEl = document.getElementById('status');
@@ -800,7 +803,7 @@
             statusEl.style.textShadow = "0 0 1vh var(--red)";
         } else {
             entBtn.disabled = false;
-            statusEl.innerText = "양자고양이 위치 관측 중...";
+            statusEl.innerText = "양자고양이 좌표 측정 중...";
             statusEl.style.animation = "neonShift 10s infinite alternate linear";
         }
     }
@@ -826,7 +829,13 @@
 
     function clickObs() {
         if(isTutorial) return;
+        if(!textData) {
+            alert("데이터 로드 중입니다. 잠시만 기다려주세요.");
+            return;
+        }
+
         playSpecialClick();
+        
         if(aiCandidates.length === 0) {
             meowCount = 0; 
             meowSfx.play().catch(e=>{}); 
@@ -842,21 +851,14 @@
                 }
             }, 6000);
 
-            renderEndGame("Quantum Paradox", "불가능한 세계선", `축하합니다! 당신은 미시세계의 모든 가능성을 부정하고 <br> 고양이의 위치와 운동량을 모두 알아냈습니다`, 'var(--green)', true, true);
+            const ed = textData.endings.paradox;
+            renderEndGame(ed.type, ed.result, ed.message, 'var(--green)', true, true);
             return;
         }
         
-        // 오버레이 표시 전 클라우드 생성 보장
         renderProbabilityCloud();
-        const obsOverlay = document.getElementById('obs-overlay');
-        if(obsOverlay) {
-            obsOverlay.style.display = 'flex';
-            const obsInput = document.getElementById('obs-num');
-            if(obsInput){ 
-                obsInput.value = ""; 
-                setTimeout(() => obsInput.focus(), 50); 
-            }
-        }
+        document.getElementById('obs-overlay').style.display = 'flex';
+        setTimeout(() => { const obsInput = document.getElementById('obs-num'); if(obsInput){ obsInput.value = ""; obsInput.focus(); } }, 10);
     }
 
     function submitObs() {
@@ -872,7 +874,8 @@
                     successSfx.play().catch(e=>{});
                 }, 6000);
                 
-                renderEndGame("Quantum Collapse", "승리", `관측 성공! 당신의 고양이는 살아있었습니다<br>당신은 고양이의 위치만을 알 수 있었습니다`, 'var(--cyan)', true, false);
+                const ed = textData.endings.win;
+                renderEndGame(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
             } else {
                 failSfx.play().catch(e=>{});
                 if(failLoopInterval) clearInterval(failLoopInterval);
@@ -881,7 +884,8 @@
                     failSfx.play().catch(e=>{});
                 }, 6000);
                 
-                renderEndGame("Quantum Collapse", "패배", `관측 실패! 당신의 고양이는 사라졌습니다<br>당신은 고양이의 운동량만을 알 수 있었습니다`, 'var(--red)', false, false);
+                const ed = textData.endings.lose;
+                renderEndGame(ed.type, ed.result, ed.message, 'var(--red)', false, false);
             }
         }
     }
@@ -919,7 +923,7 @@
         }
 
         document.body.innerHTML = `
-            <div id="version-tag">1.1 version</div>
+            <div id="version-tag">1.2 version</div>
             ${emojiLanes}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
@@ -942,7 +946,7 @@
                     <div id="tut-esc-guide" class="esc-guide" style="display:none;"></div>
                 </div>
             </div>
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow: hidden;">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow: hidden;">
                 <img src="${mediaUrl}" style="border:0.4vh solid ${color}; border-radius:4vh; box-shadow: 0 0 3vh ${color}; width: 40vh; height: 40vh; object-fit: cover; margin-bottom: 2vh;">
                 <h1 style="font-size:6vh; color:${color}; margin: 1vh 0; text-shadow:0 0 2vh ${color};">${type}</h1>
                 <h2 style="font-size:3.5vh; color:#fff; margin-bottom: 1vh;">${result}</h2>
@@ -950,52 +954,21 @@
                 ${subButtons}
             </div>`;
             
-        document.getElementById('volume-slider-end').addEventListener('input', (e) => {
-            adjustVolume(e.target.value);
-        });
+        const vEnd = document.getElementById('volume-slider-end');
+        if(vEnd) vEnd.addEventListener('input', (e) => { adjustVolume(e.target.value); });
     }
 
     let creditScrollInterval = null;
     let creditY = 0;
-    let creditSpeed = 1;
+    let creditSpeed = 0.55;
 
     window.showCredits = function() {
+        if(!textData) return;
         const overlay = document.getElementById('credit-overlay');
         const content = document.getElementById('credit-content');
         if (!overlay || !content) return;
         
-        const text = `제 첫 게임,  슈뢰딩거 베이스볼을 끝까지 즐겨주셔서 정말 감사합니다!
-사실 보잘것 없는 게임이지만, 어릴 때부터 꿈꾸던 '나만의 게임 만들기'를 
-드디어 해볼 수 있어서 만드는 내내 정말 즐거웠습니다.
-
-이 게임의 아이디어는 가짜 숫자야구게임의 변형룰에서 시작됐습니다. 
-처음엔 사람간에 치열한 두뇌 게임을 생각했죠. 수비자가 제한없이 거짓말을 할 수 있고, 
-공격자는 '이거는 말이 안 된다!' 싶을 때 '모순'을 선언해서 끝내는 방식이었거든요. 
-반대로 수비자가 모순이 아니라는 걸 '반증'하면 이기는 룰으로요.
-
-근데 막상 AI와 시뮬레이션을 돌려보니까 생각보다 어렵더라고요. 
-단 3턴 만에 논리적 모순이 발생하기도 하고 오기도, 완벽하게 거짓말을 섞어가며 카운트를 준다는 게 
-생각보다 엄청난 사고력을 필요로 한다는 걸 깨달았습니다. 
-"완벽하게 거짓말하는 상대를 이기려면 몇 번이나 걸릴까?" 라는 질문에서 이 게임이 구상되었습니다.
-
-이름도 처음엔 '패러독스 베이스볼' 같은 걸 생각했는데, "슈뢰딩거 베이스볼"이 꽂히더라고요. 
-모든 숫자의 가능성이 중첩되어 있다가, 관측을 자세히할수록 가능성이 줄어들고 
-결국 하나의 숫자로 수렴하는 양자역학 컨셉! 제가 원하던 느낌이랑 딱 맞아서 파바박 만들어봤습니다.
-
-사실 전 프로그래밍 지식이 제로에 가까워서 AI를 쓴다고 해도 이렇게 빠르게 될 줄은 몰랐습니다. 
-구상에 반나절, 코드 짜는 데 하루, 마무리에 한나절 정도 걸렸는데, 
-막히는 걸 바로바로 물어보면서 코드를 만들어갈 수 있어서 빨랐던 것 같습니다.
-
-마음 같아서는 '개쳐귀여운 고양이' 이미지랑 컨셉을 막 쏟아붓고 싶었는데... 생각보다 어렵더라고요. 
-이미지를 찾아도 게임에 넣으니깐 제가 원하는 느낌이 안 살아서 결국 지금같은 모습이 됐습니다. 
-
-세상이 참 빠르게 변하는 것 같습니다. 코딩 문외한인 제가 게임을 만들수 있다니요.
-앞으로도 재밌는 아이디어가 떠오르면 게임을 만들어 보겠습니다. 
-어쩌면 슈뢰딩거 베이스볼 PVP버젼도 만들 수 있을 것 같습니다.
-
-이상 게임은 끝입니다. 
-감사합니다! 고양이는 정말 귀엽네요...
-고양이 사진 찾으면서 주워온 귀여운 고양이짤이라도 구경하다 가세요! :) `;
+        const text = textData.dev_story.join("\n");
         
         content.innerHTML = `
             <div>${text}</div>
@@ -1003,21 +976,21 @@
             <img src="Aview.png" class="credit-logo">
         `;
         overlay.style.display = 'flex';
-        creditY = window.innerHeight;
-        creditSpeed = 1;
+        creditY = window.innerHeight * 0.1;
+        creditSpeed = 0.55;
         
         if (creditScrollInterval) clearInterval(creditScrollInterval);
         creditScrollInterval = setInterval(() => {
             creditY -= creditSpeed;
             content.style.transform = `translateY(${creditY}px)`;
-            if (creditY < -content.scrollHeight) {
+            if (creditY < -(content.scrollHeight + 100)) {
                 clearInterval(creditScrollInterval);
             }
         }, 16);
     };
 
-    window.accelerateCredits = function(e) { if(e) e.stopPropagation(); creditSpeed = 5; };
-    window.normalizeCredits = function(e) { if(e) e.stopPropagation(); creditSpeed = 1; };
+    window.accelerateCredits = function(e) { if(e) e.stopPropagation(); creditSpeed = 4.5; };
+    window.normalizeCredits = function(e) { if(e) e.stopPropagation(); creditSpeed = 0.55; };
     window.closeCredits = function() {
         const overlay = document.getElementById('credit-overlay');
         if(overlay) {
