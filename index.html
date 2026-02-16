@@ -121,11 +121,24 @@
         #cand-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1vh; overflow-y: hidden; overflow-x: hidden; font-family: 'Consolas', monospace; font-size: 1.8vh; color: #fff; flex-grow: 1; align-content: start; }
         .cand-item { padding: 0.4vh 0.2vh; height: 3vh; line-height: 3vh; text-align: center; background: rgba(255,255,255,0.07); border-radius: 0.6vh; transition: none; will-change: transform; }
 
-        /* 0% 확률 시 나타날 고양이 이미지 스타일 */
-        #zero-cat-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: 100; opacity: 0; pointer-events: none;
-            border-radius: 1vh; transition: opacity 8s linear;
+        /* 추가: 양자 구름 오버레이 이미지 스타일 */
+        #paradox-cat-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 100;
+            display: none;
+            opacity: 0;
+            border-radius: 1vh;
+        }
+
+        @keyframes fadeOutLong {
+            0% { opacity: 1; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
         .input-view { 
@@ -352,9 +365,9 @@
                 </div>
             </div>
             <div id="candidates-box">
-                <img id="zero-cat-overlay" src="cat footage3.jpg">
                 <div class="cand-title">Quantum Cloud</div>
                 <div id="cand-list"></div>
+                <img id="paradox-cat-overlay" src="cat footage3.jpg">
             </div>
         </div>
     </div>
@@ -710,10 +723,9 @@
         const catImg = document.getElementById('prob-cat-img');
         const deadX = document.getElementById('dead-x');
         const flashOverlay = document.getElementById('flash-overlay');
-        const zeroCat = document.getElementById('zero-cat-overlay');
+        const paradoxOverlay = document.getElementById('paradox-cat-overlay');
         
         if(_0xaiCandidates.length === 0) {
-            // 0% 되는 순간 즉시 실행
             if(!_0xparadoxMusicTriggered) {
                 _0xbgm.pause();
                 _0xbgm = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3");
@@ -727,13 +739,13 @@
                 flashOverlay.style.opacity = '1';
                 setTimeout(() => { flashOverlay.style.opacity = '0'; }, 1500);
                 
-                // cat footage3.jpg 즉시 표시 후 8초 뒤 8초간 사라짐
-                zeroCat.style.transition = 'none';
-                zeroCat.style.opacity = '1';
-                setTimeout(() => {
-                    zeroCat.style.transition = 'opacity 8s linear';
-                    zeroCat.style.opacity = '0';
-                }, 8000);
+                // cat footage3.jpg 표시 제어
+                if(paradoxOverlay) {
+                    paradoxOverlay.style.display = 'block';
+                    paradoxOverlay.style.opacity = '1';
+                    // 8초 뒤부터 8초에 걸쳐 사라지게 설정
+                    paradoxOverlay.style.animation = "fadeOutLong 16s forwards";
+                }
 
                 _0xzeroOverlayTriggered = true;
                 _0xstPsL();
@@ -745,7 +757,7 @@
             deadX.style.display = 'block'; 
         } else {
             deadX.style.display = 'none';
-            zeroCat.style.opacity = '0'; // 확률이 생기면 다시 숨김
+            if(paradoxOverlay) { paradoxOverlay.style.display = 'none'; paradoxOverlay.style.animation = 'none'; }
             if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
 
             let currentColor = 'var(--purple)';
@@ -817,7 +829,7 @@
             statusEl.style.textShadow = "0 0 1vh var(--red)";
         } else {
             entBtn.disabled = false;
-            statusEl.innerText = "양자고양이 좌표 측정 중...";
+            statusEl.innerText = "양자고양이 위치 관측 중...";
             statusEl.style.animation = "neonShift 10s infinite alternate linear";
         }
     }
@@ -881,7 +893,7 @@
                 }, 6000);
                 
                 const ed = _0xtextData.endings.win;
-                _0xrnEG(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
+                _0xrnEG(ed.type, ed.result, ed.message, 'var(--green)', true, false);
             } else {
                 _0xfailSfx.play().catch(e=>{});
                 if(_0xfailLoopInterval) clearInterval(_0xfailLoopInterval);
