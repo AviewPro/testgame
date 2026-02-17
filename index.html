@@ -51,7 +51,9 @@
         .title-wrapper { position: relative; margin-top: 5vh; margin-bottom: 3vh; z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; flex-shrink: 0; }
         .title-bg { position: absolute; background: rgba(0, 0, 0, 0.7); width: 120%; height: 120%; border-radius: 1.5vh; filter: blur(0.5vh); z-index: -1; }
         .header-title { font-size: 5vh; font-weight: bold; letter-spacing: 1.2vh; text-shadow: 0 0 2vh currentColor; animation: neonShift 10s infinite alternate linear; text-align: center; margin: 0; padding: 1vh 4vh 0.5vh 4vh; }
-        .header-subtitle { font-family: 'Orbitron', sans-serif; font-size: 1.8vh; color: var(--cyan); letter-spacing: 0.5vh; opacity: 0.8; margin-top: 0.5vh; margin-bottom: 1.5vh; }
+        
+        /* -Training Field- 물리적 위치 조정 (padding-top 추가) */
+        .header-subtitle { font-family: 'Orbitron', sans-serif; font-size: 1.8vh; color: var(--cyan); letter-spacing: 0.5vh; opacity: 0.8; margin-top: 0.5vh; margin-bottom: 1.5vh; padding-top: 1.5vh; }
         
         @keyframes neonShift { 0% { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 2vh var(--cyan); } 100% { color: var(--purple); border-color: var(--purple); box-shadow: 0 0 2vh var(--purple); } }
         @keyframes neonShiftBg { 0% { background-color: var(--cyan); box-shadow: 0 0 1.5vh var(--cyan); } 100% { background-color: var(--purple); box-shadow: 0 0 1.5vh var(--purple); } }
@@ -91,14 +93,15 @@
         #info-panel { background: rgba(10, 10, 15, 0.9); border: 0.1vh solid #333; display: none; position: relative; }
         
         .status { text-align:center; margin-bottom:1.5vh; font-weight:bold; height:3vh; font-size: 2.2vh; animation: neonShift 10s infinite alternate linear; transform: translateY(-1vh); }
-        #log-window { height: 26vh; background: #000; overflow-y: auto; padding: 1vh; font-family: 'Consolas', monospace; margin-bottom: 1.5vh; border: 0.1vh inset #222; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 8.5vh; gap: 0px; align-content: start; }
+        #log-window { height: 26vh; background: #000; overflow-y: auto; padding: 1vh; font-family: 'Consolas', monospace; margin-bottom: 1.5vh; border: 0.1vh inset #222; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 8.5vh; gap: 0px; align-content: start; position: relative; }
         .log-item { padding: 0.5vh; display: flex; flex-direction: column; justify-content: center; background: rgba(0, 242, 255, 0.05); color: var(--cyan); border-bottom: 0.1vh solid #222; position: relative; box-sizing: border-box; text-align: center; }
         .log-item:nth-child(odd) { border-right: 0.1vh solid #333; }
         .log-n { font-family: 'Orbitron', sans-serif; font-size: 3vh; font-weight: 900; display: block; letter-spacing: 0.2vh; color: #fff; }
         .log-sb { font-weight: bold; font-size: 1.8vh; color: var(--purple); margin-top: 0.2vh; }
         .log-out { color: #bc13fe; text-shadow: 0 0 1vh #bc13fe; }
         
-        .training-clear-msg { grid-column: span 2; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--green); font-size: 2.2vh; font-weight: bold; text-align: center; text-shadow: 0 0 1vh var(--green); line-height: 1.6; }
+        /* 훈련 통과 문구 세로폭 중앙 정렬 설정 */
+        .training-clear-msg { grid-column: span 2; display: flex; flex-direction: column; align-items: center; justify-content: center; position: absolute; top: 0; left: 0; width: 100%; height: 100%; color: var(--green); font-size: 2.2vh; font-weight: bold; text-align: center; text-shadow: 0 0 1vh var(--green); line-height: 1.6; z-index: 10; pointer-events: none; }
         .count-highlight { font-size: 4vh; margin-bottom: 0.5vh; display: block; }
 
         .chance-area { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5vh; gap: 2vh; height: 16vh; position: relative; }
@@ -765,25 +768,20 @@
             if(!_0xzeroOverlayTriggered) {
                 _0xlightsOffSfx.currentTime = 0;
                 _0xlightsOffSfx.play().catch(e=>{});
-
-                // 암전 효과 로직 수정: 확실한 초기화 후 애니메이션
                 flashOverlay.style.display = 'block';
                 flashOverlay.style.transition = 'none';
                 flashOverlay.style.background = '#000';
                 flashOverlay.style.opacity = '1';
-                
                 setTimeout(() => { 
                     flashOverlay.style.transition = 'opacity 1.5s ease-in-out';
                     flashOverlay.style.opacity = '0'; 
                     setTimeout(() => { flashOverlay.style.display = 'none'; }, 1500);
                 }, 3000);
-                
                 if(paradoxOverlay) {
                     paradoxOverlay.style.display = 'block';
                     paradoxOverlay.style.opacity = '1';
                     paradoxOverlay.style.animation = "fadeOutLong 16s forwards";
                 }
-
                 _0xzeroOverlayTriggered = true;
                 _0xstPsL();
             }
@@ -793,7 +791,6 @@
             turnCounter.style.color = 'var(--green)'; turnCounter.style.textShadow = '0 0 2vh var(--green)';
             deadX.style.display = 'block'; 
             
-            // 왼쪽 패널에 훈련 통과 메시지 고정 및 폰트 크기 조정
             logWindow.innerHTML = `
                 <div class="training-clear-msg">
                     <span class="count-highlight">${_0xplayCount}회 만에</span>
@@ -829,11 +826,9 @@
 
             chanceValEl.style.color = currentColor;
             chanceValEl.style.textShadow = currentShadow;
-            
             chanceTitleEl.style.display = 'block';
             chanceTitleEl.style.color = currentColor;
             chanceTitleEl.style.textShadow = currentShadow;
-            
             chanceValEl.innerText = prob.toFixed(2) + "%";
             chanceBoxEl.style.borderColor = currentColor;
             turnCounter.style.color = currentColor;
@@ -850,19 +845,12 @@
         }
         
         logWindow.scrollTop = logWindow.scrollHeight;
-
         const slice = [..._0xaiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
-        
         let pixelateStrength = 0;
-        if (prob >= 25) {
-            pixelateStrength = 0; 
-        } else if (prob >= 5) {
-            pixelateStrength = 0.05; 
-        } else if (prob >= 1) {
-            pixelateStrength = 0.15; 
-        } else {
-            pixelateStrength = 0.25; 
-        }
+        if (prob >= 25) pixelateStrength = 0; 
+        else if (prob >= 5) pixelateStrength = 0.05; 
+        else if (prob >= 1) pixelateStrength = 0.15; 
+        else pixelateStrength = 0.25; 
 
         document.getElementById('cand-list').innerHTML = slice.map(c => `<div class="cand-item" style="filter: blur(${pixelateStrength}vh) contrast(180%);">${c}</div>`).join('');
 
@@ -938,7 +926,6 @@
                     _0xsuccessSfx.currentTime = 0;
                     _0xsuccessSfx.play().catch(e=>{});
                 }, 6000);
-                
                 const ed = _0xtextData.endings.win;
                 _0xrnEG(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
             } else {
@@ -948,7 +935,6 @@
                     _0xfailSfx.currentTime = 0;
                     _0xfailSfx.play().catch(e=>{});
                 }, 6000);
-                
                 const ed = _0xtextData.endings.lose;
                 _0xrnEG(ed.type, ed.result, ed.message, 'var(--red)', false, false);
             }
@@ -960,7 +946,6 @@
         const paradoxGif = "Neon cat box.gif";
         const loseImg = "box.gif";
         let mediaUrl = isParadox ? paradoxGif : (isWin ? winGif : loseImg);
-        
         let emojiLanes = "";
         if(isParadox) {
             const longLane = "🐈 ".repeat(22);
@@ -971,7 +956,6 @@
                 <div class="emoji-lane" style="right:10vw; animation: slide-v 26s linear infinite reverse; animation-delay: -1s;">${longLane.split(' ').join('<br>')}</div>
             `;
         }
-
         let subButtons = "";
         if (isParadox) {
             subButtons = `<button onclick="window.open('https://aviewpro.github.io/schrodinger-baseball/', '_blank')" style="font-family: 'Bebas Neue', cursive; width:65vh; padding:2vh 0; margin-top:5vh; background:#222; color:${color}; border:0.4vh solid ${color}; cursor:pointer; font-size:5vh; border-radius:2vh; font-weight:bold; box-shadow: 0 0 2vh ${color}; z-index:100; letter-spacing:0.3vh;">실전에 도전하기</button>`;
@@ -986,7 +970,6 @@
                     </div>
                 </div>`;
         }
-
         document.body.innerHTML = `
             <div id="version-tag">0.5 Version</div>
             ${emojiLanes}
@@ -1003,14 +986,6 @@
                 <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;" onclick="_0xplayNyaBgm()"></div>
                 <div class="credit-esc">Press ESC to Close</div>
             </div>
-            <div id="tutorial-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:5000; flex-direction:column; align-items:center; justify-content:center;">
-                <div class="tutorial-msg-box">
-                    <h3 id="tut-title"></h3>
-                    <p id="tut-desc"></p>
-                    <button id="tut-next-btn" onclick="_0x5a1b()">확인</button>
-                    <div id="tut-esc-guide" class="esc-guide" style="display:none;"></div>
-                </div>
-            </div>
             <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow: hidden;">
                 <img src="${mediaUrl}" style="border:0.4vh solid ${color}; border-radius:4vh; box-shadow: 0 0 3vh ${color}; width: 40vh; height: 40vh; object-fit: cover; margin-bottom: 2vh;">
                 <h1 style="font-size:6vh; color:${color}; margin: 1vh 0; text-shadow:0 0 2vh ${color};">${type}</h1>
@@ -1018,51 +993,27 @@
                 <p style="color:${isParadox ? color : '#aaa'}; font-size:2.2vh; max-width:80vh; line-height:1.4; margin: 1vh 0;">${msg}</p>
                 ${subButtons}
             </div>`;
-            
-        document.getElementById('volume-slider-end').addEventListener('input', (e) => {
-            _0x3f2a(e.target.value);
-        });
+        document.getElementById('volume-slider-end').addEventListener('input', (e) => { _0x3f2a(e.target.value); });
     }
 
-    let _0xcrdScrInt = null;
-    let _0xcrdY = 0;
-    let _0xcrdSpd = 0.55;
-
+    let _0xcrdScrInt = null; let _0xcrdY = 0; let _0xcrdSpd = 0.55;
     window.showCredits = function() {
         if(!_0xtextData) return;
         const overlay = document.getElementById('credit-overlay');
         const content = document.getElementById('credit-content');
         if (!overlay || !content) return;
-        
         const text = _0xtextData.dev_story.join("\n");
-        
-        content.innerHTML = `
-            <div>${text}</div>
-            <img src="귀여운고양이.jpg" onclick="_0xplayNyaBgm()" style="width:67.5vh; height:auto; margin-top:5vh; border-radius:2vh; border:0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); cursor:pointer;">
-            <img src="Aview.png" class="credit-logo">
-        `;
+        content.innerHTML = `<div>${text}</div><img src="귀여운고양이.jpg" onclick="_0xplayNyaBgm()" style="width:67.5vh; height:auto; margin-top:5vh; border-radius:2vh; border:0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); cursor:pointer;"><img src="Aview.png" class="credit-logo">`;
         overlay.style.display = 'flex';
-        _0xcrdY = window.innerHeight * 0.1;
-        _0xcrdSpd = 0.55;
-        
+        _0xcrdY = window.innerHeight * 0.1; _0xcrdSpd = 0.55;
         if (_0xcrdScrInt) clearInterval(_0xcrdScrInt);
-        _0xcrdScrInt = setInterval(() => {
-            _0xcrdY -= _0xcrdSpd;
-            content.style.transform = `translateY(${_0xcrdY}px)`;
-            if (_0xcrdY < -(content.scrollHeight + 25)) {
-                clearInterval(_0xcrdScrInt);
-            }
-        }, 16);
+        _0xcrdScrInt = setInterval(() => { _0xcrdY -= _0xcrdSpd; content.style.transform = `translateY(${_0xcrdY}px)`; if (_0xcrdY < -(content.scrollHeight + 25)) clearInterval(_0xcrdScrInt); }, 16);
     };
-
     window._0x8c21 = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 4.5; };
     window._0x7d4e = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 0.55; };
     window._0xclsCr = function() {
         const overlay = document.getElementById('credit-overlay');
-        if(overlay) {
-            overlay.style.display = 'none';
-            if (_0xcrdScrInt) clearInterval(_0xcrdScrInt);
-        }
+        if(overlay) { overlay.style.display = 'none'; if (_0xcrdScrInt) clearInterval(_0xcrdScrInt); }
     };
 
     setInterval(() => {
