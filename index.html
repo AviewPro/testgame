@@ -288,7 +288,7 @@
         @keyframes slide-h { from { transform: translateX(-150%); } to { transform: translateX(150vw); } }
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
-        /* 패러독스 전용 레드 스탬프 스타일 - 레이어 맨 앞 고정 */
+        /* 패러독스 전용 레드 스탬프 스타일 - 레이어 최상단 고정 */
         .paradox-stamp {
             position: fixed;
             right: 5vh;
@@ -794,7 +794,7 @@
         
         if(_0xaiCandidates.length === 0) {
             if(!_0xzeroOverlayTriggered) {
-                // BGM 정지 및 소등/사망음 효과음 연출
+                // 확률이 0%가 되는 즉시 연출 실행
                 if(_0xbgm) _0xbgm.pause();
                 _0xlightsOffSfx.currentTime = 0;
                 _0xlightsOffSfx.play().catch(e=>{});
@@ -804,17 +804,17 @@
                     _0xdeadSfx.play().catch(e=>{});
                 }, 200);
 
-                // 시각적 효과: 0% 즉시 2초간 암전 후 3초에 걸쳐 서서히 밝아짐
+                // 2초 동안 검은색 유지 -> 이후 3초에 걸쳐 천천히 밝아짐
                 flashOverlay.style.display = 'block';
-                flashOverlay.style.transition = 'none'; // 즉시 검은색
+                flashOverlay.style.transition = 'none'; 
                 flashOverlay.style.background = '#000';
                 flashOverlay.style.opacity = '1';
                 
                 setTimeout(() => { 
-                    flashOverlay.style.transition = 'opacity 3.0s ease-in-out'; // 3초에 걸쳐 서서히 켜짐
+                    flashOverlay.style.transition = 'opacity 3.0s ease-in-out'; 
                     flashOverlay.style.opacity = '0'; 
                     setTimeout(() => { flashOverlay.style.display = 'none'; }, 3000);
-                }, 2000); // 2초 암전 유지
+                }, 2000); 
                 
                 if(paradoxOverlay) {
                     paradoxOverlay.style.display = 'block';
@@ -979,7 +979,7 @@
                 const ed = _0xtextData.endings.win;
                 _0xrnEG(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
             } else {
-                _0xrndPrCl(); // 실패 시 연출 보강
+                _0xrndPrCl(); 
                 _0xfailSfx.play().catch(e=>{});
                 if(_0xfailLoopInterval) clearInterval(_0xfailLoopInterval);
                 _0xfailLoopInterval = setInterval(() => {
@@ -1009,7 +1009,7 @@
                 <div class="emoji-lane" style="left:10vw; animation: slide-v 22s linear infinite; animation-delay: -12s;">${longLane.split(' ').join('<br>')}</div>
                 <div class="emoji-lane" style="right:10vw; animation: slide-v 26s linear infinite reverse; animation-delay: -1s;">${longLane.split(' ').join('<br>')}</div>
             `;
-            // 패러독스 화면 전용 레드 스탬프 레이어 - 최상단 고정
+            // 패러독스 엔딩에서 도장 이미지를 최상단 레이어로 배치
             stampHtml = `<img src="Aview.png" class="paradox-stamp">`;
         }
 
