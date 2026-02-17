@@ -410,6 +410,7 @@
     let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
     let _0xcurrentVolume = 0.15;
     let _0xfailLoopInterval = null; 
+    let _0xfailTimeout = null;
     let _0xsuccessLoopInterval = null; 
     let _0xmeowLoopInterval = null; 
     let _0xmeowCount = 0; 
@@ -496,6 +497,7 @@
         _0xtotalStartCount++; 
         localStorage.setItem('totalStartCount', _0xtotalStartCount);
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
+        if(_0xfailTimeout) { clearTimeout(_0xfailTimeout); _0xfailTimeout = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
         if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
         document.getElementById('setup').style.display = 'none';
@@ -524,6 +526,7 @@
         _0xtotalStartCount++; 
         localStorage.setItem('totalStartCount', _0xtotalStartCount);
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
+        if(_0xfailTimeout) { clearTimeout(_0xfailTimeout); _0xfailTimeout = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
         if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
         _0xbgm.pause();
@@ -643,6 +646,7 @@
             if (document.getElementById('credit-overlay')?.style.display === 'flex') { _0xclsCr(); return; }
             if (_0xisTutorial) {
                 if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
+                if(_0xfailTimeout) { clearTimeout(_0xfailTimeout); _0xfailTimeout = null; }
                 location.reload();
             }
             if (document.getElementById('obs-overlay')?.style.display === 'flex') { document.getElementById('obs-overlay').style.display = 'none'; }
@@ -943,15 +947,16 @@
                 _0xrnEG(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
             } else {
                 if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
-                setTimeout(() => {
-                    if(!document.getElementById('obs-overlay')) return; 
+                if(_0xfailTimeout) { clearTimeout(_0xfailTimeout); _0xfailTimeout = null; }
+
+                _0xfailTimeout = setTimeout(() => {
                     _0xfailSfx.currentTime = 0;
                     _0xfailSfx.play().catch(e=>{});
                     _0xfailLoopInterval = setInterval(() => {
                         _0xfailSfx.currentTime = 0;
                         _0xfailSfx.play().catch(e=>{});
                     }, 6000);
-                }, 5000);
+                }, 4500); 
                 
                 const ed = _0xtextData.endings.lose;
                 _0xrnEG(ed.type, ed.result, ed.message, 'var(--red)', false, false);
@@ -985,7 +990,7 @@
                 <div style="display:flex; flex-direction:column; gap: 2vh; align-items: center; margin-top:4vh; width: 62vh; z-index:100;">
                     <button onclick="window.showTips('${tipType}')" style="font-family: 'Bebas Neue', cursive; width:100%; padding:1.2vh 0; background:#333; color:${color}; border:0.2vh solid ${color}; cursor:pointer; font-size:4vh; border-radius:1.5vh; font-weight:bold; letter-spacing:0.2vh;">TIPS</button>
                     <div style="display:flex; gap: 2.5vh; width: 100%;">
-                        <button onclick="if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; } location.reload()" style="font-family: 'Bebas Neue', cursive; flex:1; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid #444; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Main Menu</button>
+                        <button onclick="if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; } if(_0xfailTimeout) { clearTimeout(_0xfailTimeout); _0xfailTimeout = null; } location.reload()" style="font-family: 'Bebas Neue', cursive; flex:1; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid #444; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Main Menu</button>
                         <button onclick="_0xresDir()" style="font-family: 'Bebas Neue', cursive; flex:2; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid ${color}; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Restart</button>
                     </div>
                 </div>`;
