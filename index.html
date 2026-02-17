@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Schrödinger Baseball - Single Mode</title>
-    <link rel="icon" type="image/png" href="Neoncat Icon.png">
+    <link rel="icon" href="Neoncat Icon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -91,22 +91,16 @@
         #info-panel { background: rgba(10, 10, 15, 0.9); border: 0.1vh solid #333; display: none; position: relative; }
         
         .status { text-align:center; margin-bottom:1.5vh; font-weight:bold; height:3vh; font-size: 2.2vh; animation: neonShift 10s infinite alternate linear; transform: translateY(-1vh); }
-        #log-window { height: 26vh; background: #000; overflow-y: auto; padding: 1vh; font-family: 'Consolas', monospace; margin-bottom: 1.5vh; border: 0.1vh inset #222; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 8.5vh; gap: 0px; align-content: start; position: relative; }
+        #log-window { height: 26vh; background: #000; overflow-y: auto; padding: 1vh; font-family: 'Consolas', monospace; margin-bottom: 1.5vh; border: 0.1vh inset #222; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 8.5vh; gap: 0px; align-content: start; }
         .log-item { padding: 0.5vh; display: flex; flex-direction: column; justify-content: center; background: rgba(0, 242, 255, 0.05); color: var(--cyan); border-bottom: 0.1vh solid #222; position: relative; box-sizing: border-box; text-align: center; }
         .log-item:nth-child(odd) { border-right: 0.1vh solid #333; }
         .log-n { font-family: 'Orbitron', sans-serif; font-size: 3vh; font-weight: 900; display: block; letter-spacing: 0.2vh; color: #fff; }
         .log-sb { font-weight: bold; font-size: 1.8vh; color: var(--purple); margin-top: 0.2vh; }
         .log-out { color: #bc13fe; text-shadow: 0 0 1vh #bc13fe; }
 
-        #paradox-message-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); display: none; flex-direction: column;
-            align-items: center; justify-content: center; text-align: center;
-            z-index: 150; padding: 2vh; box-sizing: border-box;
-            border: 0.2vh solid var(--green); border-radius: 1vh;
-        }
-        .paradox-msg-count { font-family: 'Orbitron', sans-serif; font-size: 6vh; font-weight: 900; color: var(--green); text-shadow: 0 0 2vh var(--green); margin-bottom: 1vh; }
-        .paradox-msg-text { font-size: 2vh; color: var(--green); font-weight: bold; line-height: 1.4; }
+        #log-window.paradox-mode { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(0, 255, 65, 0.05); border: 0.2vh solid var(--green); color: var(--green); overflow: hidden; }
+        .paradox-count { font-family: 'Orbitron', sans-serif; font-size: 6.5vh; font-weight: 900; text-shadow: 0 0 2vh var(--green); margin-bottom: 1vh; }
+        .paradox-msg { font-size: 2vh; line-height: 1.4; font-weight: bold; }
 
         .chance-area { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5vh; gap: 2vh; height: 16vh; position: relative; }
         #chance-box { background: rgba(0,0,0,0.6); padding: 1vh; border-radius: 2vh; border: 0.2vh solid var(--purple); text-align: center; flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; transition: border-color 0.5s; z-index: 5; }
@@ -355,12 +349,7 @@
     <div style="display: flex; flex-wrap: wrap; gap: 3vh; justify-content: center; width: 100%;">
         <div id="game-box">
             <div class="status" id="status">준비 완료</div>
-            <div id="log-window">
-                <div id="paradox-message-overlay">
-                    <div class="paradox-msg-count" id="paradox-count-display">0회</div>
-                    <div class="paradox-msg-text">시도 끝에 패러독스를 찾으셨습니다.<br>축하합니다!</div>
-                </div>
-            </div>
+            <div id="log-window"></div>
             <div class="input-view" id="display">----</div>
             <div class="keypad" id="main-keypad">
                 <button class="key-btn" data-key="7" onclick="_0x9b8a('7')">7</button><button class="key-btn" data-key="8" onclick="_0x9b8a('8')">8</button><button class="key-btn" data-key="9" onclick="_0x9b8a('9')">9</button>
@@ -416,6 +405,7 @@
     const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
 
     let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 7;
+    let _0xtotalStartCount = parseInt(localStorage.getItem('totalStartCount')) || 0; // 클릭 카운터 변수
     let _0xisTutorial = false, _0xtutorialStep = 0, _0xcurrentTipType = "";
     let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
     let _0xcurrentVolume = 0.15;
@@ -423,7 +413,6 @@
     let _0xsuccessLoopInterval = null; 
     let _0xmeowLoopInterval = null; 
     let _0xmeowCount = 0; 
-    let _0xclickCount = 0; // 버튼 클릭 횟수 카운터
     
     let _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
     _0xbgm.loop = true;
@@ -504,7 +493,8 @@
 
     function _0x4c5b() {
         _0xplayClick();
-        _0xclickCount++; // 스타트 버튼 카운트 증가
+        _0xtotalStartCount++; // 카운터 증가
+        localStorage.setItem('totalStartCount', _0xtotalStartCount);
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
         if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
@@ -518,8 +508,10 @@
     function _0xresGm() {
         _0xaiCandidates = []; _0xhistory = []; _0xinputStr = ""; _0xturnCount = 7; _0xmeowCount = 0;
         _0xparadoxMusicTriggered = false; _0xalarmTriggered = false; _0xzeroOverlayTriggered = false;
+        const logWin = document.getElementById('log-window');
+        logWin.classList.remove('paradox-mode');
+        logWin.innerHTML = "";
         if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
-        document.getElementById('paradox-message-overlay').style.display = 'none'; // 오버레이 숨기기
         for(let i=0; i<=9999; i++){
             let n = i.toString().padStart(4, '0');
             if(new Set(n).size === 4) _0xaiCandidates.push(n);
@@ -529,7 +521,8 @@
 
     function _0xresDir() {
         _0xplayClick();
-        _0xclickCount++; // 리스타트 버튼 카운트 증가
+        _0xtotalStartCount++; // 카운터 증가
+        localStorage.setItem('totalStartCount', _0xtotalStartCount);
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
         if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
@@ -537,8 +530,6 @@
         _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
         _0xbgm.loop = true;
         _0xbgm.playbackRate = 2.0;
-        
-        // 카운트 보존을 위해 수동 UI 초기화 시도 (단순 innerHTML 초기화 지양)
         document.body.innerHTML = _0xoriginalBodyContent;
         _0x3f2a(document.getElementById('volume-slider')?.value || 0.15);
         _0x4c5b();
@@ -759,10 +750,16 @@
         const deadX = document.getElementById('dead-x');
         const flashOverlay = document.getElementById('flash-overlay');
         const paradoxOverlay = document.getElementById('paradox-cat-overlay');
-        const paradoxMsgLayer = document.getElementById('paradox-message-overlay');
-        const paradoxCountDisp = document.getElementById('paradox-count-display');
+        const logWin = document.getElementById('log-window');
         
         if(_0xaiCandidates.length === 0) {
+            // 패러독스 기록창 표시
+            logWin.classList.add('paradox-mode');
+            logWin.innerHTML = `
+                <div class="paradox-count">${_0xtotalStartCount}회</div>
+                <div class="paradox-msg">시도 끝에 패러독스를 찾으셨습니다.<br>축하합니다!</div>
+            `;
+
             if(!_0xparadoxMusicTriggered) {
                 _0xbgm.pause();
                 setTimeout(() => {
@@ -792,12 +789,6 @@
                     paradoxOverlay.style.animation = "fadeOutLong 16s forwards";
                 }
 
-                // 패러독스 메시지 레이어 활성화
-                if(paradoxMsgLayer) {
-                    paradoxCountDisp.innerText = `${_0xclickCount}회`;
-                    paradoxMsgLayer.style.display = 'flex';
-                }
-
                 _0xzeroOverlayTriggered = true;
                 _0xstPsL();
             }
@@ -809,7 +800,6 @@
         } else {
             deadX.style.display = 'none';
             if(paradoxOverlay) { paradoxOverlay.style.display = 'none'; paradoxOverlay.style.animation = 'none'; }
-            if(paradoxMsgLayer) paradoxMsgLayer.style.display = 'none';
             if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
 
             let currentColor = 'var(--purple)';
@@ -831,7 +821,7 @@
                 currentShadow = '0 0 2.5vh var(--cyan)';
                 _0xalarmTriggered = false;
             } else {
-                _0alarmTriggered = false;
+                _0xalarmTriggered = false;
             }
 
             chanceValEl.style.color = currentColor;
@@ -849,19 +839,14 @@
             catImg.style.display = 'block'; catImg.style.opacity = opacityAmount;
             catImg.style.filter = `blur(${blurAmount}vh)`; 
             catImg.style.borderColor = currentColor;
+
+            logWin.innerHTML = _0xhistory.map(h => {
+                const resultText = (h.s === 0 && h.b === 0) ? `<span class="log-out">OUT</span>` : `${h.s}S / ${h.b}B`;
+                return `<div class="log-item"><span class="log-n">${h.n}</span><span class="log-sb">${resultText}</span></div>`;
+            }).join('');
+            logWin.scrollTop = logWin.scrollHeight;
         }
         
-        document.getElementById('log-window').innerHTML = `
-            <div id="paradox-message-overlay" style="display: ${_0xaiCandidates.length === 0 ? 'flex' : 'none'}">
-                <div class="paradox-msg-count">${_0xclickCount}회</div>
-                <div class="paradox-msg-text">시도 끝에 패러독스를 찾으셨습니다.<br>축하합니다!</div>
-            </div>
-            ` + _0xhistory.map(h => {
-            const resultText = (h.s === 0 && h.b === 0) ? `<span class="log-out">OUT</span>` : `${h.s}S / ${h.b}B`;
-            return `<div class="log-item"><span class="log-n">${h.n}</span><span class="log-sb">${resultText}</span></div>`;
-        }).join('');
-        document.getElementById('log-window').scrollTop = document.getElementById('log-window').scrollHeight;
-
         const slice = [..._0xaiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
         
         let pixelateStrength = 0;
