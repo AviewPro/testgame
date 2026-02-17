@@ -48,9 +48,10 @@
         #sound-control input[type=range] { -webkit-appearance: slider-vertical; width: 0.8vh; height: 15vh; cursor: pointer; }
         .sound-icon { font-size: 1.5vh; color: var(--cyan); }
 
-        .title-wrapper { position: relative; margin-top: 5vh; margin-bottom: 3vh; z-index: 300; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+        .title-wrapper { position: relative; margin-top: 5vh; margin-bottom: 3vh; z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; flex-shrink: 0; }
         .title-bg { position: absolute; background: rgba(0, 0, 0, 0.7); width: 120%; height: 120%; border-radius: 1.5vh; filter: blur(0.5vh); z-index: -1; }
-        .header-title { font-size: 5vh; font-weight: bold; letter-spacing: 1.2vh; text-shadow: 0 0 2vh currentColor; animation: neonShift 10s infinite alternate linear; text-align: center; margin: 0; padding: 1vh 4vh; }
+        .header-title { font-size: 5vh; font-weight: bold; letter-spacing: 1.2vh; text-shadow: 0 0 2vh currentColor; animation: neonShift 10s infinite alternate linear; text-align: center; margin: 0; padding: 1vh 4vh 0.5vh 4vh; }
+        .header-subtitle { font-family: 'Orbitron', sans-serif; font-size: 1.8vh; color: var(--cyan); letter-spacing: 0.5vh; opacity: 0.8; margin-bottom: 1vh; }
         
         @keyframes neonShift { 0% { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 2vh var(--cyan); } 100% { color: var(--purple); border-color: var(--purple); box-shadow: 0 0 2vh var(--purple); } }
         @keyframes neonShiftBg { 0% { background-color: var(--cyan); box-shadow: 0 0 1.5vh var(--cyan); } 100% { background-color: var(--purple); box-shadow: 0 0 1.5vh var(--purple); } }
@@ -96,6 +97,8 @@
         .log-n { font-family: 'Orbitron', sans-serif; font-size: 3vh; font-weight: 900; display: block; letter-spacing: 0.2vh; color: #fff; }
         .log-sb { font-weight: bold; font-size: 1.8vh; color: var(--purple); margin-top: 0.2vh; }
         .log-out { color: #bc13fe; text-shadow: 0 0 1vh #bc13fe; }
+        
+        .training-clear-msg { grid-column: span 2; display: flex; align-items: center; justify-content: center; height: 100%; color: var(--green); font-size: 2.2vh; font-weight: bold; text-align: center; text-shadow: 0 0 1vh var(--green); line-height: 1.4; animation: blinkSync 2s infinite ease-in-out; }
 
         .chance-area { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5vh; gap: 2vh; height: 16vh; position: relative; }
         #chance-box { background: rgba(0,0,0,0.6); padding: 1vh; border-radius: 2vh; border: 0.2vh solid var(--purple); text-align: center; flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; transition: border-color 0.5s; z-index: 5; }
@@ -325,6 +328,7 @@
 <div class="title-wrapper">
     <div class="title-bg"></div>
     <div class="header-title">SCHRÖDINGER BASEBALL</div>
+    <div class="header-subtitle">-Training Field-</div>
 </div>
 
 <div class="game-container">
@@ -407,6 +411,7 @@
     let _0xsuccessLoopInterval = null; 
     let _0xmeowLoopInterval = null; 
     let _0xmeowCount = 0; 
+    let _0xplayCount = 0;
     
     let _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
     _0xbgm.loop = true;
@@ -487,6 +492,7 @@
 
     function _0x4c5b() {
         _0xplayClick();
+        _0xplayCount++;
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
         if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
@@ -510,6 +516,7 @@
 
     function _0xresDir() {
         _0xplayClick();
+        _0xplayCount++;
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
         if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
@@ -517,7 +524,11 @@
         _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
         _0xbgm.loop = true;
         _0xbgm.playbackRate = 2.0;
+        
+        const oldPlayCount = _0xplayCount;
         document.body.innerHTML = _0xoriginalBodyContent;
+        _0xplayCount = oldPlayCount;
+        
         _0x3f2a(document.getElementById('volume-slider')?.value || 0.15);
         _0x4c5b();
     }
@@ -708,7 +719,7 @@
 
     function _0xstPsL() {
         if(_0xpoisonInterval) return;
-        const targetText = "Cat is Poisoned in the Box";
+        const targetText = "Your Training is Completed";
         const el = document.getElementById('chance-val');
         let index = targetText.length;
         let isDeleting = true;
@@ -737,6 +748,7 @@
         const deadX = document.getElementById('dead-x');
         const flashOverlay = document.getElementById('flash-overlay');
         const paradoxOverlay = document.getElementById('paradox-cat-overlay');
+        const logWindow = document.getElementById('log-window');
         
         if(_0xaiCandidates.length === 0) {
             if(!_0xparadoxMusicTriggered) {
@@ -755,7 +767,7 @@
 
                 flashOverlay.style.transition = 'none';
                 flashOverlay.style.background = '#000';
-                flashOverlay.style.opacity = '1';
+                flashOverlay.opacity = '1';
                 
                 setTimeout(() => { 
                     flashOverlay.style.transition = 'opacity 1.5s ease';
@@ -776,6 +788,9 @@
             catImg.style.opacity = '0'; catImg.style.filter = 'blur(2vh)';
             turnCounter.style.color = 'var(--green)'; turnCounter.style.textShadow = '0 0 2vh var(--green)';
             deadX.style.display = 'block'; 
+            
+            // 왼쪽 패널 다 지우고 훈련 통과 메시지 표시
+            logWindow.innerHTML = `<div class="training-clear-msg">${_0xplayCount}회만에 훈련을 통과하셨습니다</div>`;
         } else {
             deadX.style.display = 'none';
             if(paradoxOverlay) { paradoxOverlay.style.display = 'none'; paradoxOverlay.style.animation = 'none'; }
@@ -800,7 +815,7 @@
                 currentShadow = '0 0 2.5vh var(--cyan)';
                 _0xalarmTriggered = false;
             } else {
-                _0alarmTriggered = false;
+                _0xalarmTriggered = false;
             }
 
             chanceValEl.style.color = currentColor;
@@ -818,13 +833,14 @@
             catImg.style.display = 'block'; catImg.style.opacity = opacityAmount;
             catImg.style.filter = `blur(${blurAmount}vh)`; 
             catImg.style.borderColor = currentColor;
+            
+            logWindow.innerHTML = _0xhistory.map(h => {
+                const resultText = (h.s === 0 && h.b === 0) ? `<span class="log-out">OUT</span>` : `${h.s}S / ${h.b}B`;
+                return `<div class="log-item"><span class="log-n">${h.n}</span><span class="log-sb">${resultText}</span></div>`;
+            }).join('');
         }
         
-        document.getElementById('log-window').innerHTML = _0xhistory.map(h => {
-            const resultText = (h.s === 0 && h.b === 0) ? `<span class="log-out">OUT</span>` : `${h.s}S / ${h.b}B`;
-            return `<div class="log-item"><span class="log-n">${h.n}</span><span class="log-sb">${resultText}</span></div>`;
-        }).join('');
-        document.getElementById('log-window').scrollTop = document.getElementById('log-window').scrollHeight;
+        logWindow.scrollTop = logWindow.scrollHeight;
 
         const slice = [..._0xaiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
         
@@ -932,7 +948,7 @@
 
     function _0xrnEG(type, result, msg, color, isWin, isParadox) {
         const winGif = "cat in the box.gif";
-        const paradoxGif = "Neon cat 2.gif";
+        const paradoxGif = "Neon cat box.gif";
         const loseImg = "box.gif";
         let mediaUrl = isParadox ? paradoxGif : (isWin ? winGif : loseImg);
         
