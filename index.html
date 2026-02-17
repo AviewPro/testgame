@@ -48,9 +48,12 @@
         #sound-control input[type=range] { -webkit-appearance: slider-vertical; width: 0.8vh; height: 15vh; cursor: pointer; }
         .sound-icon { font-size: 1.5vh; color: var(--cyan); }
 
-        .title-wrapper { position: relative; margin-top: 5vh; margin-bottom: 3vh; z-index: 300; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+        .title-wrapper { position: relative; margin-top: 5vh; margin-bottom: 3vh; z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; flex-shrink: 0; }
         .title-bg { position: absolute; background: rgba(0, 0, 0, 0.7); width: 120%; height: 120%; border-radius: 1.5vh; filter: blur(0.5vh); z-index: -1; }
-        .header-title { font-size: 5vh; font-weight: bold; letter-spacing: 1.2vh; text-shadow: 0 0 2vh currentColor; animation: neonShift 10s infinite alternate linear; text-align: center; margin: 0; padding: 1vh 4vh; }
+        .header-title { font-size: 5vh; font-weight: bold; letter-spacing: 1.2vh; text-shadow: 0 0 2vh currentColor; animation: neonShift 10s infinite alternate linear; text-align: center; margin: 0; padding: 1vh 4vh 0.5vh 4vh; }
+        
+        /* -Training Field- 물리적 위치 조정 (padding-top 추가) */
+        .header-subtitle { font-family: 'Orbitron', sans-serif; font-size: 1.8vh; color: var(--cyan); letter-spacing: 0.5vh; opacity: 0.8; margin-top: 0.5vh; margin-bottom: 1.5vh; padding-top: 1.5vh; }
         
         @keyframes neonShift { 0% { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 2vh var(--cyan); } 100% { color: var(--purple); border-color: var(--purple); box-shadow: 0 0 2vh var(--purple); } }
         @keyframes neonShiftBg { 0% { background-color: var(--cyan); box-shadow: 0 0 1.5vh var(--cyan); } 100% { background-color: var(--purple); box-shadow: 0 0 1.5vh var(--purple); } }
@@ -90,12 +93,16 @@
         #info-panel { background: rgba(10, 10, 15, 0.9); border: 0.1vh solid #333; display: none; position: relative; }
         
         .status { text-align:center; margin-bottom:1.5vh; font-weight:bold; height:3vh; font-size: 2.2vh; animation: neonShift 10s infinite alternate linear; transform: translateY(-1vh); }
-        #log-window { height: 26vh; background: #000; overflow-y: auto; padding: 1vh; font-family: 'Consolas', monospace; margin-bottom: 1.5vh; border: 0.1vh inset #222; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 8.5vh; gap: 0px; align-content: start; }
+        #log-window { height: 26vh; background: #000; overflow-y: auto; padding: 1vh; font-family: 'Consolas', monospace; margin-bottom: 1.5vh; border: 0.1vh inset #222; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 8.5vh; gap: 0px; align-content: start; position: relative; }
         .log-item { padding: 0.5vh; display: flex; flex-direction: column; justify-content: center; background: rgba(0, 242, 255, 0.05); color: var(--cyan); border-bottom: 0.1vh solid #222; position: relative; box-sizing: border-box; text-align: center; }
         .log-item:nth-child(odd) { border-right: 0.1vh solid #333; }
         .log-n { font-family: 'Orbitron', sans-serif; font-size: 3vh; font-weight: 900; display: block; letter-spacing: 0.2vh; color: #fff; }
         .log-sb { font-weight: bold; font-size: 1.8vh; color: var(--purple); margin-top: 0.2vh; }
         .log-out { color: #bc13fe; text-shadow: 0 0 1vh #bc13fe; }
+        
+        /* 훈련 통과 문구 세로폭 중앙 정렬 설정 */
+        .training-clear-msg { grid-column: span 2; display: flex; flex-direction: column; align-items: center; justify-content: center; position: absolute; top: 0; left: 0; width: 100%; height: 100%; color: var(--green); font-size: 2.2vh; font-weight: bold; text-align: center; text-shadow: 0 0 1vh var(--green); line-height: 1.6; z-index: 10; pointer-events: none; }
+        .count-highlight { font-size: 4vh; margin-bottom: 0.5vh; display: block; }
 
         .chance-area { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5vh; gap: 2vh; height: 16vh; position: relative; }
         #chance-box { background: rgba(0,0,0,0.6); padding: 1vh; border-radius: 2vh; border: 0.2vh solid var(--purple); text-align: center; flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; transition: border-color 0.5s; z-index: 5; }
@@ -295,7 +302,7 @@
 </head>
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
-<div id="version-tag">1.3 Version</div>
+<div id="version-tag">0.5 Version</div>
 <div id="flash-overlay"></div>
 
 <div id="sound-control">
@@ -325,12 +332,13 @@
 <div class="title-wrapper">
     <div class="title-bg"></div>
     <div class="header-title">SCHRÖDINGER BASEBALL</div>
+    <div class="header-subtitle">-Training Field-</div>
 </div>
 
 <div class="game-container">
     <div id="setup">
         <div class="setup-box-container">
-            <img src="Neon cat.gif" class="setup-cat">
+            <img src="귀여운고양이도트4.jpg" class="setup-cat">
         </div>
         <button onclick="_0x1d2e()" class="tutorial-btn">How to Play</button>
         <button onclick="_0x4c5b()" class="setup-btn">Start Single Mode</button>
@@ -345,7 +353,7 @@
         <div id="game-box">
             <div class="status" id="status">준비 완료</div>
             <div id="log-window"></div>
-            <div class="input-view" id="display">----</div>
+            <div class="input-view" id="display">---</div>
             <div class="keypad" id="main-keypad">
                 <button class="key-btn" data-key="7" onclick="_0x9b8a('7')">7</button><button class="key-btn" data-key="8" onclick="_0x9b8a('8')">8</button><button class="key-btn" data-key="9" onclick="_0x9b8a('9')">9</button>
                 <button id="obs-btn" class="btn-obs" onclick="_0x2f1e()">OBS</button>
@@ -365,8 +373,8 @@
                     <div id="chance-val" class="chance-value">--.--%</div>
                 </div>
                 <div class="prob-cat-container">
-                    <div id="turn-counter">7</div>
-                    <img id="prob-cat-img" src="Neon cat.gif" class="prob-cat">
+                    <div id="turn-counter">6</div>
+                    <img id="prob-cat-img" src="귀여운고양이도트4.jpg" class="prob-cat">
                 </div>
             </div>
             <div id="candidates-box">
@@ -383,7 +391,7 @@
     <div id="obs-input-container" class="panel-center">
         <h2 style="font-family: 'Bebas Neue', cursive; color:var(--purple); font-size:7vh; margin-bottom:0; letter-spacing:0.5vh;">Observation</h2>
         <p style="color:var(--purple); font-size:2vh;"><b>양자고양이의 좌표를 관측하세요!</b></p>
-        <input type="tel" id="obs-num" maxlength="4" autocomplete="off"
+        <input type="tel" id="obs-num" maxlength="3" autocomplete="off"
                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                style="background:#000; color:#fff; font-family: 'Orbitron', sans-serif; font-size: 5vh; text-align:center; width:35vh; margin:4vh 0; border:0.3vh solid var(--purple); border-radius:1.5vh; letter-spacing:1.5vh; text-shadow: 0 0 1vh var(--purple);">
         <button onclick="_0x6f5a()" style="padding:1.5vh 8vh; background:var(--purple); color:#fff; font-weight:bold; font-size:4vh; border-radius:1.5vh; letter-spacing:0.2vh;">관측 실행</button>
@@ -391,104 +399,15 @@
 </div>
 
 <script>
-    // JSON 데이터를 코드 내부로 삽입하여 Tips 버튼 반응 문제 해결
-    const _0xtextData = {
-        "dev_story": [],
-        "endings": {
-            "paradox": {
-                "type": "Training Complete",
-                "result": "양자고양이 추적자",
-                "message": "축하합니다! 당신은 양자고양이 추적시험을 통과했습니다.<br> 슈뢰딩거의 고양이를 찾기위해 더 어려운 난이도에 도전하시겠습니까? <br>당신의 고양이에 대한 사랑을 증명해보세요!"
-            },
-            "win": {
-                "type": "Quantum Collapse",
-                "result": "승리",
-                "message": "관측 성공! 당신의 고양이는 살아있었습니다<br>당신은 고양이의 위치만을 알 수 있었습니다"
-            },
-            "lose": {
-                "type": "Quantum Collapse",
-                "result": "패배",
-                "message": "관측 실패! 당신의 고양이는 사라졌습니다<br>당신은 고양이의 운동량만을 알 수 있었습니다"
-            }
-        },
-        "tips": {
-            "fail": [
-                {
-                    "title": "실패 시 참고팁 (1/3)",
-                    "desc": "이 게임의 처음, 두번째에 가장 무난한 선택지는 123, 456이 아닐지도 모릅니다.<br>조금 다른방식으로 접근을 해보는건 어떨까요?"
-                },
-                {
-                    "title": "실패 시 참고팁 (2/3)",
-                    "desc": "그리고 고양이의 알고리즘 첫번째는 계속 1Ball 판정이 고정입니다.<br>처음 판정받은 숫자들을 돌려가며 다른식으로 배치해보세요<br>그렇게 하면 3~4턴 사이에는 금새 가능성이 좁혀지게 됩니다."
-                },
-                {
-                    "title": "실패 시 참고팁 (3/3)",
-                    "desc": "어느정도 좌표가 특정된 후 양자구름에 표시된 숫자를 보고 측정을 하면<br>양자고양이를 관측할 수 있을겁니다. 화이팅!"
-                }
-            ],
-            "success": [
-                {
-                    "title": "성공 시 참고팁 (1/5)",
-                    "desc": "눈치를 못채셨을 수도 있지만 이 게임은 관측에 성공을 하든 실패를 하든<br><span style='color:var(--cyan); font-weight:bold;'>Quantum Collapse(양자 붕괴)</span>엔딩이 나오게 설계되었습니다. <br>그렇게 한 것은 관측 성공도 이 게임의 진짜 목표가 아니기 때문입니다."
-                },
-                {
-                    "title": "성공 시 참고팁 (2/5)",
-                    "desc": "단순히 관측 성공을 하는거 자체는 너무 난이도가 낮으니까요. <br><span style='color:var(--cyan); font-weight:bold;'>이 게임은 정확히 5턴의 좌표확인으로 100%로 양자고양이의 좌표를 특정하고 <br>6턴째 좌표입력까지 진행해서 모순을 찾고 양자고양이를 잡는 게임입니다.</span>"
-                },
-                {
-                    "title": "성공 시 참고팁 (3/5)",
-                    "desc": "양자고양이는 계속해서 최대한 안전해보이는 좌표로 도망칩니다. <br>정확히는 가능한 후보 숫자가 가장 많은 볼카운트 대답한다는 의미죠."
-                },
-                {
-                    "title": "성공 시 참고팁 (4/5)",
-                    "desc": "고정된 알고리즘이기 때문에 똑같은 질문을 100번 하면 100번 똑같이 답합니다.<br> 일정한 빌드를 만들어서 가장 높은 확률을 따라가면 최적화되는 구조입니다. <br>측정 숫자를 교차로 배치해서 몰이사냥을 하듯이 숨을 곳을 좁히세요."
-                },
-                {
-                    "title": "성공 시 참고팁 (5/5)",
-                    "desc": "당신은 고양이 추적자 역량을 기르기 위해 <span style='color:var(--green); font-weight:bold;'>진심으로 도전</span>을 해보겠다는 건가요?<br> 그런분은 정말 환영입니다. "
-                }
-            ]
-        },
-        "tutorial": {
-            "steps": [
-                {
-                    "step": 1,
-                    "title": "1. 숫자 입력",
-                    "desc": "입력 패널의 버튼을 눌러서 입력하거나 키보드 숫자키를 활용해<br>임의의 3자리 수를 입력해보세요."
-                },
-                {
-                    "step": 2,
-                    "title": "2. 양자고양이 좌표 측정",
-                    "desc": "입력 패널의 엔터키나 키보드 Enter를 통해서 양자 고양이의 좌표를 측정하세요.<br>고양이가 숨어있는 3자리 좌표를 찾으면 됩니다."
-                },
-                {
-                    "step": 3,
-                    "title": "3. 결과 표시 판넬",
-                    "desc": "S는 숫자와 위치가 모두 맞는 숫자의 개수이며<br>B는 숫자는 맞지만 위치는 틀린 숫자의 개수입니다."
-                },
-                {
-                    "step": 4,
-                    "title": "4. 양자 구름의 의미",
-                    "desc": "좌표 측정을 진행하다 보면 양자고양이가 위치할 가능성이 있는 좌표들이<br>점차 선명히 보이기 시작합니다."
-                },
-                {
-                    "step": 5,
-                    "title": "5. 관측 확률",
-                    "desc": "지금까지 판정결과에 부합하는 임의의 숫자로 관측했을 때 찾을 확률입니다.<br>관측은 입력패널의 우상단 보라색 버튼을 통해 진행합니다."
-                },
-                {
-                    "step": 6,
-                    "title": "6. 횟수 제한 및 엔딩",
-                    "desc": "양자고양이는 언제나 가장 잘 숨을 수 있는 좌표로 도망칩니다.<br><span style='color:var(--red); font-weight:bold;'>6턴의 좌표 측정만으로 고양이의 좌표를 찾아보세요!</span>"
-                }
-            ],
-            "button_finish": "게임하러 가기"
-        }
-    };
+    let _0xtextData = null;
+    fetch('textdata.json')
+        .then(response => response.json())
+        .then(data => { _0xtextData = data; })
+        .catch(error => console.error('Error loading textdata:', error));
 
     const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
 
-    let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 7;
+    let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 6;
     let _0xisTutorial = false, _0xtutorialStep = 0, _0xcurrentTipType = "";
     let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
     let _0xcurrentVolume = 0.15;
@@ -496,6 +415,7 @@
     let _0xsuccessLoopInterval = null; 
     let _0xmeowLoopInterval = null; 
     let _0xmeowCount = 0; 
+    let _0xplayCount = 0;
     
     let _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
     _0xbgm.loop = true;
@@ -576,6 +496,7 @@
 
     function _0x4c5b() {
         _0xplayClick();
+        _0xplayCount++;
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
         if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
@@ -587,18 +508,19 @@
     }
 
     function _0xresGm() {
-        _0xaiCandidates = []; _0xhistory = []; _0xinputStr = ""; _0xturnCount = 7; _0xmeowCount = 0;
+        _0xaiCandidates = []; _0xhistory = []; _0xinputStr = ""; _0xturnCount = 6; _0xmeowCount = 0;
         _0xparadoxMusicTriggered = false; _0xalarmTriggered = false; _0xzeroOverlayTriggered = false;
         if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
-        for(let i=0; i<=9999; i++){
-            let n = i.toString().padStart(4, '0');
-            if(new Set(n).size === 4) _0xaiCandidates.push(n);
+        for(let i=0; i<=999; i++){
+            let n = i.toString().padStart(3, '0');
+            if(new Set(n).size === 3) _0xaiCandidates.push(n);
         }
         _0xupUI();
     }
 
     function _0xresDir() {
         _0xplayClick();
+        _0xplayCount++;
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
         if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
@@ -606,12 +528,17 @@
         _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
         _0xbgm.loop = true;
         _0xbgm.playbackRate = 2.0;
+        
+        const oldPlayCount = _0xplayCount;
         document.body.innerHTML = _0xoriginalBodyContent;
+        _0xplayCount = oldPlayCount;
+        
         _0x3f2a(document.getElementById('volume-slider')?.value || 0.15);
         _0x4c5b();
     }
 
     function _0x1d2e() {
+        if(!_0xtextData) return;
         _0xisTutorial = true; _0xcurrentTipType = ""; _0xtutorialStep = 1;
         _0x4c5b();
         document.getElementById('obs-btn').disabled = true;
@@ -620,6 +547,7 @@
     }
 
     window.showTips = function(type) {
+        if(!_0xtextData) return;
         _0xplayClick();
         _0xisTutorial = false;
         _0xcurrentTipType = type;
@@ -627,8 +555,7 @@
         const tutOverlay = document.getElementById('tutorial-overlay');
         if (tutOverlay) {
             tutOverlay.style.display = 'flex';
-            const escGuide = document.getElementById('tut-esc-guide');
-            if(escGuide) escGuide.style.display = 'none';
+            document.getElementById('tut-esc-guide').style.display = 'none';
             _0xappTip();
         }
     };
@@ -650,12 +577,10 @@
     function _0xappTip() {
         const title = document.getElementById('tut-title');
         const desc = document.getElementById('tut-desc');
-        const nextBtn = document.getElementById('tut-next-btn');
         if (title && desc) {
             const tip = _0xtextData.tips[_0xcurrentTipType][_0xtutorialStep];
             title.innerText = tip.title;
-            desc.innerHTML = tip.desc; 
-            if(nextBtn) nextBtn.innerText = "확인";
+            desc.innerHTML = tip.desc.replace(/\n/g, "<br>"); 
         }
     }
 
@@ -676,47 +601,42 @@
         const turnCounter = document.getElementById('turn-counter');
         const chanceBox = document.getElementById('chance-box');
         
-        const gb = document.getElementById('game-box');
-        const ip = document.getElementById('info-panel');
-        if(gb) gb.classList.add('tutorial-dim');
-        if(ip) ip.classList.add('tutorial-dim');
-
+        document.getElementById('game-box').classList.add('tutorial-dim');
+        document.getElementById('info-panel').classList.add('tutorial-dim');
         document.querySelectorAll('.key-btn, #ent-btn, #clr-btn, #obs-btn, #display, #log-window, #candidates-box, #chance-area, #zero-btn, .log-item, #chance-box').forEach(el => el.classList.remove('tutorial-highlight'));
-        if(turnCounter) turnCounter.classList.remove('tutorial-highlight-turn');
-        if(nextBtn) nextBtn.classList.remove('btn-cyan');
+        turnCounter.classList.remove('tutorial-highlight-turn');
+        nextBtn.classList.remove('btn-cyan');
 
         const stepData = _0xtextData.tutorial.steps.find(s => s.step === _0xtutorialStep);
-        if (stepData && title && desc) {
+        if (stepData) {
             title.innerText = stepData.title;
             desc.innerHTML = stepData.desc;
         }
 
         if (_0xtutorialStep === 1) {
-            if(gb) gb.classList.remove('tutorial-dim');
+            document.getElementById('game-box').classList.remove('tutorial-dim');
             document.querySelectorAll('.key-btn, #zero-btn, #display').forEach(el => el.classList.add('tutorial-highlight'));
         } else if (_0xtutorialStep === 2) {
-            if(gb) gb.classList.remove('tutorial-dim');
-            document.getElementById('ent-btn')?.classList.add('tutorial-highlight');
-            document.getElementById('clr-btn')?.classList.add('tutorial-highlight');
+            document.getElementById('game-box').classList.remove('tutorial-dim');
+            document.getElementById('ent-btn').classList.add('tutorial-highlight');
+            document.getElementById('clr-btn').classList.add('tutorial-highlight');
         } else if (_0xtutorialStep === 3) {
-            if(gb) gb.classList.remove('tutorial-dim');
+            document.getElementById('game-box').classList.remove('tutorial-dim');
             const firstLog = document.querySelector('.log-item');
             if(firstLog) firstLog.classList.add('tutorial-highlight');
         } else if (_0xtutorialStep === 4) {
-            if(ip) ip.classList.remove('tutorial-dim');
-            document.getElementById('candidates-box')?.classList.add('tutorial-highlight');
+            document.getElementById('info-panel').classList.remove('tutorial-dim');
+            document.getElementById('candidates-box').classList.add('tutorial-highlight');
         } else if (_0xtutorialStep === 5) {
-            if(ip) ip.classList.remove('tutorial-dim');
-            if(chanceBox) chanceBox.classList.add('tutorial-highlight');
-            if(gb) gb.classList.remove('tutorial-dim');
-            document.getElementById('obs-btn')?.classList.add('tutorial-highlight');
+            document.getElementById('info-panel').classList.remove('tutorial-dim');
+            chanceBox.classList.add('tutorial-highlight');
+            document.getElementById('game-box').classList.remove('tutorial-dim');
+            document.getElementById('obs-btn').classList.add('tutorial-highlight');
         } else if (_0xtutorialStep === 6) {
-            if(ip) ip.classList.remove('tutorial-dim');
-            if(turnCounter) turnCounter.classList.add('tutorial-highlight-turn');
-            if(nextBtn) {
-                nextBtn.classList.add('btn-cyan');
-                nextBtn.innerText = _0xtextData.tutorial.button_finish;
-            }
+            document.getElementById('info-panel').classList.remove('tutorial-dim');
+            turnCounter.classList.add('tutorial-highlight-turn');
+            nextBtn.classList.add('btn-cyan');
+            nextBtn.innerText = _0xtextData.tutorial.button_finish;
         }
     }
 
@@ -725,26 +645,27 @@
             if (document.getElementById('credit-overlay')?.style.display === 'flex') { _0xclsCr(); return; }
             if (_0xisTutorial) location.reload();
             if (document.getElementById('obs-overlay')?.style.display === 'flex') { document.getElementById('obs-overlay').style.display = 'none'; }
-            if (document.getElementById('tutorial-overlay')?.style.display === 'flex') { document.getElementById('tutorial-overlay').style.display = 'none'; }
             return;
         }
         if (document.getElementById('obs-overlay')?.style.display === 'flex') {
             if (e.key === 'Enter') _0x6f5a(); return;
         }
+        
         if (e.key === 'Enter') {
             e.preventDefault();
-            const gb = document.getElementById('game-box');
-            if (gb && gb.style.display === 'flex') {
+            if (document.getElementById('game-box').style.display === 'flex') {
                 _0x7c3d('ENT');
             }
             return;
         }
+        
         if (e.key >= '0' && e.key <= '9') {
             const btn = document.querySelector(e.key === '0' ? '#zero-btn' : `.key-btn[data-key="${e.key}"]`);
             if(btn) { btn.classList.add('active'); setTimeout(() => btn.classList.remove('active'), 100); }
             _0x9b8a(e.key);
             return;
         }
+        
         if (e.key === 'Delete' || e.key === 'Backspace') {
             _0x7c3d('CLR');
             return;
@@ -753,20 +674,19 @@
 
     function _0x9b8a(n) { 
         _0xplayClick(); 
-        if(_0xinputStr.length < 4 && !_0xinputStr.includes(n)) { 
+        if(_0xinputStr.length < 3 && !_0xinputStr.includes(n)) { 
             _0xinputStr += n; 
-            const disp = document.getElementById('display');
-            if(disp) disp.innerText = _0xinputStr; 
-            if (_0xisTutorial && _0xtutorialStep === 1 && _0xinputStr.length === 4) {
+            document.getElementById('display').innerText = _0xinputStr; 
+            if (_0xisTutorial && _0xtutorialStep === 1 && _0xinputStr.length === 3) {
                 setTimeout(() => { _0xtutorialStep = 2; document.getElementById('tutorial-overlay').style.display = 'flex'; _0xappTut(); }, 300);
             }
         } 
     }
 
-    function _0xclrIn(isSpecial) { if(!isSpecial) _0xplayClick(); _0xinputStr = ""; const disp = document.getElementById('display'); if(disp) disp.innerText = "----"; }
+    function _0xclrIn(isSpecial) { if(!isSpecial) _0xplayClick(); _0xinputStr = ""; document.getElementById('display').innerText = "---"; }
     
     function _0xentCli(isSpecial) {
-        if(_0xinputStr.length === 4 && _0xturnCount > 0) {
+        if(_0xinputStr.length === 3 && _0xturnCount > 0) {
             if(!isSpecial) _0xplayClick();
             const res = _0xaiRes(_0xinputStr);
             _0xhistory.push({ n: _0xinputStr, s: res.s, b: res.b });
@@ -781,19 +701,19 @@
         const outcomes = {};
         _0xaiCandidates.forEach(cand => {
             let s=0, b=0;
-            for(let i=0; i<4; i++){ if(guess[i] === cand[i]) s++; else if(cand.includes(guess[i])) b++; }
+            for(let i=0; i<3; i++){ if(guess[i] === cand[i]) s++; else if(cand.includes(guess[i])) b++; }
             const key = `${s}S${b}B`;
             if(!outcomes[key]) outcomes[key] = [];
             outcomes[key].push(cand);
         });
         let bestKey = ""; let maxCount = -1;
         for(let key in outcomes) {
-            if(key === "4S0B") continue; 
+            if(key === "3S0B") continue; 
             if(outcomes[key].length > maxCount) { maxCount = outcomes[key].length; bestKey = key; }
         }
         if(!bestKey || _0xaiCandidates.length <= 1) {
-            const fakeS = Math.floor(Math.random() * 3);
-            const fakeB = Math.floor(Math.random() * 3);
+            const fakeS = Math.floor(Math.random() * 2);
+            const fakeB = Math.floor(Math.random() * 2);
             bestKey = `${fakeS}S${fakeB}B`;
             _0xaiCandidates = _0xaiCandidates.filter(c => c !== guess); 
         } else { _0xaiCandidates = outcomes[bestKey]; }
@@ -803,11 +723,11 @@
 
     function _0xstPsL() {
         if(_0xpoisonInterval) return;
-        const targetText = "Cat is Poisoned in the Box";
+        const targetText = "Your Training is Completed";
         const el = document.getElementById('chance-val');
-        if(!el) return;
         let index = targetText.length;
         let isDeleting = true;
+
         _0xpoisonInterval = setInterval(() => {
             if (isDeleting) {
                 el.innerHTML = `<span class="poison-text" style="color:var(--green); text-shadow: 0 0 1.5vh var(--green);">${targetText.substring(0, index)}</span>`;
@@ -823,7 +743,6 @@
 
     function _0xupUI() {
         const turnCounter = document.getElementById('turn-counter');
-        if(!turnCounter) return;
         turnCounter.innerText = _0xturnCount;
         const prob = _0xaiCandidates.length === 0 ? 0 : (1 / _0xaiCandidates.length * 100);
         const chanceValEl = document.getElementById('chance-val');
@@ -833,6 +752,7 @@
         const deadX = document.getElementById('dead-x');
         const flashOverlay = document.getElementById('flash-overlay');
         const paradoxOverlay = document.getElementById('paradox-cat-overlay');
+        const logWindow = document.getElementById('log-window');
         
         if(_0xaiCandidates.length === 0) {
             if(!_0xparadoxMusicTriggered) {
@@ -848,15 +768,15 @@
             if(!_0xzeroOverlayTriggered) {
                 _0xlightsOffSfx.currentTime = 0;
                 _0xlightsOffSfx.play().catch(e=>{});
-                if(flashOverlay) {
-                    flashOverlay.style.transition = 'none';
-                    flashOverlay.style.background = '#000';
-                    flashOverlay.style.opacity = '1';
-                    setTimeout(() => { 
-                        flashOverlay.style.transition = 'opacity 1.5s ease';
-                        flashOverlay.style.opacity = '0'; 
-                    }, 3000);
-                }
+                flashOverlay.style.display = 'block';
+                flashOverlay.style.transition = 'none';
+                flashOverlay.style.background = '#000';
+                flashOverlay.style.opacity = '1';
+                setTimeout(() => { 
+                    flashOverlay.style.transition = 'opacity 1.5s ease-in-out';
+                    flashOverlay.style.opacity = '0'; 
+                    setTimeout(() => { flashOverlay.style.display = 'none'; }, 1500);
+                }, 3000);
                 if(paradoxOverlay) {
                     paradoxOverlay.style.display = 'block';
                     paradoxOverlay.style.opacity = '1';
@@ -865,13 +785,19 @@
                 _0xzeroOverlayTriggered = true;
                 _0xstPsL();
             }
-            if(chanceTitleEl) chanceTitleEl.style.display = 'none';
-            if(chanceBoxEl) chanceBoxEl.style.borderColor = 'var(--green)';
-            if(catImg) { catImg.style.opacity = '0'; catImg.style.filter = 'blur(2vh)'; }
+            chanceTitleEl.style.display = 'none';
+            chanceBoxEl.style.borderColor = 'var(--green)';
+            catImg.style.opacity = '0'; catImg.style.filter = 'blur(2vh)';
             turnCounter.style.color = 'var(--green)'; turnCounter.style.textShadow = '0 0 2vh var(--green)';
-            if(deadX) deadX.style.display = 'block'; 
+            deadX.style.display = 'block'; 
+            
+            logWindow.innerHTML = `
+                <div class="training-clear-msg">
+                    <span class="count-highlight">${_0xplayCount}회 만에</span>
+                    훈련을 통과하셨습니다
+                </div>`;
         } else {
-            if(deadX) deadX.style.display = 'none';
+            deadX.style.display = 'none';
             if(paradoxOverlay) { paradoxOverlay.style.display = 'none'; paradoxOverlay.style.animation = 'none'; }
             if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
 
@@ -883,12 +809,11 @@
                 currentShadow = '0 0 2.5vh var(--red)';
                 if(!_0xalarmTriggered) {
                     _0xemergencySfx.play().catch(e=>{});
-                    if(flashOverlay) {
-                        flashOverlay.style.transition = 'opacity 1.5s ease';
-                        flashOverlay.style.background = 'radial-gradient(circle, rgba(255, 0, 0, 0) 70%, rgba(255, 0, 0, 0.4) 100%)';
-                        flashOverlay.style.opacity = '1';
-                        setTimeout(() => { flashOverlay.style.opacity = '0'; }, 1500);
-                    }
+                    flashOverlay.style.display = 'block';
+                    flashOverlay.style.transition = 'opacity 1.5s ease';
+                    flashOverlay.style.background = 'radial-gradient(circle, rgba(255, 0, 0, 0) 70%, rgba(255, 0, 0, 0.4) 100%)';
+                    flashOverlay.style.opacity = '1';
+                    setTimeout(() => { flashOverlay.style.opacity = '0'; setTimeout(() => { flashOverlay.style.display = 'none'; }, 1500); }, 1500);
                     _0xalarmTriggered = true;
                 }
             } else if (prob >= 10 && prob <= 51) {
@@ -899,36 +824,27 @@
                 _0xalarmTriggered = false;
             }
 
-            if(chanceValEl) {
-                chanceValEl.style.color = currentColor;
-                chanceValEl.style.textShadow = currentShadow;
-                chanceValEl.innerText = prob.toFixed(2) + "%";
-            }
-            if(chanceTitleEl) {
-                chanceTitleEl.style.display = 'block';
-                chanceTitleEl.style.color = currentColor;
-                chanceTitleEl.style.textShadow = currentShadow;
-            }
-            if(chanceBoxEl) chanceBoxEl.style.borderColor = currentColor;
+            chanceValEl.style.color = currentColor;
+            chanceValEl.style.textShadow = currentShadow;
+            chanceTitleEl.style.display = 'block';
+            chanceTitleEl.style.color = currentColor;
+            chanceTitleEl.style.textShadow = currentShadow;
+            chanceValEl.innerText = prob.toFixed(2) + "%";
+            chanceBoxEl.style.borderColor = currentColor;
             turnCounter.style.color = currentColor;
             const blurAmount = Math.max(0, (prob * 0.05));
             const opacityAmount = Math.max(0.1, 1 - (prob / 100));
-            if(catImg) {
-                catImg.style.display = 'block'; catImg.style.opacity = opacityAmount;
-                catImg.style.filter = `blur(${blurAmount}vh)`; 
-                catImg.style.borderColor = currentColor;
-            }
-        }
-        
-        const logWin = document.getElementById('log-window');
-        if(logWin) {
-            logWin.innerHTML = _0xhistory.map(h => {
+            catImg.style.display = 'block'; catImg.style.opacity = opacityAmount;
+            catImg.style.filter = `blur(${blurAmount}vh)`; 
+            catImg.style.borderColor = currentColor;
+            
+            logWindow.innerHTML = _0xhistory.map(h => {
                 const resultText = (h.s === 0 && h.b === 0) ? `<span class="log-out">OUT</span>` : `${h.s}S / ${h.b}B`;
                 return `<div class="log-item"><span class="log-n">${h.n}</span><span class="log-sb">${resultText}</span></div>`;
             }).join('');
-            logWin.scrollTop = logWin.scrollHeight;
         }
-
+        
+        logWindow.scrollTop = logWindow.scrollHeight;
         const slice = [..._0xaiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
         let pixelateStrength = 0;
         if (prob >= 25) pixelateStrength = 0; 
@@ -936,34 +852,28 @@
         else if (prob >= 1) pixelateStrength = 0.15; 
         else pixelateStrength = 0.25; 
 
-        const candList = document.getElementById('cand-list');
-        if(candList) {
-            candList.innerHTML = slice.map(c => `<div class="cand-item" style="filter: blur(${pixelateStrength}vh) contrast(180%);">${c}</div>`).join('');
-        }
+        document.getElementById('cand-list').innerHTML = slice.map(c => `<div class="cand-item" style="filter: blur(${pixelateStrength}vh) contrast(180%);">${c}</div>`).join('');
 
         const statusEl = document.getElementById('status');
         const entBtn = document.getElementById('ent-btn');
-        if(statusEl) {
-            if(_0xturnCount <= 0) {
-                if(entBtn) entBtn.disabled = true;
-                statusEl.innerText = "측정 완료 (관측만 가능)";
-                statusEl.style.animation = "none";
-                statusEl.style.color = "var(--red)";
-                statusEl.style.textShadow = "0 0 1vh var(--red)";
-            } else {
-                if(entBtn) entBtn.disabled = false;
-                statusEl.innerText = "양자고양이 위치 관측 중...";
-                statusEl.style.animation = "neonShift 10s infinite alternate linear";
-            }
+        if(_0xturnCount <= 0) {
+            entBtn.disabled = true;
+            statusEl.innerText = "측정 완료 (관측만 가능)";
+            statusEl.style.animation = "none";
+            statusEl.style.color = "var(--red)";
+            statusEl.style.textShadow = "0 0 1vh var(--red)";
+        } else {
+            entBtn.disabled = false;
+            statusEl.innerText = "양자고양이 위치 관측 중...";
+            statusEl.style.animation = "neonShift 10s infinite alternate linear";
         }
     }
 
     function _0xrndPrCl() {
         const field = document.getElementById('quantum-field');
-        if(!field) return;
         field.innerHTML = "";
         const neons = ['var(--cyan)', 'var(--purple)', 'var(--green)', 'var(--red)'];
-        const list = _0xaiCandidates.length > 0 ? _0xaiCandidates : ["ERROR", "VOID", "0000"];
+        const list = _0xaiCandidates.length > 0 ? _0xaiCandidates : ["ERR", "VOID", "000"];
         list.slice(0, 80).forEach(num => {
             const span = document.createElement('span');
             span.className = 'bg-candidate';
@@ -978,7 +888,7 @@
     }
 
     function _0x2f1e() {
-        if(_0xisTutorial) return;
+        if(_0xisTutorial || !_0xtextData) return;
         _0xplaySpecialClick();
         if(_0xaiCandidates.length === 0) {
             _0xmeowCount = 0; 
@@ -994,23 +904,19 @@
                     clearInterval(_0xmeowLoopInterval);
                 }
             }, 6000);
+
             const ed = _0xtextData.endings.paradox;
             _0xrnEG(ed.type, ed.result, ed.message, 'var(--green)', true, true);
             return;
         }
         _0xrndPrCl();
-        const obsOv = document.getElementById('obs-overlay');
-        if(obsOv) {
-            obsOv.style.display = 'flex';
-            setTimeout(() => { const obsInput = document.getElementById('obs-num'); if(obsInput){ obsInput.value = ""; obsInput.focus(); } }, 10);
-        }
+        document.getElementById('obs-overlay').style.display = 'flex';
+        setTimeout(() => { const obsInput = document.getElementById('obs-num'); if(obsInput){ obsInput.value = ""; obsInput.focus(); } }, 10);
     }
 
     function _0x6f5a() {
-        const obsNumEl = document.getElementById('obs-num');
-        if(!obsNumEl) return;
-        const guess = obsNumEl.value;
-        if(guess.length === 4) {
+        const guess = document.getElementById('obs-num').value;
+        if(guess.length === 3) {
             _0xplayClick();
             let realSecret = _0xaiCandidates[Math.floor(Math.random() * _0xaiCandidates.length)];
             if(guess === realSecret) {
@@ -1037,10 +943,9 @@
 
     function _0xrnEG(type, result, msg, color, isWin, isParadox) {
         const winGif = "cat in the box.gif";
-        const paradoxGif = "Neon cat 2.gif";
+        const paradoxGif = "Neon cat box.gif";
         const loseImg = "box.gif";
         let mediaUrl = isParadox ? paradoxGif : (isWin ? winGif : loseImg);
-        
         let emojiLanes = "";
         if(isParadox) {
             const longLane = "🐈 ".repeat(22);
@@ -1051,10 +956,9 @@
                 <div class="emoji-lane" style="right:10vw; animation: slide-v 26s linear infinite reverse; animation-delay: -1s;">${longLane.split(' ').join('<br>')}</div>
             `;
         }
-
         let subButtons = "";
         if (isParadox) {
-            subButtons = `<button onclick="window.showCredits()" style="font-family: 'Bebas Neue', cursive; width:65vh; padding:2vh 0; margin-top:5vh; background:#222; color:${color}; border:0.4vh solid ${color}; cursor:pointer; font-size:5vh; border-radius:2vh; font-weight:bold; box-shadow: 0 0 2vh ${color}; z-index:100; letter-spacing:0.3vh;">Credits</button>`;
+            subButtons = `<button onclick="window.open('https://aviewpro.github.io/schrodinger-baseball/', '_blank')" style="font-family: 'Bebas Neue', cursive; width:65vh; padding:2vh 0; margin-top:5vh; background:#222; color:${color}; border:0.4vh solid ${color}; cursor:pointer; font-size:5vh; border-radius:2vh; font-weight:bold; box-shadow: 0 0 2vh ${color}; z-index:100; letter-spacing:0.3vh;">실전에 도전하기</button>`;
         } else {
             const tipType = isWin ? 'success' : 'fail';
             subButtons = `
@@ -1066,9 +970,8 @@
                     </div>
                 </div>`;
         }
-
         document.body.innerHTML = `
-            <div id="version-tag">1.3 Version</div>
+            <div id="version-tag">0.5 Version</div>
             ${emojiLanes}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
@@ -1083,14 +986,6 @@
                 <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;" onclick="_0xplayNyaBgm()"></div>
                 <div class="credit-esc">Press ESC to Close</div>
             </div>
-            <div id="tutorial-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:5000; flex-direction:column; align-items:center; justify-content:center;">
-                <div class="tutorial-msg-box">
-                    <h3 id="tut-title"></h3>
-                    <p id="tut-desc"></p>
-                    <button id="tut-next-btn" onclick="_0x5a1b()">확인</button>
-                    <div id="tut-esc-guide" class="esc-guide" style="display:none;"></div>
-                </div>
-            </div>
             <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow: hidden;">
                 <img src="${mediaUrl}" style="border:0.4vh solid ${color}; border-radius:4vh; box-shadow: 0 0 3vh ${color}; width: 40vh; height: 40vh; object-fit: cover; margin-bottom: 2vh;">
                 <h1 style="font-size:6vh; color:${color}; margin: 1vh 0; text-shadow:0 0 2vh ${color};">${type}</h1>
@@ -1098,46 +993,27 @@
                 <p style="color:${isParadox ? color : '#aaa'}; font-size:2.2vh; max-width:80vh; line-height:1.4; margin: 1vh 0;">${msg}</p>
                 ${subButtons}
             </div>`;
-            
-        const volEnd = document.getElementById('volume-slider-end');
-        if(volEnd) volEnd.addEventListener('input', (e) => { _0x3f2a(e.target.value); });
+        document.getElementById('volume-slider-end').addEventListener('input', (e) => { _0x3f2a(e.target.value); });
     }
 
-    let _0xcrdScrInt = null;
-    let _0xcrdY = 0;
-    let _0xcrdSpd = 0.55;
-
+    let _0xcrdScrInt = null; let _0xcrdY = 0; let _0xcrdSpd = 0.55;
     window.showCredits = function() {
+        if(!_0xtextData) return;
         const overlay = document.getElementById('credit-overlay');
         const content = document.getElementById('credit-content');
         if (!overlay || !content) return;
         const text = _0xtextData.dev_story.join("\n");
-        content.innerHTML = `
-            <div>${text}</div>
-            <img src="귀여운고양이.jpg" onclick="_0xplayNyaBgm()" style="width:67.5vh; height:auto; margin-top:5vh; border-radius:2vh; border:0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); cursor:pointer;">
-            <img src="Aview.png" class="credit-logo">
-        `;
+        content.innerHTML = `<div>${text}</div><img src="귀여운고양이.jpg" onclick="_0xplayNyaBgm()" style="width:67.5vh; height:auto; margin-top:5vh; border-radius:2vh; border:0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); cursor:pointer;"><img src="Aview.png" class="credit-logo">`;
         overlay.style.display = 'flex';
-        _0xcrdY = window.innerHeight * 0.1;
-        _0xcrdSpd = 0.55;
+        _0xcrdY = window.innerHeight * 0.1; _0xcrdSpd = 0.55;
         if (_0xcrdScrInt) clearInterval(_0xcrdScrInt);
-        _0xcrdScrInt = setInterval(() => {
-            _0xcrdY -= _0xcrdSpd;
-            content.style.transform = `translateY(${_0xcrdY}px)`;
-            if (_0xcrdY < -(content.scrollHeight + 25)) {
-                clearInterval(_0xcrdScrInt);
-            }
-        }, 16);
+        _0xcrdScrInt = setInterval(() => { _0xcrdY -= _0xcrdSpd; content.style.transform = `translateY(${_0xcrdY}px)`; if (_0xcrdY < -(content.scrollHeight + 25)) clearInterval(_0xcrdScrInt); }, 16);
     };
-
     window._0x8c21 = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 4.5; };
     window._0x7d4e = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 0.55; };
     window._0xclsCr = function() {
         const overlay = document.getElementById('credit-overlay');
-        if(overlay) {
-            overlay.style.display = 'none';
-            if (_0xcrdScrInt) clearInterval(_0xcrdScrInt);
-        }
+        if(overlay) { overlay.style.display = 'none'; if (_0xcrdScrInt) clearInterval(_0xcrdScrInt); }
     };
 
     setInterval(() => {
@@ -1148,7 +1024,7 @@
         const turnCounter = document.getElementById('turn-counter');
         if(turnCounter) {
             if (_0xturnCount > 0) {
-                const intensity = 25; 
+                const intensity = 15; 
                 const tMoveX = (Math.random()-0.5) * intensity;
                 const tMoveY = (Math.random()-0.5) * intensity;
                 turnCounter.style.transform = `translate(${tMoveX}px, ${tMoveY}px)`;
