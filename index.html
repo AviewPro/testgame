@@ -100,7 +100,7 @@
 
         #log-window.paradox-mode { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(0, 255, 65, 0.05); border: 0.2vh solid var(--green); color: var(--green); overflow: hidden; }
         .paradox-count { font-family: 'Orbitron', sans-serif; font-size: 6.5vh; font-weight: 900; text-shadow: 0 0 2vh var(--green); margin-bottom: 1vh; }
-        .paradox-msg { font-size: 2vh; line-height: 1.4; font-weight: bold; }
+        .paradox-msg { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-size: 2vh; line-height: 1.4; font-weight: bold; }
 
         .chance-area { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5vh; gap: 2vh; height: 16vh; position: relative; }
         #chance-box { background: rgba(0,0,0,0.6); padding: 1vh; border-radius: 2vh; border: 0.2vh solid var(--purple); text-align: center; flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; transition: border-color 0.5s; z-index: 5; }
@@ -405,7 +405,7 @@
     const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
 
     let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 7;
-    let _0xtotalStartCount = parseInt(localStorage.getItem('totalStartCount')) || 0; // 클릭 카운터 변수
+    let _0xtotalStartCount = parseInt(localStorage.getItem('totalStartCount')) || 0; 
     let _0xisTutorial = false, _0xtutorialStep = 0, _0xcurrentTipType = "";
     let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
     let _0xcurrentVolume = 0.15;
@@ -493,7 +493,7 @@
 
     function _0x4c5b() {
         _0xplayClick();
-        _0xtotalStartCount++; // 카운터 증가
+        _0xtotalStartCount++; 
         localStorage.setItem('totalStartCount', _0xtotalStartCount);
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
@@ -521,7 +521,7 @@
 
     function _0xresDir() {
         _0xplayClick();
-        _0xtotalStartCount++; // 카운터 증가
+        _0xtotalStartCount++; 
         localStorage.setItem('totalStartCount', _0xtotalStartCount);
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
@@ -753,7 +753,6 @@
         const logWin = document.getElementById('log-window');
         
         if(_0xaiCandidates.length === 0) {
-            // 패러독스 기록창 표시
             logWin.classList.add('paradox-mode');
             logWin.innerHTML = `
                 <div class="paradox-count">${_0xtotalStartCount}회</div>
@@ -821,7 +820,7 @@
                 currentShadow = '0 0 2.5vh var(--cyan)';
                 _0xalarmTriggered = false;
             } else {
-                _0xalarmTriggered = false;
+                _0alarmTriggered = false;
             }
 
             chanceValEl.style.color = currentColor;
