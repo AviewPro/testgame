@@ -1044,7 +1044,7 @@
         _0xcrdScrInt = setInterval(() => {
             _0xcrdY -= _0xcrdSpd;
             content.style.transform = `translateY(${_0xcrdY}px)`;
-            if (_0xcrdY < -(content.scrollHeight + 25)) {
+            if (_0xcrdY < -(content.scrollHeight + 5)) {
                 clearInterval(_0xcrdScrInt);
             }
         }, 16);
