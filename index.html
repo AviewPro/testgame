@@ -657,7 +657,7 @@
             return;
         }
         
-        if (e.key >= '0' && e.key <= '9') {
+        if (e.key === '0' || (e.key >= '1' && e.key <= '9')) {
             const btn = document.querySelector(e.key === '0' ? '#zero-btn' : `.key-btn[data-key="${e.key}"]`);
             if(btn) { btn.classList.add('active'); setTimeout(() => btn.classList.remove('active'), 100); }
             _0x9b8a(e.key);
@@ -820,7 +820,7 @@
                 currentShadow = '0 0 2.5vh var(--cyan)';
                 _0xalarmTriggered = false;
             } else {
-                _0alarmTriggered = false;
+                _0xalarmTriggered = false;
             }
 
             chanceValEl.style.color = currentColor;
@@ -926,7 +926,9 @@
         if(guess.length === 4) {
             _0xplayClick();
             let realSecret = _0xaiCandidates[Math.floor(Math.random() * _0xaiCandidates.length)];
-            if(guess === realSecret) {
+            const prob = 1 / _0xaiCandidates.length * 100;
+            
+            if(guess === realSecret && prob === 100) {
                 _0xsuccessSfx.play().catch(e=>{});
                 if(_0xsuccessLoopInterval) clearInterval(_0xsuccessLoopInterval);
                 _0xsuccessLoopInterval = setInterval(() => {
