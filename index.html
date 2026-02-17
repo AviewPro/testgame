@@ -52,7 +52,6 @@
         .title-bg { position: absolute; background: rgba(0, 0, 0, 0.7); width: 120%; height: 120%; border-radius: 1.5vh; filter: blur(0.5vh); z-index: -1; }
         .header-title { font-size: 5vh; font-weight: bold; letter-spacing: 1.2vh; text-shadow: 0 0 2vh currentColor; animation: neonShift 10s infinite alternate linear; text-align: center; margin: 0; padding: 1vh 4vh 0.5vh 4vh; }
         
-        /* Train Field 스타일 수정: 크기 확대, 굵게, 배경 제거, 글자 색상 애니메이션 */
         .header-subtitle { 
             font-family: 'Orbitron', sans-serif; 
             font-size: 3vh; 
@@ -109,7 +108,6 @@
         .log-sb { font-weight: bold; font-size: 1.8vh; color: var(--purple); margin-top: 0.2vh; }
         .log-out { color: #bc13fe; text-shadow: 0 0 1vh #bc13fe; }
         
-        /* 훈련 통과 문구 위치 수정: 세로 중앙 정렬 */
         .training-clear-msg { grid-column: span 2; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 24vh; color: var(--green); font-size: 2.2vh; font-weight: bold; text-align: center; text-shadow: 0 0 1vh var(--green); line-height: 1.6; }
         .count-highlight { font-size: 4vh; margin-bottom: 0.5vh; display: block; }
 
@@ -438,6 +436,10 @@
     const _0xnyaBgmSfx = new Audio("냥이 브금.mp3");
     _0xnyaBgmSfx.loop = true; 
     const _0xlightsOffSfx = new Audio("소등.mp3");
+    
+    // 추가 효과음 정의
+    const _0xdeadSfx = new Audio("사망음.mp3");
+    const _0xoffSfx = new Audio("꺼지는 소리.mp3");
 
     const _0xoriginalBodyContent = document.body.innerHTML;
 
@@ -453,6 +455,8 @@
         _0xspecialClickSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0);
         _0xnyaBgmSfx.volume = _0xcurrentVolume * 0.6; 
         _0xlightsOffSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
+        _0xdeadSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
+        _0xoffSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
     }
     
     _0x3f2a(0.15);
@@ -461,7 +465,7 @@
         const sc = _0xclickSfx.cloneNode(); 
         sc.volume = Math.min(1.0, _0xcurrentVolume * 8.0); 
         sc.play().catch(e=>{}); 
-        if(_0xbgm.paused) _0xbgm.play().catch(e=>{}); 
+        if(_0xbgm.paused && !_0xzeroOverlayTriggered) _0xbgm.play().catch(e=>{}); 
     }
 
     function _0xplaySpecialClick() { 
@@ -530,7 +534,6 @@
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
         if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
         
-        // BGM 변경 로직 제거를 위해 초기 배경음악 재생 상태 유지
         if(_0xbgm.src.includes("SoundHelix") || _0xbgm.src.includes("nya")) {
             _0xbgm.pause();
             _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
@@ -650,7 +653,6 @@
     }
 
     window.addEventListener('keydown', (e) => {
-        // Shift 키: Restart 버튼과 연결
         if (e.key === 'Shift') {
             const restartBtn = document.querySelector('button[onclick="_0xresDir()"]');
             if (restartBtn) {
@@ -670,7 +672,6 @@
             if (e.key === 'Enter') _0x6f5a(); return;
         }
         
-        // '-' 키: OBS 버튼과 연결 (게임 화면인 경우에만 작동)
         if (e.key === '-' || e.key === '_') {
             if (document.getElementById('game-box').style.display === 'flex') {
                 _0x2f1e();
@@ -782,21 +783,32 @@
         const logWindow = document.getElementById('log-window');
         
         if(_0xaiCandidates.length === 0) {
-            // 확률 0% 시 BGM 변경 로직 제거
             if(!_0xzeroOverlayTriggered) {
-                _0xlightsOffSfx.currentTime = 0;
-                _0xlightsOffSfx.play().catch(e=>{});
+                _0xzeroOverlayTriggered = true;
+                
+                // BGM 즉시 정지
+                if(_0xbgm) _0xbgm.pause();
+                
+                // 사망음 -> 1초 뒤 꺼지는 소리
+                _0xdeadSfx.currentTime = 0;
+                _0xdeadSfx.play().catch(e=>{});
+                setTimeout(() => {
+                    _0xoffSfx.currentTime = 0;
+                    _0xoffSfx.play().catch(e=>{});
+                }, 1000);
 
+                // 암전 효과 (빠른 종료 방지를 위해 transition 명확히 설정)
                 flashOverlay.style.display = 'block';
-                flashOverlay.style.transition = 'none';
                 flashOverlay.style.background = '#000';
+                flashOverlay.style.transition = 'none';
                 flashOverlay.style.opacity = '1';
                 
+                // 3초간 완전 암전 유지 후 서서히 제거
                 setTimeout(() => { 
-                    flashOverlay.style.transition = 'opacity 1.5s ease-in-out';
+                    flashOverlay.style.transition = 'opacity 2.5s ease-in-out';
                     flashOverlay.style.opacity = '0'; 
-                    setTimeout(() => { flashOverlay.style.display = 'none'; }, 1500);
-                }, 3000);
+                    setTimeout(() => { flashOverlay.style.display = 'none'; }, 2500);
+                }, 3500);
                 
                 if(paradoxOverlay) {
                     paradoxOverlay.style.display = 'block';
@@ -804,7 +816,6 @@
                     paradoxOverlay.style.animation = "fadeOutLong 16s forwards";
                 }
 
-                _0xzeroOverlayTriggered = true;
                 _0xstPsL();
             }
             chanceTitleEl.style.display = 'none';
@@ -919,7 +930,6 @@
     }
 
     function _0x2f1e() {
-        // 게임 화면(game-box)이 flex 상태일 때만 OBS 작동
         if(_0xisTutorial || !_0xtextData || document.getElementById('game-box').style.display !== 'flex') return;
         _0xplaySpecialClick();
         if(_0xaiCandidates.length === 0) {

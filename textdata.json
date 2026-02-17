@@ -1,5 +1,4 @@
 {
-  "dev_story": [],
   "endings": {
     "paradox": {
       "type": "Training Complete",
@@ -51,7 +50,7 @@
       },
       {
         "title": "성공 시 참고팁 (5/5)",
-        "desc": "당신은 고양이 추적자 역량을 기르기 위해 <span style='color:var(--green); font-weight:bold;'>진심으로 도전</span>을 해보겠다는 건가요?<br> 그런분은 정말 환영입니다. "
+        "desc": "당신은 고양이 추적자 자격 시험을 통과하기 위해 <br><span style='color:var(--green); font-weight:bold;'>진심</span>으로 도전을 해보겠다는 건가요?<br> 그런분은 정말 환영입니다. "
       }
     ]
   },
