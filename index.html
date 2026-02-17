@@ -72,7 +72,7 @@
             padding-bottom: 5vh;
         }
         
-        #setup { width: 50vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--green); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1vh; }
+        #setup { width: 50vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--cyan); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1vh; }
         
         .setup-box-container { position: relative; width: 35vh; margin-bottom: 2vh; }
         .setup-cat { width: 35vh; height: 35vh; border-radius: 4vh; border: 0.4vh solid var(--green); object-fit: cover; animation: neonShift 10s infinite alternate linear; display: block; }
@@ -322,7 +322,7 @@
     <div class="tutorial-msg-box">
         <h3 id="tut-title">튜토리얼</h3>
         <p id="tut-desc">내용</p>
-        <button id="tut-next-btn" onclick="handleTutorialNext()">확인</button>
+        <button id="tut-next-btn" onclick="_0x5a1b()">확인</button>
         <div id="tut-esc-guide" class="esc-guide">ESC를 누르면 언제든지 메인화면으로 돌아갑니다.</div>
     </div>
 </div>
@@ -397,77 +397,79 @@
 </div>
 
 <script>
+    // 하드코딩된 데이터
     const _0xtextData = {
-        "endings": {
-            "paradox": {
-                "type": "Training Complete",
-                "result": "양자고양이 추적자",
-                "message": "축하합니다! 당신은 양자고양이 추적시험을 통과했습니다.<br> 슈뢰딩거의 고양이를 찾기위해 더 어려운 난이도에 도전하시겠습니까? <br>당신의 고양이에 대한 사랑을 증명해보세요!"
-            },
-            "win": {
-                "type": "Quantum Collapse",
-                "result": "승리",
-                "message": "관측 성공! 당신의 고양이는 살아있었습니다<br>당신은 고양이의 위치만을 알 수 있었습니다"
-            },
-            "lose": {
-                "type": "Quantum Collapse",
-                "result": "패배",
-                "message": "관측 실패! 당신의 고양이는 사라졌습니다<br>당신은 고양이의 운동량만을 알 수 있었습니다"
-            }
-        },
-        "tips": {
-            "fail": [
-                { "title": "실패 시 참고팁 (1/3)", "desc": "이 게임의 처음, 두번째에 가장 무난한 선택지는 123, 456이 아닐지도 모릅니다.<br>조금 다른방식으로 접근을 해보는건 어떨까요?" },
-                { "title": "실패 시 참고팁 (2/3)", "desc": "그리고 고양이의 알고리즘 첫번째는 계속 1Ball 판정이 고정입니다.<br>처음 판정받은 숫자들을 돌려가며 다른식으로 배치해보세요<br>그렇게 하면 3~4턴 사이에는 금새 가능성이 좁혀지게 됩니다." },
-                { "title": "실패 시 참고팁 (3/3)", "desc": "어느정도 좌표가 특정된 후 양자구름에 표시된 숫자를 보고 측정을 하면<br>양자고양이를 관측할 수 있을겁니다. 화이팅!" }
-            ],
-            "success": [
-                { "title": "성공 시 참고팁 (1/5)", "desc": "눈치를 못채셨을 수도 있지만 이 게임은 관측에 성공을 하든 실패를 하든<br><span style='color:var(--cyan); font-weight:bold;'>Quantum Collapse(양자 붕괴)</span>엔딩이 나옵니다. <br>그렇게 한 것은 관측 성공도 이 게임의 진짜 목표가 아니기 때문입니다." },
-                { "title": "성공 시 참고팁 (2/5)", "desc": "단순히 관측 성공을 하는거 자체는 너무 난이도가 낮으니까요. <br><span style='color:var(--cyan); font-weight:bold;'>이 게임은 정확히 5턴의 좌표확인으로 100%로 양자고양이의 좌표를 특정하고 <br>6턴째 좌표입력까지 진행해서 모순을 찾고 양자고양이를 잡는 게임입니다.</span>" },
-                { "title": "성공 시 참고팁 (3/5)", "desc": "양자고양이는 계속해서 최대한 안전해보이는 좌표로 도망칩니다. <br>정확히는 가능한 후보 숫자가 가장 많은 볼카운트 대답한다는 의미죠." },
-                { "title": "성공 시 참고팁 (4/5)", "desc": "고정된 알고리즘이기 때문에 똑같은 질문을 100번 하면 100번 똑같이 답합니다.<br> 일정한 빌드를 만들어서 가장 높은 확률을 따라가면 최적화되는 구조입니다. <br>측정 숫자를 교차로 배치해서 몰이사냥을 하듯이 숨을 곳을 좁히세요." },
-                { "title": "성공 시 참고팁 (5/5)", "desc": "당신은 고양이 추적자 역량을 기르기 위해 <span style='color:var(--green); font-weight:bold;'>진심으로 도전</span>을 해보겠다는 건가요?<br> 그런분은 정말 환영입니다. " }
-            ]
-        },
         "tutorial": {
             "steps": [
-                { "step": 1, "title": "1. 숫자 입력", "desc": "입력 패널의 버튼을 눌러서 입력하거나 키보드 숫자키를 활용해<br>임의의 3자리 수를 입력해보세요." },
-                { "step": 2, "title": "2. 양자고양이 좌표 측정", "desc": "입력 패널의 엔터키나 키보드 Enter를 통해서 양자 고양이의 좌표를 측정하세요.<br>고양이가 숨어있는 3자리 좌표를 찾으면 됩니다." },
-                { "step": 3, "title": "3. 결과 표시 판넬", "desc": "S는 숫자와 위치가 모두 맞는 숫자의 개수이며<br>B는 숫자는 맞지만 위치는 틀린 숫자의 개수입니다." },
-                { "step": 4, "title": "4. 양자 구름의 의미", "desc": "좌표 측정을 진행하다 보면 양자고양이가 위치할 가능성이 있는 좌표들이<br>점차 선명히 보이기 시작합니다." },
-                { "step": 5, "title": "5. 관측 확률", "desc": "지금까지 판정결과에 부합하는 임의의 숫자로 관측했을 때 찾을 확률입니다.<br>관측은 입력패널의 우상단 보라색 버튼을 통해 진행합니다." },
-                { "step": 6, "title": "6. 횟수 제한 및 엔딩", "desc": "양자고양이는 언제나 가장 잘 숨을 수 있는 좌표로 도망칩니다.<br><span style='color:var(--red); font-weight:bold;'>6턴의 좌표 측정만으로 고양이의 좌표를 찾아보세요!</span>" }
+                { "step": 1, "title": "숫자 입력", "desc": "0부터 9까지의 중복되지 않은 <br>세 자리 숫자를 입력하세요." },
+                { "step": 2, "title": "측정 실행", "desc": "ENT를 눌러 현재 입력한 숫자에 대한 <br>양자 상태를 측정합니다." },
+                { "step": 3, "title": "측정 결과", "desc": "S(Strike)는 숫자와 위치가 일치,<br>B(Ball)은 숫자는 포함되나 위치가 다름을 의미합니다." },
+                { "step": 4, "title": "양자 구름", "desc": "Quantum Cloud는 현재 가능성이 남아있는<br>모든 좌표(숫자)들의 집합입니다." },
+                { "step": 5, "title": "관측 시스템", "desc": "가능성이 충분히 좁혀졌다면 OBS를 눌러<br>양자고양이의 확정적 위치를 관측할 수 있습니다." },
+                { "step": 6, "title": "훈련 목표", "desc": "주어진 6턴 안에 측정 결과들을 조합하여<br>양자 구름의 가능성을 0%로 만드세요." }
             ],
-            "button_finish": "게임하러 가기"
-        }
+            "button_next": "다음",
+            "button_finish": "훈련 시작"
+        },
+        "tips": {
+            "success": [
+                { "title": "완벽한 관측", "desc": "당신은 양자역학의 불확정성을 극복했습니다.<br>이 기록을 유지하며 실전 모드에 도전해보세요." },
+                { "title": "효율적인 필터링", "desc": "가장 적은 턴으로 구름을 제거하는 것이<br>고급 관측자의 자질입니다." }
+            ],
+            "fail": [
+                { "title": "관측 실패", "desc": "고양이는 상자 속에 없었습니다.<br>측정 결과를 다시 한번 복기해보세요." },
+                { "title": "전략 팁", "desc": "0S 0B(OUT) 결과는 구름을 제거하는 데<br>가장 강력한 단서가 됩니다." }
+            ]
+        },
+        "endings": {
+            "win": { "type": "SUCCESS", "result": "관측 성공!", "message": "축하합니다! 양자고양이의 정확한 위치를 포착했습니다." },
+            "lose": { "type": "FAILED", "result": "관측 실패...", "message": "고양이는 이미 다른 차원으로 이동한 것 같습니다." },
+            "paradox": { "type": "PARADOX", "result": "슈뢰딩거의 역설 통과", "message": "구름이 완전히 소멸되었습니다. 당신은 이미 정답을 알고 있군요." }
+        },
+        "dev_story": [
+            "Project: Schrödinger Baseball",
+            "Developed with Gemini & Grok",
+            "Created by Aview",
+            "Inspired by Quantum Mechanics"
+        ]
     };
 
-    const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.app", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
+    const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
 
     let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 6;
-    let _0xisTutorialMode = false, _0xcurrentStepIdx = 0, _0xactiveTipType = null, _0xactiveTipIdx = 0;
+    let _0xisTutorial = false, _0xtutorialStep = 0, _0xcurrentTipType = "";
     let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
     let _0xcurrentVolume = 0.15;
-    let _0xfailLoopInterval = null, _0xsuccessLoopInterval = null, _0xmeowLoopInterval = null; 
-    let _0xmeowCount = 0, _0xplayCount = 0;
+    let _0xfailLoopInterval = null; 
+    let _0xsuccessLoopInterval = null; 
+    let _0xmeowLoopInterval = null; 
+    let _0xmeowCount = 0; 
+    let _0xplayCount = 0;
     
     let _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
-    _0xbgm.loop = true; _0xbgm.playbackRate = 2.0;
+    _0xbgm.loop = true;
+    _0xbgm.playbackRate = 2.0;
     const _0xclickSfx = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
     const _0xspecialClickSfx = new Audio("Click.mp3");
     const _0xmeowSfx = new Audio("moeeza3-kitten-cat-meow-437244.mp3");
     const _0xemergencySfx = new Audio("비상알람.mp3");
     const _0xfailSfx = new Audio("띠용.mp3");
     const _0xsuccessSfx = new Audio("고양이 코골이_[cut_5sec].mp3");
-    const _0xnyaBgmSfx = new Audio("냥이 브금.mp3"); _0xnyaBgmSfx.loop = true; 
+    const _0xnyaBgmSfx = new Audio("냥이 브금.mp3");
+    _0xnyaBgmSfx.loop = true; 
     const _0xlightsOffSfx = new Audio("소등.mp3");
 
     const _0xoriginalBodyContent = document.body.innerHTML;
+
     let _0xpoisonInterval = null;
 
     function _0x3f2a(val) { 
         _0xcurrentVolume = parseFloat(val);
-        _0xbgm.volume = _0xbgm.src.includes("SoundHelix-Song-8.mp3") ? Math.min(1.0, _0xcurrentVolume * 0.56) : _0xcurrentVolume;
+        if (_0xbgm.src.includes("SoundHelix-Song-8.mp3")) {
+            _0xbgm.volume = Math.min(1.0, _0xcurrentVolume * 0.5616);
+        } else {
+            _0xbgm.volume = _0xcurrentVolume; 
+        }
         _0xmeowSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.17); 
         _0xemergencySfx.volume = Math.min(1.0, _0xcurrentVolume * 2.56);
         _0xfailSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0); 
@@ -476,17 +478,57 @@
         _0xnyaBgmSfx.volume = _0xcurrentVolume * 0.6; 
         _0xlightsOffSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
     }
+    
     _0x3f2a(0.15);
 
-    function _0xplayClick() { const sc = _0xclickSfx.cloneNode(); sc.volume = Math.min(1.0, _0xcurrentVolume * 8.0); sc.play().catch(e=>{}); if(_0xbgm.paused) _0xbgm.play().catch(e=>{}); }
-    function _0xplaySpecialClick() { const sc = _0xspecialClickSfx.cloneNode(); sc.volume = Math.min(1.0, _0xcurrentVolume * 3.0); sc.play().catch(e=>{}); }
-    function _0xplayNyaBgm() { if(_0xbgm) _0xbgm.pause(); _0xbgm = _0xnyaBgmSfx; _0xbgm.volume = _0xcurrentVolume * 0.6; _0xbgm.currentTime = 0; _0xbgm.play().catch(e=>{}); }
+    function _0xplayClick() { 
+        const sc = _0xclickSfx.cloneNode(); 
+        sc.volume = Math.min(1.0, _0xcurrentVolume * 8.0); 
+        sc.play().catch(e=>{}); 
+        if(_0xbgm.paused) _0xbgm.play().catch(e=>{}); 
+    }
+
+    function _0xplaySpecialClick() { 
+        const sc = _0xspecialClickSfx.cloneNode(); 
+        sc.volume = Math.min(1.0, _0xcurrentVolume * 3.0);
+        sc.play().catch(e=>{}); 
+    }
+
+    function _0xplayNyaBgm() {
+        if(_0xbgm) _0xbgm.pause();
+        _0xbgm = _0xnyaBgmSfx;
+        _0xbgm.volume = _0xcurrentVolume * 0.6; 
+        _0xbgm.currentTime = 0;
+        _0xbgm.play().catch(e=>{});
+    }
+
+    function _0xsimBtn(btnId) {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            btn.classList.add('active');
+            setTimeout(() => btn.classList.remove('active'), 100);
+        }
+    }
+
+    function _0x7c3d(type) {
+        if(type === 'CLR') {
+            _0xsimBtn('clr-btn');
+            _0xplaySpecialClick();
+            _0xclrIn(true);
+        }
+        if(type === 'ENT') {
+            _0xsimBtn('ent-btn');
+            _0xplaySpecialClick();
+            _0xentCli(true);
+        }
+    }
 
     function _0x4c5b() {
-        _0xplayClick(); _0xplayCount++;
-        if(_0xfailLoopInterval) clearInterval(_0xfailLoopInterval);
-        if(_0xsuccessLoopInterval) clearInterval(_0xsuccessLoopInterval);
-        if(_0xmeowLoopInterval) clearInterval(_0xmeowLoopInterval);
+        _0xplayClick();
+        _0xplayCount++;
+        if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
+        if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
+        if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
         document.getElementById('setup').style.display = 'none';
         document.getElementById('setup-footer').style.display = 'none';
         document.getElementById('game-box').style.display = 'flex';
@@ -506,84 +548,76 @@
     }
 
     function _0xresDir() {
-        _0xplayClick(); _0xplayCount++;
-        if(_0xfailLoopInterval) clearInterval(_0xfailLoopInterval);
-        if(_0xsuccessLoopInterval) clearInterval(_0xsuccessLoopInterval);
-        if(_0xmeowLoopInterval) clearInterval(_0xmeowLoopInterval);
+        _0xplayClick();
+        _0xplayCount++;
+        if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
+        if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
+        if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
         _0xbgm.pause();
         _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
-        _0xbgm.loop = true; _0xbgm.playbackRate = 2.0;
+        _0xbgm.loop = true;
+        _0xbgm.playbackRate = 2.0;
+        
         const oldPlayCount = _0xplayCount;
         document.body.innerHTML = _0xoriginalBodyContent;
         _0xplayCount = oldPlayCount;
+        
         _0x3f2a(document.getElementById('volume-slider')?.value || 0.15);
         _0x4c5b();
     }
 
-    // ==========================================
-    // TIPS & TUTORIAL NEW LOGIC (완전 재작성)
-    // ==========================================
-    window.openTips = function(type) {
-        _0xplayClick();
-        _0xisTutorialMode = false;
-        _0xactiveTipType = type;
-        _0xactiveTipIdx = 0;
-        
-        const overlay = document.getElementById('tutorial-overlay');
-        const escGuide = document.getElementById('tut-esc-guide');
-        overlay.style.display = 'flex';
-        if(escGuide) escGuide.style.display = 'none'; // 팁 모드에선 ESC 가이드 숨김
-        
-        updateTipUI();
-    };
-
-    function updateTipUI() {
-        const titleEl = document.getElementById('tut-title');
-        const descEl = document.getElementById('tut-desc');
-        const nextBtn = document.getElementById('tut-next-btn');
-        
-        const currentData = _0xtextData.tips[_0xactiveTipType][_0xactiveTipIdx];
-        titleEl.innerText = currentData.title;
-        descEl.innerHTML = currentData.desc;
-        nextBtn.innerText = (_0xactiveTipIdx === _0xtextData.tips[_0xactiveTipType].length - 1) ? "닫기" : "다음";
-        nextBtn.classList.remove('btn-cyan');
-        
-        // 하이라이트 초기화
-        document.getElementById('game-box').classList.remove('tutorial-dim');
-        document.getElementById('info-panel').classList.remove('tutorial-dim');
-        document.querySelectorAll('.tutorial-highlight, .tutorial-highlight-turn').forEach(el => {
-            el.classList.remove('tutorial-highlight', 'tutorial-highlight-turn');
-        });
-    }
-
-    window.handleTutorialNext = function() {
-        _0xplayClick();
-        if (_0xactiveTipType) {
-            // TIPS 모드 로직
-            _0xactiveTipIdx++;
-            if (_0xactiveTipIdx < _0xtextData.tips[_0xactiveTipType].length) {
-                updateTipUI();
-            } else {
-                document.getElementById('tutorial-overlay').style.display = 'none';
-                _0xactiveTipType = null;
-            }
-        } else {
-            // 기존 TUTORIAL 모드 로직
-            if (_0xcurrentStepIdx === 1 || _0xcurrentStepIdx === 2) {
-                document.getElementById('tutorial-overlay').style.display = 'none';
-                return;
-            }
-            _0xcurrentStepIdx++;
-            if (_0xcurrentStepIdx > 6) { location.reload(); return; }
-            _0xappTut();
-        }
-    };
-
     function _0x1d2e() {
-        _0xisTutorialMode = true; _0xactiveTipType = null; _0xcurrentStepIdx = 1;
+        _0xisTutorial = true; _0xcurrentTipType = ""; _0xtutorialStep = 1;
         _0x4c5b();
         document.getElementById('obs-btn').disabled = true;
         document.getElementById('tutorial-overlay').style.display = 'flex';
+        _0xappTut();
+    }
+
+    window.showTips = function(type) {
+        _0xplayClick();
+        _0xisTutorial = false;
+        _0xcurrentTipType = type;
+        _0xtutorialStep = 0;
+        const tutOverlay = document.getElementById('tutorial-overlay');
+        if (tutOverlay) {
+            tutOverlay.style.display = 'flex';
+            document.getElementById('tut-esc-guide').style.display = 'none';
+            _0xappTip();
+        }
+    };
+
+    function _0x5a1b() {
+        _0xplayClick();
+        if (_0xcurrentTipType) {
+            _0xtutorialStep++;
+            if (_0xtutorialStep >= _0xtextData.tips[_0xcurrentTipType].length) {
+                document.getElementById('tutorial-overlay').style.display = 'none';
+                return;
+            }
+            _0xappTip();
+        } else {
+            _0xnxtTut();
+        }
+    }
+
+    function _0xappTip() {
+        const title = document.getElementById('tut-title');
+        const desc = document.getElementById('tut-desc');
+        if (title && desc) {
+            const tip = _0xtextData.tips[_0xcurrentTipType][_0xtutorialStep];
+            title.innerText = tip.title;
+            desc.innerHTML = tip.desc.replace(/\n/g, "<br>"); 
+        }
+    }
+
+    function _0xnxtTut() {
+        if (_0xtutorialStep === 1 || _0xtutorialStep === 2) {
+            document.getElementById('tutorial-overlay').style.display = 'none';
+            return;
+        }
+        _0xtutorialStep++;
+        if (_0xtutorialStep > 6) { location.reload(); return; }
         _0xappTut();
     }
 
@@ -592,6 +626,7 @@
         const desc = document.getElementById('tut-desc');
         const nextBtn = document.getElementById('tut-next-btn');
         const turnCounter = document.getElementById('turn-counter');
+        const chanceBox = document.getElementById('chance-box');
         
         document.getElementById('game-box').classList.add('tutorial-dim');
         document.getElementById('info-panel').classList.add('tutorial-dim');
@@ -599,73 +634,92 @@
         turnCounter.classList.remove('tutorial-highlight-turn');
         nextBtn.classList.remove('btn-cyan');
 
-        const stepData = _0xtextData.tutorial.steps.find(s => s.step === _0xcurrentStepIdx);
+        const stepData = _0xtextData.tutorial.steps.find(s => s.step === _0xtutorialStep);
         if (stepData) {
             title.innerText = stepData.title;
             desc.innerHTML = stepData.desc;
         }
 
-        if (_0xcurrentStepIdx === 1) {
+        if (_0xtutorialStep === 1) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.querySelectorAll('.key-btn, #zero-btn, #display').forEach(el => el.classList.add('tutorial-highlight'));
-        } else if (_0xcurrentStepIdx === 2) {
+        } else if (_0xtutorialStep === 2) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.getElementById('ent-btn').classList.add('tutorial-highlight');
             document.getElementById('clr-btn').classList.add('tutorial-highlight');
-        } else if (_0xcurrentStepIdx === 3) {
+        } else if (_0xtutorialStep === 3) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             const firstLog = document.querySelector('.log-item');
             if(firstLog) firstLog.classList.add('tutorial-highlight');
-        } else if (_0xcurrentStepIdx === 4) {
+        } else if (_0xtutorialStep === 4) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             document.getElementById('candidates-box').classList.add('tutorial-highlight');
-        } else if (_0xcurrentStepIdx === 5) {
+        } else if (_0xtutorialStep === 5) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
-            document.getElementById('chance-box').classList.add('tutorial-highlight');
+            chanceBox.classList.add('tutorial-highlight');
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.getElementById('obs-btn').classList.add('tutorial-highlight');
-        } else if (_0xcurrentStepIdx === 6) {
+        } else if (_0xtutorialStep === 6) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             turnCounter.classList.add('tutorial-highlight-turn');
             nextBtn.classList.add('btn-cyan');
             nextBtn.innerText = _0xtextData.tutorial.button_finish;
         }
     }
-    // ==========================================
 
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             if (document.getElementById('credit-overlay')?.style.display === 'flex') { _0xclsCr(); return; }
-            if (_0xisTutorialMode) location.reload();
+            if (_0xisTutorial) location.reload();
             if (document.getElementById('obs-overlay')?.style.display === 'flex') { document.getElementById('obs-overlay').style.display = 'none'; }
-            if (document.getElementById('tutorial-overlay')?.style.display === 'flex') { document.getElementById('tutorial-overlay').style.display = 'none'; }
             return;
         }
-        if (document.getElementById('obs-overlay')?.style.display === 'flex') { if (e.key === 'Enter') _0x6f5a(); return; }
-        if (e.key === 'Enter') { e.preventDefault(); if (document.getElementById('game-box').style.display === 'flex') _0x7c3d('ENT'); return; }
-        if (e.key >= '0' && e.key <= '9') { _0x9b8a(e.key); return; }
-        if (e.key === 'Delete' || e.key === 'Backspace') { _0x7c3d('CLR'); return; }
+        if (document.getElementById('obs-overlay')?.style.display === 'flex') {
+            if (e.key === 'Enter') _0x6f5a(); return;
+        }
+        
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (document.getElementById('game-box').style.display === 'flex') {
+                _0x7c3d('ENT');
+            }
+            return;
+        }
+        
+        if (e.key >= '0' && e.key <= '9') {
+            const btn = document.querySelector(e.key === '0' ? '#zero-btn' : `.key-btn[data-key="${e.key}"]`);
+            if(btn) { btn.classList.add('active'); setTimeout(() => btn.classList.remove('active'), 100); }
+            _0x9b8a(e.key);
+            return;
+        }
+        
+        if (e.key === 'Delete' || e.key === 'Backspace') {
+            _0x7c3d('CLR');
+            return;
+        }
     });
 
     function _0x9b8a(n) { 
         _0xplayClick(); 
         if(_0xinputStr.length < 3 && !_0xinputStr.includes(n)) { 
-            _0xinputStr += n; document.getElementById('display').innerText = _0xinputStr; 
-            if (_0xisTutorialMode && _0xcurrentStepIdx === 1 && _0xinputStr.length === 3) {
-                setTimeout(() => { _0xcurrentStepIdx = 2; document.getElementById('tutorial-overlay').style.display = 'flex'; _0xappTut(); }, 300);
+            _0xinputStr += n; 
+            document.getElementById('display').innerText = _0xinputStr; 
+            if (_0xisTutorial && _0xtutorialStep === 1 && _0xinputStr.length === 3) {
+                setTimeout(() => { _0xtutorialStep = 2; document.getElementById('tutorial-overlay').style.display = 'flex'; _0xappTut(); }, 300);
             }
         } 
     }
 
-    function _0x7c3d(type) {
-        if(type === 'CLR') { _0xplaySpecialClick(); _0xinputStr = ""; document.getElementById('display').innerText = "---"; }
-        if(type === 'ENT' && _0xinputStr.length === 3 && _0xturnCount > 0) {
-            _0xplaySpecialClick();
+    function _0xclrIn(isSpecial) { if(!isSpecial) _0xplayClick(); _0xinputStr = ""; document.getElementById('display').innerText = "---"; }
+    
+    function _0xentCli(isSpecial) {
+        if(_0xinputStr.length === 3 && _0xturnCount > 0) {
+            if(!isSpecial) _0xplayClick();
             const res = _0xaiRes(_0xinputStr);
             _0xhistory.push({ n: _0xinputStr, s: res.s, b: res.b });
-            _0xturnCount--; _0xinputStr = ""; document.getElementById('display').innerText = "---"; _0xupUI();
-            if (_0xisTutorialMode && _0xcurrentStepIdx === 2) {
-                setTimeout(() => { _0xcurrentStepIdx = 3; document.getElementById('tutorial-overlay').style.display = 'flex'; _0xappTut(); }, 500);
+            _0xturnCount--; _0xclrIn(true); _0xupUI();
+            if (_0xisTutorial && _0xtutorialStep === 2) {
+                setTimeout(() => { _0xtutorialStep = 3; document.getElementById('tutorial-overlay').style.display = 'flex'; _0xappTut(); }, 500);
             }
         }
     }
@@ -675,7 +729,9 @@
         _0xaiCandidates.forEach(cand => {
             let s=0, b=0;
             for(let i=0; i<3; i++){ if(guess[i] === cand[i]) s++; else if(cand.includes(guess[i])) b++; }
-            const key = `${s}S${b}B`; if(!outcomes[key]) outcomes[key] = []; outcomes[key].push(cand);
+            const key = `${s}S${b}B`;
+            if(!outcomes[key]) outcomes[key] = [];
+            outcomes[key].push(cand);
         });
         let bestKey = ""; let maxCount = -1;
         for(let key in outcomes) {
@@ -683,10 +739,33 @@
             if(outcomes[key].length > maxCount) { maxCount = outcomes[key].length; bestKey = key; }
         }
         if(!bestKey || _0xaiCandidates.length <= 1) {
-            bestKey = `${Math.floor(Math.random()*2)}S${Math.floor(Math.random()*2)}B`;
-            _0xaiCandidates = _0xaiCandidates.filter(c => c !== guess);
+            const fakeS = Math.floor(Math.random() * 2);
+            const fakeB = Math.floor(Math.random() * 2);
+            bestKey = `${fakeS}S${fakeB}B`;
+            _0xaiCandidates = _0xaiCandidates.filter(c => c !== guess); 
         } else { _0xaiCandidates = outcomes[bestKey]; }
-        const match = bestKey.match(/(\d)S(\d)B/); return { s: parseInt(match[1]), b: parseInt(match[2]) };
+        const match = bestKey.match(/(\d)S(\d)B/);
+        return { s: parseInt(match[1]), b: parseInt(match[2]) };
+    }
+
+    function _0xstPsL() {
+        if(_0xpoisonInterval) return;
+        const targetText = "Your Training is Completed";
+        const el = document.getElementById('chance-val');
+        let index = targetText.length;
+        let isDeleting = true;
+
+        _0xpoisonInterval = setInterval(() => {
+            if (isDeleting) {
+                el.innerHTML = `<span class="poison-text" style="color:var(--green); text-shadow: 0 0 1.5vh var(--green);">${targetText.substring(0, index)}</span>`;
+                index--;
+                if (index < 0) { isDeleting = false; }
+            } else {
+                el.innerHTML = `<span class="poison-text" style="color:var(--green); text-shadow: 0 0 1.5vh var(--green);">${targetText.substring(0, index)}</span>`;
+                index++;
+                if (index > targetText.length) { isDeleting = true; }
+            }
+        }, 150);
     }
 
     function _0xupUI() {
@@ -697,6 +776,9 @@
         const chanceTitleEl = document.getElementById('chance-title');
         const chanceBoxEl = document.getElementById('chance-box');
         const catImg = document.getElementById('prob-cat-img');
+        const deadX = document.getElementById('dead-x');
+        const flashOverlay = document.getElementById('flash-overlay');
+        const paradoxOverlay = document.getElementById('paradox-cat-overlay');
         const logWindow = document.getElementById('log-window');
         
         if(_0xaiCandidates.length === 0) {
@@ -704,105 +786,275 @@
                 _0xbgm.pause();
                 setTimeout(() => {
                     _0xbgm = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3");
-                    _0xbgm.loop = true; _0xbgm.volume = _0xcurrentVolume * 0.56; _0xbgm.play().catch(e => {});
+                    _0xbgm.loop = true;
+                    _0xbgm.volume = Math.min(1.0, _0xcurrentVolume * 0.5616);
+                    _0xbgm.play().catch(e => {});
                 }, 4000);
                 _0xparadoxMusicTriggered = true;
             }
             if(!_0xzeroOverlayTriggered) {
+                _0xlightsOffSfx.currentTime = 0;
                 _0xlightsOffSfx.play().catch(e=>{});
-                const fo = document.getElementById('flash-overlay');
-                fo.style.display = 'block'; fo.style.opacity = '1';
-                setTimeout(() => { fo.style.transition = 'opacity 1.5s ease'; fo.style.opacity = '0'; setTimeout(()=>fo.style.display='none', 1500); }, 3000);
-                document.getElementById('paradox-cat-overlay').style.display = 'block';
-                document.getElementById('paradox-cat-overlay').style.animation = "fadeOutLong 16s forwards";
+                flashOverlay.style.display = 'block';
+                flashOverlay.style.transition = 'none';
+                flashOverlay.style.background = '#000';
+                flashOverlay.style.opacity = '1';
+                setTimeout(() => { 
+                    flashOverlay.style.transition = 'opacity 1.5s ease-in-out';
+                    flashOverlay.style.opacity = '0'; 
+                    setTimeout(() => { flashOverlay.style.display = 'none'; }, 1500);
+                }, 3000);
+                if(paradoxOverlay) {
+                    paradoxOverlay.style.display = 'block';
+                    paradoxOverlay.style.opacity = '1';
+                    paradoxOverlay.style.animation = "fadeOutLong 16s forwards";
+                }
                 _0xzeroOverlayTriggered = true;
                 _0xstPsL();
             }
             chanceTitleEl.style.display = 'none';
             chanceBoxEl.style.borderColor = 'var(--green)';
-            catImg.style.opacity = '0'; turnCounter.style.color = 'var(--green)';
-            logWindow.innerHTML = `<div class="training-clear-msg"><span class="count-highlight">${_0xplayCount}회 만에</span>훈련을 통과하셨습니다</div>`;
+            catImg.style.opacity = '0'; catImg.style.filter = 'blur(2vh)';
+            turnCounter.style.color = 'var(--green)'; turnCounter.style.textShadow = '0 0 2vh var(--green)';
+            deadX.style.display = 'block'; 
+            
+            logWindow.innerHTML = `
+                <div class="training-clear-msg">
+                    <span class="count-highlight">${_0xplayCount}회 만에</span>
+                    훈련을 통과하셨습니다
+                </div>`;
         } else {
-            let color = prob === 100 ? 'var(--red)' : (prob >= 10 ? 'var(--cyan)' : 'var(--purple)');
-            chanceValEl.style.color = color; chanceValEl.style.textShadow = `0 0 2.5vh ${color}`;
-            chanceTitleEl.style.color = color; chanceBoxEl.style.borderColor = color;
+            deadX.style.display = 'none';
+            if(paradoxOverlay) { paradoxOverlay.style.display = 'none'; paradoxOverlay.style.animation = 'none'; }
+            if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
+
+            let currentColor = 'var(--purple)';
+            let currentShadow = '0 0 2.5vh var(--purple)';
+
+            if (prob === 100) {
+                currentColor = 'var(--red)';
+                currentShadow = '0 0 2.5vh var(--red)';
+                if(!_0xalarmTriggered) {
+                    _0xemergencySfx.play().catch(e=>{});
+                    flashOverlay.style.display = 'block';
+                    flashOverlay.style.transition = 'opacity 1.5s ease';
+                    flashOverlay.style.background = 'radial-gradient(circle, rgba(255, 0, 0, 0) 70%, rgba(255, 0, 0, 0.4) 100%)';
+                    flashOverlay.style.opacity = '1';
+                    setTimeout(() => { flashOverlay.style.opacity = '0'; setTimeout(() => { flashOverlay.style.display = 'none'; }, 1500); }, 1500);
+                    _0xalarmTriggered = true;
+                }
+            } else if (prob >= 10 && prob <= 51) {
+                currentColor = 'var(--cyan)';
+                currentShadow = '0 0 2.5vh var(--cyan)';
+                _0xalarmTriggered = false;
+            } else {
+                _0xalarmTriggered = false;
+            }
+
+            chanceValEl.style.color = currentColor;
+            chanceValEl.style.textShadow = currentShadow;
+            chanceTitleEl.style.display = 'block';
+            chanceTitleEl.style.color = currentColor;
+            chanceTitleEl.style.textShadow = currentShadow;
             chanceValEl.innerText = prob.toFixed(2) + "%";
-            catImg.style.opacity = Math.max(0.1, 1 - (prob / 100));
-            catImg.style.filter = `blur(${prob * 0.05}vh)`;
-            logWindow.innerHTML = _0xhistory.map(h => `<div class="log-item"><span class="log-n">${h.n}</span><span class="log-sb">${(h.s===0&&h.b===0)?'<span class="log-out">OUT</span>':h.s+'S / '+h.b+'B'}</span></div>`).join('');
+            chanceBoxEl.style.borderColor = currentColor;
+            turnCounter.style.color = currentColor;
+            const blurAmount = Math.max(0, (prob * 0.05));
+            const opacityAmount = Math.max(0.1, 1 - (prob / 100));
+            catImg.style.display = 'block'; catImg.style.opacity = opacityAmount;
+            catImg.style.filter = `blur(${blurAmount}vh)`; 
+            catImg.style.borderColor = currentColor;
+            
+            logWindow.innerHTML = _0xhistory.map(h => {
+                const resultText = (h.s === 0 && h.b === 0) ? `<span class="log-out">OUT</span>` : `${h.s}S / ${h.b}B`;
+                return `<div class="log-item"><span class="log-n">${h.n}</span><span class="log-sb">${resultText}</span></div>`;
+            }).join('');
         }
+        
         logWindow.scrollTop = logWindow.scrollHeight;
         const slice = [..._0xaiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
-        document.getElementById('cand-list').innerHTML = slice.map(c => `<div class="cand-item">${c}</div>`).join('');
-        document.getElementById('status').innerText = _0xturnCount <= 0 ? "측정 완료 (관측만 가능)" : "고양이 위치 관측 중...";
+        let pixelateStrength = 0;
+        if (prob >= 25) pixelateStrength = 0; 
+        else if (prob >= 5) pixelateStrength = 0.05; 
+        else if (prob >= 1) pixelateStrength = 0.15; 
+        else pixelateStrength = 0.25; 
+
+        document.getElementById('cand-list').innerHTML = slice.map(c => `<div class="cand-item" style="filter: blur(${pixelateStrength}vh) contrast(180%);">${c}</div>`).join('');
+
+        const statusEl = document.getElementById('status');
+        const entBtn = document.getElementById('ent-btn');
+        if(_0xturnCount <= 0) {
+            entBtn.disabled = true;
+            statusEl.innerText = "측정 완료 (관측만 가능)";
+            statusEl.style.animation = "none";
+            statusEl.style.color = "var(--red)";
+            statusEl.style.textShadow = "0 0 1vh var(--red)";
+        } else {
+            entBtn.disabled = false;
+            statusEl.innerText = "양자고양이 위치 관측 중...";
+            statusEl.style.animation = "neonShift 10s infinite alternate linear";
+        }
     }
 
-    function _0xstPsL() {
-        if(_0xpoisonInterval) return;
-        const target = "Your Training is Completed"; const el = document.getElementById('chance-val');
-        let idx = target.length, del = true;
-        _0xpoisonInterval = setInterval(() => {
-            el.innerHTML = `<span class="poison-text" style="color:var(--green);">${target.substring(0, idx)}</span>`;
-            if(del) idx--; else idx++;
-            if(idx < 0) del = false; if(idx > target.length) del = true;
-        }, 150);
+    function _0xrndPrCl() {
+        const field = document.getElementById('quantum-field');
+        field.innerHTML = "";
+        const neons = ['var(--cyan)', 'var(--purple)', 'var(--green)', 'var(--red)'];
+        const list = _0xaiCandidates.length > 0 ? _0xaiCandidates : ["ERR", "VOID", "000"];
+        list.slice(0, 80).forEach(num => {
+            const span = document.createElement('span');
+            span.className = 'bg-candidate';
+            span.innerText = num;
+            let x, y;
+            do { x = Math.random() * 85 + 5; y = Math.random() * 85 + 5; } while (x > 25 && x < 75 && y > 20 && y < 80);
+            span.style.left = x + "%"; span.style.top = y + "%";
+            span.style.color = neons[Math.floor(Math.random() * neons.length)];
+            span.style.animationDelay = (Math.random() * 4) + "s";
+            field.appendChild(span);
+        });
     }
 
     function _0x2f1e() {
-        if(_0xisTutorialMode) return;
+        if(_0xisTutorial) return;
         _0xplaySpecialClick();
         if(_0xaiCandidates.length === 0) {
-            _0xmeowSfx.play();
+            _0xmeowCount = 0; 
+            _0xmeowSfx.play().catch(e=>{}); 
+            _0xmeowCount++;
+            if(_0xmeowLoopInterval) clearInterval(_0xmeowLoopInterval);
+            _0xmeowLoopInterval = setInterval(() => {
+                if(_0xmeowCount < 10) {
+                    _0xmeowSfx.currentTime = 0;
+                    _0xmeowSfx.play().catch(e=>{});
+                    _0xmeowCount++;
+                } else {
+                    clearInterval(_0xmeowLoopInterval);
+                }
+            }, 6000);
+
             const ed = _0xtextData.endings.paradox;
             _0xrnEG(ed.type, ed.result, ed.message, 'var(--green)', true, true);
             return;
         }
+        _0xrndPrCl();
         document.getElementById('obs-overlay').style.display = 'flex';
-        setTimeout(() => document.getElementById('obs-num').focus(), 10);
+        setTimeout(() => { const obsInput = document.getElementById('obs-num'); if(obsInput){ obsInput.value = ""; obsInput.focus(); } }, 10);
     }
 
     function _0x6f5a() {
         const guess = document.getElementById('obs-num').value;
         if(guess.length === 3) {
-            let secret = _0xaiCandidates[Math.floor(Math.random() * _0xaiCandidates.length)];
-            if(guess === secret) {
-                _0xsuccessSfx.play();
+            _0xplayClick();
+            let realSecret = _0xaiCandidates[Math.floor(Math.random() * _0xaiCandidates.length)];
+            if(guess === realSecret) {
+                _0xsuccessSfx.play().catch(e=>{});
+                if(_0xsuccessLoopInterval) clearInterval(_0xsuccessLoopInterval);
+                _0xsuccessLoopInterval = setInterval(() => {
+                    _0xsuccessSfx.currentTime = 0;
+                    _0xsuccessSfx.play().catch(e=>{});
+                }, 6000);
                 const ed = _0xtextData.endings.win;
                 _0xrnEG(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
             } else {
-                _0xfailSfx.play();
+                _0xfailSfx.play().catch(e=>{});
+                if(_0xfailLoopInterval) clearInterval(_0xfailLoopInterval);
+                _0xfailLoopInterval = setInterval(() => {
+                    _0xfailSfx.currentTime = 0;
+                    _0xfailSfx.play().catch(e=>{});
+                }, 6000);
                 const ed = _0xtextData.endings.lose;
                 _0xrnEG(ed.type, ed.result, ed.message, 'var(--red)', false, false);
             }
         }
     }
 
-    function _0xrnEG(type, result, msg, color, win, paradox) {
-        let media = paradox ? "Neon cat box.gif" : (win ? "cat in the box.gif" : "box.gif");
-        let sub = paradox ? `<button onclick="window.open('https://aviewpro.github.io/schrodinger-baseball/', '_blank')" style="font-family:'Bebas Neue'; width:65vh; padding:2vh; background:#222; color:${color}; border:0.4vh solid ${color}; font-size:5vh; border-radius:2vh; cursor:pointer;">실전에 도전하기</button>` : 
-            `<div style="display:flex; flex-direction:column; gap:2vh; align-items:center; margin-top:4vh; width:62vh;">
-                <button onclick="window.openTips('${win?'success':'fail'}')" style="font-family:'Bebas Neue'; width:100%; padding:1.2vh; background:#333; color:${color}; border:0.2vh solid ${color}; font-size:4vh; border-radius:1.5vh; cursor:pointer;">TIPS</button>
-                <div style="display:flex; gap:2.5vh; width:100%;">
-                    <button onclick="location.reload()" style="font-family:'Bebas Neue'; flex:1; padding:1.2vh; background:#222; color:#fff; border:0.2vh solid #444; font-size:3.2vh; border-radius:1.5vh; cursor:pointer;">Main Menu</button>
-                    <button onclick="_0xresDir()" style="font-family:'Bebas Neue'; flex:2; padding:1.2vh; background:#222; color:#fff; border:0.2vh solid ${color}; font-size:3.2vh; border-radius:1.5vh; cursor:pointer;">Restart</button>
-                </div>
-            </div>`;
+    function _0xrnEG(type, result, msg, color, isWin, isParadox) {
+        const winGif = "cat in the box.gif";
+        const paradoxGif = "Neon cat box.gif";
+        const loseImg = "box.gif";
+        let mediaUrl = isParadox ? paradoxGif : (isWin ? winGif : loseImg);
+        let emojiLanes = "";
+        if(isParadox) {
+            const longLane = "🐈 ".repeat(22);
+            emojiLanes = `
+                <div class="emoji-lane" style="top:15vh; animation: slide-h 24s linear infinite; animation-delay: -3s;">${longLane}</div>
+                <div class="emoji-lane" style="bottom:15vh; animation: slide-h 29s linear infinite reverse; animation-delay: -7s;">${longLane}</div>
+                <div class="emoji-lane" style="left:10vw; animation: slide-v 22s linear infinite; animation-delay: -12s;">${longLane.split(' ').join('<br>')}</div>
+                <div class="emoji-lane" style="right:10vw; animation: slide-v 26s linear infinite reverse; animation-delay: -1s;">${longLane.split(' ').join('<br>')}</div>
+            `;
+        }
+        let subButtons = "";
+        if (isParadox) {
+            subButtons = `<button onclick="window.open('https://aviewpro.github.io/schrodinger-baseball/', '_blank')" style="font-family: 'Bebas Neue', cursive; width:65vh; padding:2vh 0; margin-top:5vh; background:#222; color:${color}; border:0.4vh solid ${color}; cursor:pointer; font-size:5vh; border-radius:2vh; font-weight:bold; box-shadow: 0 0 2vh ${color}; z-index:100; letter-spacing:0.3vh;">실전에 도전하기</button>`;
+        } else {
+            const tipType = isWin ? 'success' : 'fail';
+            subButtons = `
+                <div style="display:flex; flex-direction:column; gap: 2vh; align-items: center; margin-top:4vh; width: 62vh; z-index:100;">
+                    <button onclick="window.showTips('${tipType}')" style="font-family: 'Bebas Neue', cursive; width:100%; padding:1.2vh 0; background:#333; color:${color}; border:0.2vh solid ${color}; cursor:pointer; font-size:4vh; border-radius:1.5vh; font-weight:bold; letter-spacing:0.2vh;">TIPS</button>
+                    <div style="display:flex; gap: 2.5vh; width: 100%;">
+                        <button onclick="location.reload()" style="font-family: 'Bebas Neue', cursive; flex:1; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid #444; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Main Menu</button>
+                        <button onclick="_0xresDir()" style="font-family: 'Bebas Neue', cursive; flex:2; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid ${color}; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Restart</button>
+                    </div>
+                </div>`;
+        }
         document.body.innerHTML = `
             <div id="version-tag">0.5 Version</div>
-            <div id="sound-control" style="z-index:20000;"><span class="sound-icon">♪</span><input type="range" id="vol-end" min="0" max="1" step="0.01" value="${_0xcurrentVolume}" oninput="_0x3f2a(this.value)"><span class="sound-icon" style="font-size:1vh;">VOL</span></div>
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; text-align:center; padding:3vh 0;">
-                <img src="${media}" style="border:0.4vh solid ${color}; border-radius:4vh; width:40vh; height:40vh; object-fit:cover; margin-bottom:2vh;">
-                <h1 style="font-size:6vh; color:${color}; margin:1vh 0;">${type}</h1>
-                <h2 style="font-size:3.5vh; color:#fff;">${result}</h2>
-                <p style="color:#aaa; font-size:2.2vh; max-width:80vh; line-height:1.4;">${msg}</p>
-                ${sub}
+            ${emojiLanes}
+            <div id="sound-control" style="z-index:20000;">
+                <span class="sound-icon">♪</span>
+                <input type="range" id="volume-slider-end" min="0" max="1" step="0.01" value="${_0xcurrentVolume}" oninput="_0x3f2a(this.value)">
+                <span class="sound-icon" style="font-size:1vh;">VOL</span>
+            </div>
+            <div id="credit-overlay">
+                <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img" onclick="_0xplayNyaBgm()"></div>
+                <div id="credit-container" onmousedown="_0x8c21(event)" onmouseup="_0x7d4e(event)">
+                    <div id="credit-content"></div>
+                </div>
+                <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;" onclick="_0xplayNyaBgm()"></div>
+                <div class="credit-esc">Press ESC to Close</div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; text-align:center; box-sizing: border-box; position:relative; z-index:50; padding: 3vh 0; overflow: hidden;">
+                <img src="${mediaUrl}" style="border:0.4vh solid ${color}; border-radius:4vh; box-shadow: 0 0 3vh ${color}; width: 40vh; height: 40vh; object-fit: cover; margin-bottom: 2vh;">
+                <h1 style="font-size:6vh; color:${color}; margin: 1vh 0; text-shadow:0 0 2vh ${color};">${type}</h1>
+                <h2 style="font-size:3.5vh; color:#fff; margin-bottom: 1vh;">${result}</h2>
+                <p style="color:${isParadox ? color : '#aaa'}; font-size:2.2vh; max-width:80vh; line-height:1.4; margin: 1vh 0;">${msg}</p>
+                ${subButtons}
             </div>`;
+        document.getElementById('volume-slider-end').addEventListener('input', (e) => { _0x3f2a(e.target.value); });
     }
 
+    let _0xcrdScrInt = null; let _0xcrdY = 0; let _0xcrdSpd = 0.55;
+    window.showCredits = function() {
+        const overlay = document.getElementById('credit-overlay');
+        const content = document.getElementById('credit-content');
+        if (!overlay || !content) return;
+        const text = _0xtextData.dev_story.join("\n");
+        content.innerHTML = `<div>${text}</div><img src="귀여운고양이.jpg" onclick="_0xplayNyaBgm()" style="width:67.5vh; height:auto; margin-top:5vh; border-radius:2vh; border:0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); cursor:pointer;"><img src="Aview.png" class="credit-logo">`;
+        overlay.style.display = 'flex';
+        _0xcrdY = window.innerHeight * 0.1; _0xcrdSpd = 0.55;
+        if (_0xcrdScrInt) clearInterval(_0xcrdScrInt);
+        _0xcrdScrInt = setInterval(() => { _0xcrdY -= _0xcrdSpd; content.style.transform = `translateY(${_0xcrdY}px)`; if (_0xcrdY < -(content.scrollHeight + 25)) clearInterval(_0xcrdScrInt); }, 16);
+    };
+    window._0x8c21 = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 4.5; };
+    window._0x7d4e = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 0.55; };
+    window._0xclsCr = function() {
+        const overlay = document.getElementById('credit-overlay');
+        if(overlay) { overlay.style.display = 'none'; if (_0xcrdScrInt) clearInterval(_0xcrdScrInt); }
+    };
+
     setInterval(() => {
-        const tc = document.getElementById('turn-counter');
-        if(tc && _0xturnCount > 0) {
-            tc.style.transform = `translate(${(Math.random()-0.5)*15}px, ${(Math.random()-0.5)*15}px)`;
+        document.querySelectorAll('.cand-item').forEach(item => {
+            const moveX = (Math.random()-0.5)*1.5; const moveY = (Math.random()-0.5)*1.5;
+            item.style.transform = `translate(${moveX}vh, ${moveY}vh)`;
+        });
+        const turnCounter = document.getElementById('turn-counter');
+        if(turnCounter) {
+            if (_0xturnCount > 0) {
+                const intensity = 15; 
+                const tMoveX = (Math.random()-0.5) * intensity;
+                const tMoveY = (Math.random()-0.5) * intensity;
+                turnCounter.style.transform = `translate(${tMoveX}px, ${tMoveY}px)`;
+            } else { turnCounter.style.transform = `translate(0px, 0px)`; }
         }
     }, 2000);
 </script>
