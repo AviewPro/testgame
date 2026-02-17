@@ -288,6 +288,20 @@
         @keyframes slide-h { from { transform: translateX(-150%); } to { transform: translateX(150vw); } }
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
+        /* 패러독스 전용 레드 스탬프 스타일 */
+        .paradox-stamp {
+            position: absolute;
+            right: 5vh;
+            top: 5vh;
+            width: 25vh;
+            height: auto;
+            z-index: 1000;
+            filter: grayscale(1) brightness(0.5) sepia(1) hue-rotate(-50deg) saturate(10) contrast(1.5);
+            transform: rotate(15deg);
+            pointer-events: none;
+            opacity: 0.9;
+        }
+
         @media screen and (max-width: 768px) {
             #setup { width: 90vw; }
             #game-box, #info-panel { 
@@ -436,10 +450,7 @@
     const _0xnyaBgmSfx = new Audio("냥이 브금.mp3");
     _0xnyaBgmSfx.loop = true; 
     const _0xlightsOffSfx = new Audio("소등.mp3");
-    
-    // 추가 효과음 정의
     const _0xdeadSfx = new Audio("사망음.mp3");
-    const _0xoffSfx = new Audio("꺼지는 소리.mp3");
 
     const _0xoriginalBodyContent = document.body.innerHTML;
 
@@ -456,7 +467,6 @@
         _0xnyaBgmSfx.volume = _0xcurrentVolume * 0.6; 
         _0xlightsOffSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
         _0xdeadSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
-        _0xoffSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
     }
     
     _0x3f2a(0.15);
@@ -465,7 +475,7 @@
         const sc = _0xclickSfx.cloneNode(); 
         sc.volume = Math.min(1.0, _0xcurrentVolume * 8.0); 
         sc.play().catch(e=>{}); 
-        if(_0xbgm.paused && !_0xzeroOverlayTriggered) _0xbgm.play().catch(e=>{}); 
+        if(_0xbgm.paused) _0xbgm.play().catch(e=>{}); 
     }
 
     function _0xplaySpecialClick() { 
@@ -784,31 +794,27 @@
         
         if(_0xaiCandidates.length === 0) {
             if(!_0xzeroOverlayTriggered) {
-                _0xzeroOverlayTriggered = true;
-                
-                // BGM 즉시 정지
+                // BGM 정지 및 소등/사망음 효과음 연출
                 if(_0xbgm) _0xbgm.pause();
+                _0xlightsOffSfx.currentTime = 0;
+                _0xlightsOffSfx.play().catch(e=>{});
                 
-                // 사망음 -> 1초 뒤 꺼지는 소리
-                _0xdeadSfx.currentTime = 0;
-                _0xdeadSfx.play().catch(e=>{});
                 setTimeout(() => {
-                    _0xoffSfx.currentTime = 0;
-                    _0xoffSfx.play().catch(e=>{});
-                }, 1000);
+                    _0xdeadSfx.currentTime = 0;
+                    _0xdeadSfx.play().catch(e=>{});
+                }, 200);
 
-                // 암전 효과 (빠른 종료 방지를 위해 transition 명확히 설정)
+                // 시각적 효과: 2초간 암전 후 서서히 회복
                 flashOverlay.style.display = 'block';
-                flashOverlay.style.background = '#000';
                 flashOverlay.style.transition = 'none';
+                flashOverlay.style.background = '#000';
                 flashOverlay.style.opacity = '1';
                 
-                // 3초간 완전 암전 유지 후 서서히 제거
                 setTimeout(() => { 
-                    flashOverlay.style.transition = 'opacity 2.5s ease-in-out';
+                    flashOverlay.style.transition = 'opacity 3.0s ease-in-out'; // 서서히 켜짐
                     flashOverlay.style.opacity = '0'; 
-                    setTimeout(() => { flashOverlay.style.display = 'none'; }, 2500);
-                }, 3500);
+                    setTimeout(() => { flashOverlay.style.display = 'none'; }, 3000);
+                }, 2000); // 2초 유지
                 
                 if(paradoxOverlay) {
                     paradoxOverlay.style.display = 'block';
@@ -816,6 +822,7 @@
                     paradoxOverlay.style.animation = "fadeOutLong 16s forwards";
                 }
 
+                _0xzeroOverlayTriggered = true;
                 _0xstPsL();
             }
             chanceTitleEl.style.display = 'none';
@@ -992,6 +999,7 @@
         let mediaUrl = isParadox ? paradoxGif : (isWin ? winGif : loseImg);
         
         let emojiLanes = "";
+        let stampHtml = "";
         if(isParadox) {
             const longLane = "🐈 ".repeat(22);
             emojiLanes = `
@@ -1000,6 +1008,8 @@
                 <div class="emoji-lane" style="left:10vw; animation: slide-v 22s linear infinite; animation-delay: -12s;">${longLane.split(' ').join('<br>')}</div>
                 <div class="emoji-lane" style="right:10vw; animation: slide-v 26s linear infinite reverse; animation-delay: -1s;">${longLane.split(' ').join('<br>')}</div>
             `;
+            // 패러독스 화면 전용 레드 스탬프 레이어
+            stampHtml = `<img src="Aview.png" class="paradox-stamp">`;
         }
 
         let subButtons = "";
@@ -1020,6 +1030,7 @@
         document.body.innerHTML = `
             <div id="version-tag">0.6 Version</div>
             ${emojiLanes}
+            ${stampHtml}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
                 <input type="range" id="volume-slider-end" min="0" max="1" step="0.01" value="${_0xcurrentVolume}" oninput="_0x3f2a(this.value)">
