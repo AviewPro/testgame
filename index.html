@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Schrödinger Baseball - Single Mode</title>
+    <link rel="icon" type="image/jpeg" href="귀여운고양이도트4.jpg">
+    <link rel="shortcut icon" href="귀여운고양이도트4.jpg">
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -288,7 +291,6 @@
         @keyframes slide-h { from { transform: translateX(-150%); } to { transform: translateX(150vw); } }
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
-        /* 패러독스 전용 레드 스탬프 스타일 - 레이어 최상단 고정 */
         .paradox-stamp {
             position: fixed;
             right: 5vh;
@@ -328,16 +330,16 @@
 
 <div id="sound-control">
     <span class="sound-icon">♪</span>
-    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.15" oninput="_0x3f2a(this.value)">
+    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.15" oninput="_0vVol(this.value)">
     <span class="sound-icon" style="font-size:1vh;">VOL</span>
 </div>
 
 <div id="credit-overlay">
-    <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img" onclick="_0xplayNyaBgm()"></div>
-    <div id="credit-container" onmousedown="_0x8c21(event)" onmouseup="_0x7d4e(event)">
+    <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img" onclick="_0vNya()"></div>
+    <div id="credit-container" onmousedown="_0vCrD(event)" onmouseup="_0vCrU(event)">
         <div id="credit-content"></div>
     </div>
-    <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;" onclick="_0xplayNyaBgm()"></div>
+    <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;" onclick="_0vNya()"></div>
     <div class="credit-esc">Press ESC to Close</div>
 </div>
 
@@ -345,7 +347,7 @@
     <div class="tutorial-msg-box">
         <h3 id="tut-title">튜토리얼</h3>
         <p id="tut-desc">내용</p>
-        <button id="tut-next-btn" onclick="_0x5a1b()">확인</button>
+        <button id="tut-next-btn" onclick="_0vTNext()">확인</button>
         <div id="tut-esc-guide" class="esc-guide">ESC를 누르면 언제든지 메인화면으로 돌아갑니다.</div>
     </div>
 </div>
@@ -361,8 +363,8 @@
         <div class="setup-box-container">
             <img src="귀여운고양이도트4.jpg" class="setup-cat">
         </div>
-        <button onclick="_0x1d2e()" class="tutorial-btn">How to Play</button>
-        <button onclick="_0x4c5b()" class="setup-btn">Start Single Mode</button>
+        <button onclick="_0vHTP()" class="tutorial-btn">How to Play</button>
+        <button onclick="_0vStart()" class="setup-btn">Start Single Mode</button>
         <img src="Aview.png" class="new-keyhole">
     </div>
     <div id="setup-footer">
@@ -376,13 +378,13 @@
             <div id="log-window"></div>
             <div class="input-view" id="display">---</div>
             <div class="keypad" id="main-keypad">
-                <button class="key-btn" data-key="7" onclick="_0x9b8a('7')">7</button><button class="key-btn" data-key="8" onclick="_0x9b8a('8')">8</button><button class="key-btn" data-key="9" onclick="_0x9b8a('9')">9</button>
-                <button id="obs-btn" class="btn-obs" onclick="_0x2f1e()">OBS</button>
-                <button class="key-btn" data-key="4" onclick="_0x9b8a('4')">4</button><button class="key-btn" data-key="5" onclick="_0x9b8a('5')">5</button><button class="key-btn" data-key="6" onclick="_0x9b8a('6')">6</button>
-                <button id="clr-btn" class="btn-clr" onclick="_0x7c3d('CLR')">CLR</button>
-                <button class="key-btn" data-key="1" onclick="_0x9b8a('1')">1</button><button class="key-btn" data-key="2" onclick="_0x9b8a('2')">2</button><button class="key-btn" data-key="3" onclick="_0x9b8a('3')">3</button>
-                <button id="ent-btn" class="btn-ent" onclick="_0x7c3d('ENT')">ENT</button>
-                <button id="zero-btn" data-key="0" style="grid-column: span 3" onclick="_0x9b8a('0')">0</button>
+                <button class="key-btn" data-key="7" onclick="_0vNum('7')">7</button><button class="key-btn" data-key="8" onclick="_0vNum('8')">8</button><button class="key-btn" data-key="9" onclick="_0vNum('9')">9</button>
+                <button id="obs-btn" class="btn-obs" onclick="_0vOBS()">OBS</button>
+                <button class="key-btn" data-key="4" onclick="_0vNum('4')">4</button><button class="key-btn" data-key="5" onclick="_0vNum('5')">5</button><button class="key-btn" data-key="6" onclick="_0vNum('6')">6</button>
+                <button id="clr-btn" class="btn-clr" onclick="_0vCmd('CLR')">CLR</button>
+                <button class="key-btn" data-key="1" onclick="_0vNum('1')">1</button><button class="key-btn" data-key="2" onclick="_0vNum('2')">2</button><button class="key-btn" data-key="3" onclick="_0vNum('3')">3</button>
+                <button id="ent-btn" class="btn-ent" onclick="_0vCmd('ENT')">ENT</button>
+                <button id="zero-btn" data-key="0" style="grid-column: span 3" onclick="_0vNum('0')">0</button>
             </div>
         </div>
 
@@ -415,84 +417,83 @@
         <input type="tel" id="obs-num" maxlength="3" autocomplete="off"
                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                style="background:#000; color:#fff; font-family: 'Orbitron', sans-serif; font-size: 5vh; text-align:center; width:35vh; margin:4vh 0; border:0.3vh solid var(--purple); border-radius:1.5vh; letter-spacing:1.5vh; text-shadow: 0 0 1vh var(--purple);">
-        <button onclick="_0x6f5a()" style="padding:1.5vh 8vh; background:var(--purple); color:#fff; font-weight:bold; font-size:4vh; border-radius:1.5vh; letter-spacing:0.2vh;">관측 실행</button>
+        <button onclick="_0vDoObs()" style="padding:1.5vh 8vh; background:var(--purple); color:#fff; font-weight:bold; font-size:4vh; border-radius:1.5vh; letter-spacing:0.2vh;">관측 실행</button>
     </div>
 </div>
 
 <script>
-    let _0xtextData = null;
+    let _0vTData = null;
     fetch('textdata.json')
         .then(response => response.json())
-        .then(data => { _0xtextData = data; })
+        .then(data => { _0vTData = data; })
         .catch(error => console.error('Error loading textdata:', error));
 
-    const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
+    const _0vFb = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
 
-    let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 6;
-    let _0xisTutorial = false, _0xtutorialStep = 0, _0xcurrentTipType = "";
-    let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
-    let _0xcurrentVolume = 0.15;
-    let _0xfailLoopInterval = null; 
-    let _0xsuccessLoopInterval = null; 
-    let _0xmeowLoopInterval = null; 
-    let _0xmeowCount = 0; 
-    let _0xplayCount = 0;
+    let _0vAiC = [], _0vHist = [], _0vInS = "", _0vTC = 6;
+    let _0vIsTut = false, _0vTStep = 0, _0vTType = "";
+    let _0vPMTrig = false, _0vAlmTrig = false, _0vZeroTrig = false;
+    let _0vCurVol = 0.15;
+    let _0vFInt = null; 
+    let _0vSInt = null; 
+    let _0vMInt = null; 
+    let _0vMCnt = 0; 
+    let _0vPCnt = 0;
     
-    let _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
-    _0xbgm.loop = true;
-    _0xbgm.playbackRate = 2.0;
-    const _0xclickSfx = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
-    const _0xspecialClickSfx = new Audio("Click.mp3");
-    const _0xmeowSfx = new Audio("moeeza3-kitten-cat-meow-437244.mp3");
-    const _0xemergencySfx = new Audio("비상알람.mp3");
-    const _0xfailSfx = new Audio("띠용.mp3");
-    const _0xsuccessSfx = new Audio("고양이 코골이_[cut_5sec].mp3");
-    const _0xnyaBgmSfx = new Audio("냥이 브금.mp3");
-    _0xnyaBgmSfx.loop = true; 
-    const _0xlightsOffSfx = new Audio("소등.mp3");
-    const _0xdeadSfx = new Audio("사망음.mp3");
+    let _0vBgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
+    _0vBgm.loop = true;
+    _0vBgm.playbackRate = 2.0;
+    const _0vCSfx = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+    const _0vSSfx = new Audio("Click.mp3");
+    const _0vMSfx = new Audio("moeeza3-kitten-cat-meow-437244.mp3");
+    const _0vESfx = new Audio("비상알람.mp3");
+    const _0vFSfx = new Audio("띠용.mp3");
+    const _0vGSSfx = new Audio("고양이 코골이_[cut_5sec].mp3");
+    const _0vNSfx = new Audio("냥이 브금.mp3");
+    _0vNSfx.loop = true; 
+    const _0vLSfx = new Audio("소등.mp3");
+    const _0vDSfx = new Audio("사망음.mp3");
 
-    const _0xoriginalBodyContent = document.body.innerHTML;
+    const _0vBodyOri = document.body.innerHTML;
+    let _0vPoisInt = null;
 
-    let _0xpoisonInterval = null;
-
-    function _0x3f2a(val) { 
-        _0xcurrentVolume = parseFloat(val);
-        _0xbgm.volume = _0xcurrentVolume; 
-        _0xmeowSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.17); 
-        _0xemergencySfx.volume = Math.min(1.0, _0xcurrentVolume * 2.56);
-        _0xfailSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0); 
-        _0xsuccessSfx.volume = _0xcurrentVolume;
-        _0xspecialClickSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0);
-        _0xnyaBgmSfx.volume = _0xcurrentVolume * 0.6; 
-        _0xlightsOffSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
-        _0xdeadSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
+    function _0vVol(val) { 
+        _0vCurVol = parseFloat(val);
+        _0vBgm.volume = _0vCurVol; 
+        _0vMSfx.volume = Math.min(1.0, _0vCurVol * 1.17); 
+        _0vESfx.volume = Math.min(1.0, _0vCurVol * 2.56);
+        _0vFSfx.volume = Math.min(1.0, _0vCurVol * 3.0); 
+        _0vGSSfx.volume = _0vCurVol;
+        _0vSSfx.volume = Math.min(1.0, _0vCurVol * 3.0);
+        _0vNSfx.volume = _0vCurVol * 0.6; 
+        _0vLSfx.volume = Math.min(1.0, _0vCurVol * 1.5);
+        _0vDSfx.volume = Math.min(1.0, _0vCurVol * 1.5);
     }
     
-    _0x3f2a(0.15);
+    _0vVol(0.15);
 
-    function _0xplayClick() { 
-        const sc = _0xclickSfx.cloneNode(); 
-        sc.volume = Math.min(1.0, _0xcurrentVolume * 8.0); 
+    function _0vPlayC() { 
+        const sc = _0vCSfx.cloneNode(); 
+        sc.volume = Math.min(1.0, _0vCurVol * 8.0); 
         sc.play().catch(e=>{}); 
-        if(_0xbgm.paused) _0xbgm.play().catch(e=>{}); 
+        if(_0vBgm.paused) _0vBgm.play().catch(e=>{}); 
     }
 
-    function _0xplaySpecialClick() { 
-        const sc = _0xspecialClickSfx.cloneNode(); 
-        sc.volume = Math.min(1.0, _0xcurrentVolume * 3.0);
+    function _0vPlayS() { 
+        const sc = _0vSSfx.cloneNode(); 
+        sc.volume = Math.min(1.0, _0vCurVol * 3.0);
         sc.play().catch(e=>{}); 
     }
 
-    function _0xplayNyaBgm() {
-        if(_0xbgm) _0xbgm.pause();
-        _0xbgm = _0xnyaBgmSfx;
-        _0xbgm.volume = _0xcurrentVolume * 0.6; 
-        _0xbgm.currentTime = 0;
-        _0xbgm.play().catch(e=>{});
+    function _0vNya() {
+        if(_0vBgm) _0vBgm.pause();
+        _0vBgm = _0vNSfx;
+        _0vBgm.volume = _0vCurVol * 0.6; 
+        _0vBgm.currentTime = 0;
+        _0vBgm.play().catch(e=>{});
     }
 
-    function _0xsimBtn(btnId) {
+    function _0vSimB(btnId) {
         const btn = document.getElementById(btnId);
         if (btn) {
             btn.classList.add('active');
@@ -500,123 +501,123 @@
         }
     }
 
-    function _0x7c3d(type) {
+    function _0vCmd(type) {
         if(type === 'CLR') {
-            _0xsimBtn('clr-btn');
-            _0xplaySpecialClick();
-            _0xclrIn(true);
+            _0vSimB('clr-btn');
+            _0vPlayS();
+            _0vClrIn(true);
         }
         if(type === 'ENT') {
-            _0xsimBtn('ent-btn');
-            _0xplaySpecialClick();
-            _0xentCli(true);
+            _0vSimB('ent-btn');
+            _0vPlayS();
+            _0vEntCli(true);
         }
     }
 
-    function _0x4c5b() {
-        _0xplayClick();
-        _0xplayCount++;
-        if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
-        if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
-        if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
+    function _0vStart() {
+        _0vPlayC();
+        _0vPCnt++;
+        if(_0vFInt) { clearInterval(_0vFInt); _0vFInt = null; }
+        if(_0vSInt) { clearInterval(_0vSInt); _0vSInt = null; }
+        if(_0vMInt) { clearInterval(_0vMInt); _0vMInt = null; }
         document.getElementById('setup').style.display = 'none';
         document.getElementById('setup-footer').style.display = 'none';
         document.getElementById('game-box').style.display = 'flex';
         document.getElementById('info-panel').style.display = 'flex';
-        _0xresGm();
+        _0vResGm();
     }
 
-    function _0xresGm() {
-        _0xaiCandidates = []; _0xhistory = []; _0xinputStr = ""; _0xturnCount = 6; _0xmeowCount = 0;
-        _0xparadoxMusicTriggered = false; _0xalarmTriggered = false; _0xzeroOverlayTriggered = false;
-        if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
+    function _0vResGm() {
+        _0vAiC = []; _0vHist = []; _0vInS = ""; _0vTC = 6; _0vMCnt = 0;
+        _0vPMTrig = false; _0vAlmTrig = false; _0vZeroTrig = false;
+        if(_0vPoisInt) { clearInterval(_0vPoisInt); _0vPoisInt = null; }
         for(let i=0; i<=999; i++){
             let n = i.toString().padStart(3, '0');
-            if(new Set(n).size === 3) _0xaiCandidates.push(n);
+            if(new Set(n).size === 3) _0vAiC.push(n);
         }
-        _0xupUI();
+        _0vUpUI();
     }
 
-    function _0xresDir() {
-        _0xplayClick();
-        _0xplayCount++;
-        if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
-        if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
-        if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
+    function _0vResDir() {
+        _0vPlayC();
+        _0vPCnt++;
+        if(_0vFInt) { clearInterval(_0vFInt); _0vFInt = null; }
+        if(_0vSInt) { clearInterval(_0vSInt); _0vSInt = null; }
+        if(_0vMInt) { clearInterval(_0vMInt); _0vMInt = null; }
         
-        if(_0xbgm.src.includes("SoundHelix") || _0xbgm.src.includes("nya")) {
-            _0xbgm.pause();
-            _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
-            _0xbgm.loop = true;
-            _0xbgm.playbackRate = 2.0;
+        if(_0vBgm.src.includes("SoundHelix") || _0vBgm.src.includes("nya")) {
+            _0vBgm.pause();
+            _0vBgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
+            _0vBgm.loop = true;
+            _0vBgm.playbackRate = 2.0;
         }
         
-        const oldPlayCount = _0xplayCount;
-        document.body.innerHTML = _0xoriginalBodyContent;
-        _0xplayCount = oldPlayCount;
+        const oldPlayCount = _0vPCnt;
+        document.body.innerHTML = _0vBodyOri;
+        _0vPCnt = oldPlayCount;
         
-        _0x3f2a(document.getElementById('volume-slider')?.value || 0.15);
-        _0x4c5b();
+        _0vVol(document.getElementById('volume-slider')?.value || 0.15);
+        _0vStart();
     }
 
-    function _0x1d2e() {
-        if(!_0xtextData) return;
-        _0xisTutorial = true; _0xcurrentTipType = ""; _0xtutorialStep = 1;
-        _0x4c5b();
+    function _0vHTP() {
+        if(!_0vTData) return;
+        _0vIsTut = true; _0vTType = ""; _0vTStep = 1;
+        _0vStart();
         document.getElementById('obs-btn').disabled = true;
         document.getElementById('tutorial-overlay').style.display = 'flex';
-        _0xappTut();
+        _0vAppTut();
     }
 
     window.showTips = function(type) {
-        if(!_0xtextData) return;
-        _0xplayClick();
-        _0xisTutorial = false;
-        _0xcurrentTipType = type;
-        _0xtutorialStep = 0;
+        if(!_0vTData) return;
+        _0vPlayC();
+        _0vIsTut = false;
+        _0vTType = type;
+        _0vTStep = 0;
         const tutOverlay = document.getElementById('tutorial-overlay');
         if (tutOverlay) {
             tutOverlay.style.display = 'flex';
             document.getElementById('tut-esc-guide').style.display = 'none';
-            _0xappTip();
+            _0vAppTip();
         }
     };
 
-    function _0x5a1b() {
-        _0xplayClick();
-        if (_0xcurrentTipType) {
-            _0xtutorialStep++;
-            if (_0xtutorialStep >= _0xtextData.tips[_0xcurrentTipType].length) {
+    function _0vTNext() {
+        _0vPlayC();
+        if (_0vTType) {
+            _0vTStep++;
+            if (_0vTStep >= _0vTData.tips[_0vTType].length) {
                 document.getElementById('tutorial-overlay').style.display = 'none';
                 return;
             }
-            _0xappTip();
+            _0vAppTip();
         } else {
-            _0xnxtTut();
+            _0vNxtTut();
         }
     }
 
-    function _0xappTip() {
+    function _0vAppTip() {
         const title = document.getElementById('tut-title');
         const desc = document.getElementById('tut-desc');
         if (title && desc) {
-            const tip = _0xtextData.tips[_0xcurrentTipType][_0xtutorialStep];
+            const tip = _0vTData.tips[_0vTType][_0vTStep];
             title.innerText = tip.title;
             desc.innerHTML = tip.desc.replace(/\n/g, "<br>"); 
         }
     }
 
-    function _0xnxtTut() {
-        if (_0xtutorialStep === 1 || _0xtutorialStep === 2) {
+    function _0vNxtTut() {
+        if (_0vTStep === 1 || _0vTStep === 2) {
             document.getElementById('tutorial-overlay').style.display = 'none';
             return;
         }
-        _0xtutorialStep++;
-        if (_0xtutorialStep > 6) { location.reload(); return; }
-        _0xappTut();
+        _0vTStep++;
+        if (_0vTStep > 6) { location.reload(); return; }
+        _0vAppTut();
     }
 
-    function _0xappTut() {
+    function _0vAppTut() {
         const title = document.getElementById('tut-title');
         const desc = document.getElementById('tut-desc');
         const nextBtn = document.getElementById('tut-next-btn');
@@ -629,115 +630,109 @@
         turnCounter.classList.remove('tutorial-highlight-turn');
         nextBtn.classList.remove('btn-cyan');
 
-        const stepData = _0xtextData.tutorial.steps.find(s => s.step === _0xtutorialStep);
+        const stepData = _0vTData.tutorial.steps.find(s => s.step === _0vTStep);
         if (stepData) {
             title.innerText = stepData.title;
             desc.innerHTML = stepData.desc;
         }
 
-        if (_0xtutorialStep === 1) {
+        if (_0vTStep === 1) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.querySelectorAll('.key-btn, #zero-btn, #display').forEach(el => el.classList.add('tutorial-highlight'));
-        } else if (_0xtutorialStep === 2) {
+        } else if (_0vTStep === 2) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.getElementById('ent-btn').classList.add('tutorial-highlight');
             document.getElementById('clr-btn').classList.add('tutorial-highlight');
-        } else if (_0xtutorialStep === 3) {
+        } else if (_0vTStep === 3) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             const firstLog = document.querySelector('.log-item');
             if(firstLog) firstLog.classList.add('tutorial-highlight');
-        } else if (_0xtutorialStep === 4) {
+        } else if (_0vTStep === 4) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             document.getElementById('candidates-box').classList.add('tutorial-highlight');
-        } else if (_0xtutorialStep === 5) {
+        } else if (_0vTStep === 5) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             chanceBox.classList.add('tutorial-highlight');
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.getElementById('obs-btn').classList.add('tutorial-highlight');
-        } else if (_0xtutorialStep === 6) {
+        } else if (_0vTStep === 6) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             turnCounter.classList.add('tutorial-highlight-turn');
             nextBtn.classList.add('btn-cyan');
-            nextBtn.innerText = _0xtextData.tutorial.button_finish;
+            nextBtn.innerText = _0vTData.tutorial.button_finish;
         }
     }
 
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Shift') {
-            const restartBtn = document.querySelector('button[onclick="_0xresDir()"]');
+            const restartBtn = document.querySelector('button[onclick="_0vResDir()"]');
             if (restartBtn) {
-                _0xresDir();
+                _0vResDir();
                 return;
             }
         }
-
         if (e.key === 'Escape') {
-            if (document.getElementById('credit-overlay')?.style.display === 'flex') { _0xclsCr(); return; }
-            if (_0xisTutorial) location.reload();
+            if (document.getElementById('credit-overlay')?.style.display === 'flex') { _0vClsCr(); return; }
+            if (_0vIsTut) location.reload();
             if (document.getElementById('obs-overlay')?.style.display === 'flex') { document.getElementById('obs-overlay').style.display = 'none'; }
             return;
         }
-        
         if (document.getElementById('obs-overlay')?.style.display === 'flex') {
-            if (e.key === 'Enter') _0x6f5a(); return;
+            if (e.key === 'Enter') _0vDoObs(); return;
         }
-        
         if (e.key === '-' || e.key === '_') {
             if (document.getElementById('game-box').style.display === 'flex') {
-                _0x2f1e();
+                _0vOBS();
             }
             return;
         }
-        
         if (e.key === 'Enter') {
             e.preventDefault();
             if (document.getElementById('game-box').style.display === 'flex') {
-                _0x7c3d('ENT');
+                _0vCmd('ENT');
             }
             return;
         }
-        
         if (e.key >= '0' && e.key <= '9') {
             const btn = document.querySelector(e.key === '0' ? '#zero-btn' : `.key-btn[data-key="${e.key}"]`);
             if(btn) { btn.classList.add('active'); setTimeout(() => btn.classList.remove('active'), 100); }
-            _0x9b8a(e.key);
+            _0vNum(e.key);
             return;
         }
-        
         if (e.key === 'Delete' || e.key === 'Backspace') {
-            _0x7c3d('CLR');
+            _0vCmd('CLR');
             return;
         }
     });
 
-    function _0x9b8a(n) { 
-        _0xplayClick(); 
-        if(_0xinputStr.length < 3 && !_0xinputStr.includes(n)) { 
-            _0xinputStr += n; 
-            document.getElementById('display').innerText = _0xinputStr; 
-            if (_0xisTutorial && _0xtutorialStep === 1 && _0xinputStr.length === 3) {
-                setTimeout(() => { _0xtutorialStep = 2; document.getElementById('tutorial-overlay').style.display = 'flex'; _0xappTut(); }, 300);
+    function _0vNum(n) { 
+        _0vPlayC(); 
+        if(_0vInS.length < 3 && !_0vInS.includes(n)) { 
+            _0vInS += n; 
+            document.getElementById('display').innerText = _0vInS; 
+            if (_0vIsTut && _0vTStep === 1 && _0vInS.length === 3) {
+                setTimeout(() => { _0vTStep = 2; document.getElementById('tutorial-overlay').style.display = 'flex'; _0vAppTut(); }, 300);
             }
         } 
     }
 
-    function _0xclrIn(isSpecial) { if(!isSpecial) _0xplayClick(); _0xinputStr = ""; document.getElementById('display').innerText = "---"; }
+    function _0vClrIn(isSpecial) { if(!isSpecial) _0vPlayC(); _0vInS = ""; document.getElementById('display').innerText = "---"; }
     
-    function _0xentCli(isSpecial) {
-        if(_0xinputStr.length === 3 && _0xturnCount > 0) {
-            if(!isSpecial) _0xplayClick();
-            const res = _0xaiRes(_0xinputStr);
-            _0xhistory.push({ n: _0xinputStr, s: res.s, b: res.b });
-            _0xturnCount--; _0xclrIn(true); _0xupUI();
-            if (_0xisTutorial && _0xtutorialStep === 2) {
-                setTimeout(() => { _0xtutorialStep = 3; document.getElementById('tutorial-overlay').style.display = 'flex'; _0xappTut(); }, 500);
+    function _0vEntCli(isSpecial) {
+        if(_0vInS.length === 3 && _0vTC > 0) {
+            if(!isSpecial) _0vPlayC();
+            const res = _0vAiR(_0vInS);
+            _0vHist.push({ n: _0vInS, s: res.s, b: res.b });
+            _0vTC--; _0vClrIn(true); _0vUpUI();
+            if (_0vIsTut && _0vTStep === 2) {
+                setTimeout(() => { _0vTStep = 3; document.getElementById('tutorial-overlay').style.display = 'flex'; _0vAppTut(); }, 500);
             }
         }
     }
 
-    function _0xaiRes(guess) {
+    function _0vAiR(guess) {
         const outcomes = {};
-        _0xaiCandidates.forEach(cand => {
+        _0vAiC.forEach(cand => {
             let s=0, b=0;
             for(let i=0; i<3; i++){ if(guess[i] === cand[i]) s++; else if(cand.includes(guess[i])) b++; }
             const key = `${s}S${b}B`;
@@ -749,24 +744,24 @@
             if(key === "3S0B") continue; 
             if(outcomes[key].length > maxCount) { maxCount = outcomes[key].length; bestKey = key; }
         }
-        if(!bestKey || _0xaiCandidates.length <= 1) {
+        if(!bestKey || _0vAiC.length <= 1) {
             const fakeS = Math.floor(Math.random() * 2);
             const fakeB = Math.floor(Math.random() * 2);
             bestKey = `${fakeS}S${fakeB}B`;
-            _0xaiCandidates = _0xaiCandidates.filter(c => c !== guess); 
-        } else { _0xaiCandidates = outcomes[bestKey]; }
+            _0vAiC = _0vAiC.filter(c => c !== guess); 
+        } else { _0vAiC = outcomes[bestKey]; }
         const match = bestKey.match(/(\d)S(\d)B/);
         return { s: parseInt(match[1]), b: parseInt(match[2]) };
     }
 
-    function _0xstPsL() {
-        if(_0xpoisonInterval) return;
+    function _0vStPL() {
+        if(_0vPoisInt) return;
         const targetText = "Your Training is Completed";
         const el = document.getElementById('chance-val');
         let index = targetText.length;
         let isDeleting = true;
 
-        _0xpoisonInterval = setInterval(() => {
+        _0vPoisInt = setInterval(() => {
             if (isDeleting) {
                 el.innerHTML = `<span class="poison-text" style="color:var(--green); text-shadow: 0 0 1.5vh var(--green);">${targetText.substring(0, index)}</span>`;
                 index--;
@@ -779,10 +774,10 @@
         }, 150);
     }
 
-    function _0xupUI() {
+    function _0vUpUI() {
         const turnCounter = document.getElementById('turn-counter');
-        turnCounter.innerText = _0xturnCount;
-        const prob = _0xaiCandidates.length === 0 ? 0 : (1 / _0xaiCandidates.length * 100);
+        turnCounter.innerText = _0vTC;
+        const prob = _0vAiC.length === 0 ? 0 : (1 / _0vAiC.length * 100);
         const chanceValEl = document.getElementById('chance-val');
         const chanceTitleEl = document.getElementById('chance-title');
         const chanceBoxEl = document.getElementById('chance-box');
@@ -792,19 +787,17 @@
         const paradoxOverlay = document.getElementById('paradox-cat-overlay');
         const logWindow = document.getElementById('log-window');
         
-        if(_0xaiCandidates.length === 0) {
-            if(!_0xzeroOverlayTriggered) {
-                // 확률이 0%가 되는 즉시 연출 실행
-                if(_0xbgm) _0xbgm.pause();
-                _0xlightsOffSfx.currentTime = 0;
-                _0xlightsOffSfx.play().catch(e=>{});
+        if(_0vAiC.length === 0) {
+            if(!_0vZeroTrig) {
+                if(_0vBgm) _0vBgm.pause();
+                _0vLSfx.currentTime = 0;
+                _0vLSfx.play().catch(e=>{});
                 
                 setTimeout(() => {
-                    _0xdeadSfx.currentTime = 0;
-                    _0xdeadSfx.play().catch(e=>{});
+                    _0vDSfx.currentTime = 0;
+                    _0vDSfx.play().catch(e=>{});
                 }, 200);
 
-                // 2초 동안 검은색 유지 -> 이후 3초에 걸쳐 천천히 밝아짐
                 flashOverlay.style.display = 'block';
                 flashOverlay.style.transition = 'none'; 
                 flashOverlay.style.background = '#000';
@@ -822,8 +815,8 @@
                     paradoxOverlay.style.animation = "fadeOutLong 16s forwards";
                 }
 
-                _0xzeroOverlayTriggered = true;
-                _0xstPsL();
+                _0vZeroTrig = true;
+                _0vStPL();
             }
             chanceTitleEl.style.display = 'none';
             chanceBoxEl.style.borderColor = 'var(--green)';
@@ -833,13 +826,13 @@
             
             logWindow.innerHTML = `
                 <div class="training-clear-msg">
-                    <span class="count-highlight">${_0xplayCount}회 만에</span>
+                    <span class="count-highlight">${_0vPCnt}회 만에</span>
                     훈련을 통과하셨습니다
                 </div>`;
         } else {
             deadX.style.display = 'none';
             if(paradoxOverlay) { paradoxOverlay.style.display = 'none'; paradoxOverlay.style.animation = 'none'; }
-            if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
+            if(_0vPoisInt) { clearInterval(_0vPoisInt); _0vPoisInt = null; }
 
             let currentColor = 'var(--purple)';
             let currentShadow = '0 0 2.5vh var(--purple)';
@@ -847,21 +840,21 @@
             if (prob === 100) {
                 currentColor = 'var(--red)';
                 currentShadow = '0 0 2.5vh var(--red)';
-                if(!_0xalarmTriggered) {
-                    _0xemergencySfx.play().catch(e=>{});
+                if(!_0vAlmTrig) {
+                    _0vESfx.play().catch(e=>{});
                     flashOverlay.style.display = 'block';
                     flashOverlay.style.transition = 'opacity 1.5s ease';
                     flashOverlay.style.background = 'radial-gradient(circle, rgba(255, 0, 0, 0) 70%, rgba(255, 0, 0, 0.4) 100%)';
                     flashOverlay.style.opacity = '1';
                     setTimeout(() => { flashOverlay.style.opacity = '0'; setTimeout(() => { flashOverlay.style.display = 'none'; }, 1500); }, 1500);
-                    _0xalarmTriggered = true;
+                    _0vAlmTrig = true;
                 }
             } else if (prob >= 10 && prob <= 51) {
                 currentColor = 'var(--cyan)';
                 currentShadow = '0 0 2.5vh var(--cyan)';
-                _0xalarmTriggered = false;
+                _0vAlmTrig = false;
             } else {
-                _0xalarmTriggered = false;
+                _0vAlmTrig = false;
             }
 
             chanceValEl.style.color = currentColor;
@@ -880,7 +873,7 @@
             catImg.style.filter = `blur(${blurAmount}vh)`; 
             catImg.style.borderColor = currentColor;
             
-            logWindow.innerHTML = _0xhistory.map(h => {
+            logWindow.innerHTML = _0vHist.map(h => {
                 const resultText = (h.s === 0 && h.b === 0) ? `<span class="log-out">OUT</span>` : `${h.s}S / ${h.b}B`;
                 return `<div class="log-item"><span class="log-n">${h.n}</span><span class="log-sb">${resultText}</span></div>`;
             }).join('');
@@ -888,24 +881,19 @@
         
         logWindow.scrollTop = logWindow.scrollHeight;
 
-        const slice = [..._0xaiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
+        const slice = [..._0vAiC].sort(() => 0.5 - Math.random()).slice(0, 100);
         
         let pixelateStrength = 0;
-        if (prob >= 25) {
-            pixelateStrength = 0; 
-        } else if (prob >= 5) {
-            pixelateStrength = 0.05; 
-        } else if (prob >= 1) {
-            pixelateStrength = 0.15; 
-        } else {
-            pixelateStrength = 0.25; 
-        }
+        if (prob >= 25) { pixelateStrength = 0; } 
+        else if (prob >= 5) { pixelateStrength = 0.05; } 
+        else if (prob >= 1) { pixelateStrength = 0.15; } 
+        else { pixelateStrength = 0.25; }
 
         document.getElementById('cand-list').innerHTML = slice.map(c => `<div class="cand-item" style="filter: blur(${pixelateStrength}vh) contrast(180%);">${c}</div>`).join('');
 
         const statusEl = document.getElementById('status');
         const entBtn = document.getElementById('ent-btn');
-        if(_0xturnCount <= 0) {
+        if(_0vTC <= 0) {
             entBtn.disabled = true;
             statusEl.innerText = "측정 완료 (관측만 가능)";
             statusEl.style.animation = "none";
@@ -918,11 +906,11 @@
         }
     }
 
-    function _0xrndPrCl() {
+    function _0vRPfC() {
         const field = document.getElementById('quantum-field');
         field.innerHTML = "";
         const neons = ['var(--cyan)', 'var(--purple)', 'var(--green)', 'var(--red)'];
-        const list = _0xaiCandidates.length > 0 ? _0xaiCandidates : ["ERR", "VOID", "000"];
+        const list = _0vAiC.length > 0 ? _0vAiC : ["ERR", "VOID", "000"];
         list.slice(0, 80).forEach(num => {
             const span = document.createElement('span');
             span.className = 'bg-candidate';
@@ -936,64 +924,50 @@
         });
     }
 
-    function _0x2f1e() {
-        if(_0xisTutorial || !_0xtextData || document.getElementById('game-box').style.display !== 'flex') return;
-        _0xplaySpecialClick();
-        if(_0xaiCandidates.length === 0) {
-            _0xmeowCount = 0; 
-            _0xmeowSfx.play().catch(e=>{}); 
-            _0xmeowCount++;
-            if(_0xmeowLoopInterval) clearInterval(_0xmeowLoopInterval);
-            _0xmeowLoopInterval = setInterval(() => {
-                if(_0xmeowCount < 10) {
-                    _0xmeowSfx.currentTime = 0;
-                    _0xmeowSfx.play().catch(e=>{});
-                    _0xmeowCount++;
-                } else {
-                    clearInterval(_0xmeowLoopInterval);
-                }
+    function _0vOBS() {
+        if(_0vIsTut || !_0vTData || document.getElementById('game-box').style.display !== 'flex') return;
+        _0vPlayS();
+        if(_0vAiC.length === 0) {
+            _0vMCnt = 0; 
+            _0vMSfx.play().catch(e=>{}); 
+            _0vMCnt++;
+            if(_0vMInt) clearInterval(_0vMInt);
+            _0vMInt = setInterval(() => {
+                if(_0vMCnt < 10) { _0vMSfx.currentTime = 0; _0vMSfx.play().catch(e=>{}); _0vMCnt++; } 
+                else { clearInterval(_0vMInt); }
             }, 6000);
-
-            const ed = _0xtextData.endings.paradox;
-            _0xrnEG(ed.type, ed.result, ed.message, 'var(--green)', true, true);
+            const ed = _0vTData.endings.paradox;
+            _0vRendE(ed.type, ed.result, ed.message, 'var(--green)', true, true);
             return;
         }
-        _0xrndPrCl();
+        _0vRPfC();
         document.getElementById('obs-overlay').style.display = 'flex';
         setTimeout(() => { const obsInput = document.getElementById('obs-num'); if(obsInput){ obsInput.value = ""; obsInput.focus(); } }, 10);
     }
 
-    function _0x6f5a() {
+    function _0vDoObs() {
         const guess = document.getElementById('obs-num').value;
         if(guess.length === 3) {
-            _0xplayClick();
-            let realSecret = _0xaiCandidates[Math.floor(Math.random() * _0xaiCandidates.length)];
+            _0vPlayC();
+            let realSecret = _0vAiC[Math.floor(Math.random() * _0vAiC.length)];
             if(guess === realSecret) {
-                _0xsuccessSfx.play().catch(e=>{});
-                if(_0xsuccessLoopInterval) clearInterval(_0xsuccessLoopInterval);
-                _0xsuccessLoopInterval = setInterval(() => {
-                    _0xsuccessSfx.currentTime = 0;
-                    _0xsuccessSfx.play().catch(e=>{});
-                }, 6000);
-                
-                const ed = _0xtextData.endings.win;
-                _0xrnEG(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
+                _0vGSSfx.play().catch(e=>{});
+                if(_0vSInt) clearInterval(_0vSInt);
+                _0vSInt = setInterval(() => { _0vGSSfx.currentTime = 0; _0vGSSfx.play().catch(e=>{}); }, 6000);
+                const ed = _0vTData.endings.win;
+                _0vRendE(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
             } else {
-                _0xrndPrCl(); 
-                _0xfailSfx.play().catch(e=>{});
-                if(_0xfailLoopInterval) clearInterval(_0xfailLoopInterval);
-                _0xfailLoopInterval = setInterval(() => {
-                    _0xfailSfx.currentTime = 0;
-                    _0xfailSfx.play().catch(e=>{});
-                }, 6000);
-                
-                const ed = _0xtextData.endings.lose;
-                _0xrnEG(ed.type, ed.result, ed.message, 'var(--red)', false, false);
+                _0vRPfC(); 
+                _0vFSfx.play().catch(e=>{});
+                if(_0vFInt) clearInterval(_0vFInt);
+                _0vFInt = setInterval(() => { _0vFSfx.currentTime = 0; _0vFSfx.play().catch(e=>{}); }, 6000);
+                const ed = _0vTData.endings.lose;
+                _0vRendE(ed.type, ed.result, ed.message, 'var(--red)', false, false);
             }
         }
     }
 
-    function _0xrnEG(type, result, msg, color, isWin, isParadox) {
+    function _0vRendE(type, result, msg, color, isWin, isParadox) {
         const winGif = "cat in the box.gif";
         const paradoxGif = "Neon cat box.gif";
         const loseImg = "box.gif";
@@ -1009,7 +983,6 @@
                 <div class="emoji-lane" style="left:10vw; animation: slide-v 22s linear infinite; animation-delay: -12s;">${longLane.split(' ').join('<br>')}</div>
                 <div class="emoji-lane" style="right:10vw; animation: slide-v 26s linear infinite reverse; animation-delay: -1s;">${longLane.split(' ').join('<br>')}</div>
             `;
-            // 패러독스 엔딩에서 도장 이미지를 최상단 레이어로 배치
             stampHtml = `<img src="Aview.png" class="paradox-stamp">`;
         }
 
@@ -1023,7 +996,7 @@
                     <button onclick="window.showTips('${tipType}')" style="font-family: 'Bebas Neue', cursive; width:100%; padding:1.2vh 0; background:#333; color:${color}; border:0.2vh solid ${color}; cursor:pointer; font-size:4vh; border-radius:1.5vh; font-weight:bold; letter-spacing:0.2vh;">TIPS</button>
                     <div style="display:flex; gap: 2.5vh; width: 100%;">
                         <button onclick="location.reload()" style="font-family: 'Bebas Neue', cursive; flex:1; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid #444; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Main Menu</button>
-                        <button id="restart-game-btn" onclick="_0xresDir()" style="font-family: 'Bebas Neue', cursive; flex:2; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid ${color}; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Restart</button>
+                        <button id="restart-game-btn" onclick="_0vResDir()" style="font-family: 'Bebas Neue', cursive; flex:2; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid ${color}; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Restart</button>
                     </div>
                 </div>`;
         }
@@ -1034,22 +1007,22 @@
             ${stampHtml}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
-                <input type="range" id="volume-slider-end" min="0" max="1" step="0.01" value="${_0xcurrentVolume}" oninput="_0x3f2a(this.value)">
+                <input type="range" id="volume-slider-end" min="0" max="1" step="0.01" value="${_0vCurVol}" oninput="_0vVol(this.value)">
                 <span class="sound-icon" style="font-size:1vh;">VOL</span>
             </div>
             <div id="credit-overlay">
-                <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img" onclick="_0xplayNyaBgm()"></div>
-                <div id="credit-container" onmousedown="_0x8c21(event)" onmouseup="_0x7d4e(event)">
+                <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img" onclick="_0vNya()"></div>
+                <div id="credit-container" onmousedown="_0vCrD(event)" onmouseup="_0vCrU(event)">
                     <div id="credit-content"></div>
                 </div>
-                <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;" onclick="_0xplayNyaBgm()"></div>
+                <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;" onclick="_0vNya()"></div>
                 <div class="credit-esc">Press ESC to Close</div>
             </div>
             <div id="tutorial-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:5000; flex-direction:column; align-items:center; justify-content:center;">
                 <div class="tutorial-msg-box">
                     <h3 id="tut-title"></h3>
                     <p id="tut-desc"></p>
-                    <button id="tut-next-btn" onclick="_0x5a1b()">확인</button>
+                    <button id="tut-next-btn" onclick="_0vTNext()">확인</button>
                     <div id="tut-esc-guide" class="esc-guide" style="display:none;"></div>
                 </div>
             </div>
@@ -1061,50 +1034,36 @@
                 ${subButtons}
             </div>`;
             
-        document.getElementById('volume-slider-end').addEventListener('input', (e) => {
-            _0x3f2a(e.target.value);
-        });
+        document.getElementById('volume-slider-end').addEventListener('input', (e) => { _0vVol(e.target.value); });
     }
 
-    let _0xcrdScrInt = null;
-    let _0xcrdY = 0;
-    let _0xcrdSpd = 0.55;
+    let _0vCrSInt = null;
+    let _0vCrY = 0;
+    let _0vCrSpd = 0.55;
 
     window.showCredits = function() {
-        if(!_0xtextData) return;
+        if(!_0vTData) return;
         const overlay = document.getElementById('credit-overlay');
         const content = document.getElementById('credit-content');
         if (!overlay || !content) return;
-        
-        const text = _0xtextData.dev_story.join("\n");
-        
-        content.innerHTML = `
-            <div>${text}</div>
-            <img src="귀여운고양이.jpg" onclick="_0xplayNyaBgm()" style="width:67.5vh; height:auto; margin-top:5vh; border-radius:2vh; border:0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); cursor:pointer;">
-            <img src="Aview.png" class="credit-logo">
-        `;
+        const text = _0vTData.dev_story.join("\n");
+        content.innerHTML = `<div>${text}</div><img src="귀여운고양이.jpg" onclick="_0vNya()" style="width:67.5vh; height:auto; margin-top:5vh; border-radius:2vh; border:0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); cursor:pointer;"><img src="Aview.png" class="credit-logo">`;
         overlay.style.display = 'flex';
-        _0xcrdY = window.innerHeight * 0.1;
-        _0xcrdSpd = 0.55;
-        
-        if (_0xcrdScrInt) clearInterval(_0xcrdScrInt);
-        _0xcrdScrInt = setInterval(() => {
-            _0xcrdY -= _0xcrdSpd;
-            content.style.transform = `translateY(${_0xcrdY}px)`;
-            if (_0xcrdY < -(content.scrollHeight + 25)) {
-                clearInterval(_0xcrdScrInt);
-            }
+        _0vCrY = window.innerHeight * 0.1;
+        _0vCrSpd = 0.55;
+        if (_0vCrSInt) clearInterval(_0vCrSInt);
+        _0vCrSInt = setInterval(() => {
+            _0vCrY -= _0vCrSpd;
+            content.style.transform = `translateY(${_0vCrY}px)`;
+            if (_0vCrY < -(content.scrollHeight + 25)) { clearInterval(_0vCrSInt); }
         }, 16);
     };
 
-    window._0x8c21 = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 4.5; };
-    window._0x7d4e = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 0.55; };
-    window._0xclsCr = function() {
+    window._0vCrD = function(e) { if(e) e.stopPropagation(); _0vCrSpd = 4.5; };
+    window._0vCrU = function(e) { if(e) e.stopPropagation(); _0vCrSpd = 0.55; };
+    window._0vClsCr = function() {
         const overlay = document.getElementById('credit-overlay');
-        if(overlay) {
-            overlay.style.display = 'none';
-            if (_0xcrdScrInt) clearInterval(_0xcrdScrInt);
-        }
+        if(overlay) { overlay.style.display = 'none'; if (_0vCrSInt) clearInterval(_0vCrSInt); }
     };
 
     setInterval(() => {
@@ -1114,7 +1073,7 @@
         });
         const turnCounter = document.getElementById('turn-counter');
         if(turnCounter) {
-            if (_0xturnCount > 0) {
+            if (_0vTC > 0) {
                 const intensity = 15; 
                 const tMoveX = (Math.random()-0.5) * intensity;
                 const tMoveY = (Math.random()-0.5) * intensity;
