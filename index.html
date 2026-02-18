@@ -46,6 +46,10 @@
             letter-spacing: 0.1vh;
             z-index: 500;
         }
+
+        #how-counter {
+            display: none;
+        }
         
         #sound-control { position: fixed; right: 2vh; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; gap: 1vh; background: rgba(0,0,0,0.7); padding: 1.5vh 1vh; border-radius: 3vh; border: 0.1vh solid var(--cyan); z-index: 10000; }
         #sound-control input[type=range] { -webkit-appearance: slider-vertical; width: 0.8vh; height: 15vh; cursor: pointer; }
@@ -92,24 +96,11 @@
         .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; animation: neonShiftBg 10s infinite alternate linear; margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
         .setup-btn:hover { transform: scale(1.02); filter: brightness(1.2); }
         .setup-btn:active { transform: scale(0.98); }
+        .setup-btn:disabled { opacity: 0.3; cursor: not-allowed; animation: none; background: #444; color: #888; box-shadow: none; }
 
         .tutorial-btn { font-family: 'Bebas Neue', cursive; width: 35vh; background: #444; color: #fff; font-weight: 700; height: 5vh; font-size: 2.5vh; border-radius: 1.5vh; cursor: pointer; border: 0.2vh solid #666; margin-bottom: 1vh; transition: 0.2s; letter-spacing: 0.1vh; }
         .tutorial-btn:hover { background: #555; transform: scale(1.02); }
         .tutorial-btn:active { transform: scale(0.98); }
-
-        /* How to Play 버튼 강조 스타일 */
-        .tutorial-btn.highlight {
-            background: #000;
-            color: var(--cyan);
-            border-color: var(--cyan);
-            box-shadow: 0 0 2vh var(--cyan);
-            animation: highlightPulse 2s infinite;
-        }
-        @keyframes highlightPulse {
-            0% { box-shadow: 0 0 1vh var(--cyan); filter: brightness(1); }
-            50% { box-shadow: 0 0 3vh var(--cyan); filter: brightness(1.5); }
-            100% { box-shadow: 0 0 1vh var(--cyan); filter: brightness(1); }
-        }
 
         .new-keyhole { width: 35vh; height: auto; margin-top: 1.5vh; animation: keyholeNeonShift 10s infinite alternate linear; }
 
@@ -186,6 +177,7 @@
         
         .btn-clr { font-family: 'Bebas Neue', cursive; background: var(--cyan) !important; color: #000 !important; font-weight: bold; border: 0.2vh solid rgba(255,255,255,0.4); box-shadow: inset 0 0 1vh rgba(255,255,255,0.5), 0 0 1.5vh var(--cyan); font-size: 2.5vh !important; }
         .btn-obs { font-family: 'Bebas Neue', cursive; background: var(--purple); color: #000; font-weight: bold; border: 0.2vh solid rgba(255,255,255,0.2); box-shadow: inset 0 0 1.5vh rgba(0,0,0,0.5), 0 0 1.5vh var(--purple); font-size: 2.5vh !important; }
+        .btn-obs:disabled { filter: grayscale(1) brightness(0.5) !important; opacity: 0.5 !important; }
         .btn-ent { font-family: 'Bebas Neue', cursive; background: var(--green); color: #000; font-weight: bold; grid-row: span 2; border: 0.2vh solid rgba(0,0,0,0.2); box-shadow: inset 0 0 1.5vh rgba(255,255,255,0.3), 0 0 1.5vh var(--green); font-size: 2.5vh !important; }
         
         .overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
@@ -318,10 +310,14 @@
             opacity: 0.9;
         }
 
+        @media screen and (max-width: 1000px) {
+            .title-wrapper { display: none; }
+            #game-box, #info-panel { width: 100vw !important; }
+        }
+
         @media screen and (max-width: 768px) {
             #setup { width: 90vw; }
             #game-box, #info-panel { 
-                width: 90vw; 
                 height: auto; 
                 min-height: 80vh; 
                 flex-shrink: 0;
@@ -339,7 +335,8 @@
 </head>
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
-<div id="version-tag">0.6 Version</div>
+<div id="version-tag">0.7 Version</div>
+<div id="how-counter" style="display: none;">HOW버튼 카운터: 0</div>
 <div id="flash-overlay"></div>
 
 <div id="sound-control">
@@ -377,8 +374,8 @@
         <div class="setup-box-container">
             <img src="귀여운고양이도트4.jpg" class="setup-cat">
         </div>
-        <button id="how-to-play-btn" onclick="_0vHTP()" class="tutorial-btn">How to Play</button>
-        <button onclick="_0vStart()" class="setup-btn">Start Single Mode</button>
+        <button onclick="_0vHTP()" class="tutorial-btn">How to Play</button>
+        <button id="start-btn" onclick="_0vStart()" class="setup-btn" disabled>Start Single Mode</button>
         <img src="Aview.png" class="new-keyhole">
     </div>
     <div id="setup-footer">
@@ -439,11 +436,7 @@
     let _0vTData = null;
     fetch('textdata.json')
         .then(response => response.json())
-        .then(data => { 
-            _0vTData = data; 
-            // 데이터 로드 후 초기 강조 효과 체크
-            _0vChkHTP();
-        })
+        .then(data => { _0vTData = data; })
         .catch(error => console.error('Error loading textdata:', error));
 
     const _0vFb = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
@@ -458,6 +451,9 @@
     let _0vMCnt = 0; 
     let _0vPCnt = 0;
     
+    // 로컬 스토리지에서 카운트 불러오기
+    let _0vHowCnt = parseInt(localStorage.getItem('sb_how_count')) || 0;
+
     let _0vBgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
     _0vBgm.loop = true;
     _0vBgm.playbackRate = 2.0;
@@ -475,17 +471,14 @@
     const _0vBodyOri = document.body.innerHTML;
     let _0vPoisInt = null;
 
-    // How to Play 강조 효과 체크 함수
-    function _0vChkHTP() {
-        const htpBtn = document.getElementById('how-to-play-btn');
-        if (htpBtn) {
-            if (_0vPCnt === 0) {
-                htpBtn.classList.add('highlight');
-            } else {
-                htpBtn.classList.remove('highlight');
-            }
-        }
-    }
+    // 초기 상태 반영
+    window.onload = function() {
+        _0vVol(0.15);
+        const counterEl = document.getElementById('how-counter');
+        const startBtn = document.getElementById('start-btn');
+        // if(counterEl) counterEl.innerText = "HOW버튼 카운터: " + _0vHowCnt; // 텍스트 제거
+        if(startBtn && _0vHowCnt >= 1) startBtn.disabled = false;
+    };
 
     function _0vVol(val) { 
         _0vCurVol = parseFloat(val);
@@ -499,8 +492,6 @@
         _0vLSfx.volume = Math.min(1.0, _0vCurVol * 1.5);
         _0vDSfx.volume = Math.min(1.0, _0vCurVol * 1.5);
     }
-    
-    _0vVol(0.15);
 
     function _0vPlayC() { 
         const sc = _0vCSfx.cloneNode(); 
@@ -545,9 +536,9 @@
     }
 
     function _0vStart() {
+        if(_0vHowCnt < 1) return;
         _0vPlayC();
         _0vPCnt++;
-        _0vChkHTP(); // 플레이 카운트 상승에 따른 강조 제거
         if(_0vFInt) { clearInterval(_0vFInt); _0vFInt = null; }
         if(_0vSInt) { clearInterval(_0vSInt); _0vSInt = null; }
         if(_0vMInt) { clearInterval(_0vMInt); _0vMInt = null; }
@@ -555,6 +546,7 @@
         document.getElementById('setup-footer').style.display = 'none';
         document.getElementById('game-box').style.display = 'flex';
         document.getElementById('info-panel').style.display = 'flex';
+        document.getElementById('how-counter').style.display = 'none';
         _0vResGm();
     }
 
@@ -588,11 +580,27 @@
         _0vPCnt = oldPlayCount;
         
         _0vVol(document.getElementById('volume-slider')?.value || 0.15);
-        _0vChkHTP(); // 리스타트 후에도 카운트 체크
+        // 상태 복구
+        const counterEl = document.getElementById('how-counter');
+        const startBtn = document.getElementById('start-btn');
+        // if(counterEl) counterEl.innerText = "HOW버튼 카운터: " + _0vHowCnt; // 텍스트 제거
+        if(startBtn && _0vHowCnt >= 1) startBtn.disabled = false;
         _0vStart();
     }
 
     function _0vHTP() {
+        // 카운트 증가 및 로컬 스토리지 저장
+        _0vHowCnt++;
+        localStorage.setItem('sb_how_count', _0vHowCnt);
+        
+        const counterEl = document.getElementById('how-counter');
+        // if(counterEl) counterEl.innerText = "HOW버튼 카운터: " + _0vHowCnt; // 텍스트 제거
+        
+        const startBtn = document.getElementById('start-btn');
+        if(_0vHowCnt >= 1 && startBtn) {
+            startBtn.disabled = false;
+        }
+
         if(!_0vTData) return;
         _0vIsTut = true; _0vTType = ""; _0vTStep = 1;
         _0vStart();
@@ -720,7 +728,7 @@
         }
         if (e.key === 'Enter') {
             e.preventDefault();
-            if (document.getElementById('game-box').style.display === 'flex') {
+            if (document.getElementById('game-box').style.display === 'flex' && _0vTC > 0) {
                 _0vCmd('ENT');
             }
             return;
@@ -818,7 +826,14 @@
         const flashOverlay = document.getElementById('flash-overlay');
         const paradoxOverlay = document.getElementById('paradox-cat-overlay');
         const logWindow = document.getElementById('log-window');
+        const obsBtn = document.getElementById('obs-btn');
         
+        if(_0vHist.length < 4) {
+            obsBtn.disabled = true;
+        } else {
+            obsBtn.disabled = false;
+        }
+
         if(_0vAiC.length === 0) {
             if(!_0vZeroTrig) {
                 if(_0vBgm) _0vBgm.pause();
@@ -958,6 +973,7 @@
 
     function _0vOBS() {
         if(_0vIsTut || !_0vTData || document.getElementById('game-box').style.display !== 'flex') return;
+        if(_0vHist.length < 4) return;
         _0vPlayS();
         if(_0vAiC.length === 0) {
             _0vMCnt = 0; 
@@ -1008,7 +1024,7 @@
         let emojiLanes = "";
         let stampHtml = "";
         if(isParadox) {
-            const longLane = "🐈 ".repeat(22);
+            const long lane = "🐈 ".repeat(22);
             emojiLanes = `
                 <div class="emoji-lane" style="top:15vh; animation: slide-h 24s linear infinite; animation-delay: -3s;">${longLane}</div>
                 <div class="emoji-lane" style="bottom:15vh; animation: slide-h 29s linear infinite reverse; animation-delay: -7s;">${longLane}</div>
@@ -1034,7 +1050,7 @@
         }
 
         document.body.innerHTML = `
-            <div id="version-tag">0.6 Version</div>
+            <div id="version-tag">0.7 Version</div>
             ${emojiLanes}
             ${stampHtml}
             <div id="sound-control" style="z-index:20000;">
