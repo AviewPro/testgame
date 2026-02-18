@@ -28,11 +28,10 @@
             align-items: center; 
             justify-content: flex-start;
             min-height: 100vh;
-            margin: 0 auto; 
+            margin: 0; 
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
-            max-width: 1000px; /* 화면 크기 1000px 고정 */
         }
 
         #version-tag {
@@ -50,19 +49,9 @@
         #sound-control input[type=range] { -webkit-appearance: slider-vertical; width: 0.8vh; height: 15vh; cursor: pointer; }
         .sound-icon { font-size: 1.5vh; color: var(--cyan); }
 
-        .title-wrapper { 
-            position: relative; 
-            margin-top: 5vh; 
-            margin-bottom: 3vh; 
-            z-index: 300; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            flex-shrink: 0; 
-            width: 400px; /* 제목 박스 크기 400px 고정 */
-        }
-        .title-bg { position: absolute; background: rgba(0, 0, 0, 0.7); width: 100%; height: 100%; border-radius: 1.5vh; filter: blur(0.5vh); z-index: -1; }
-        .header-title { font-size: 3.5vh; font-weight: bold; letter-spacing: 0.5vh; text-shadow: 0 0 2vh currentColor; animation: neonShift 10s infinite alternate linear; text-align: center; margin: 0; padding: 1vh 0; width: 100%; }
+        .title-wrapper { position: relative; margin-top: 5vh; margin-bottom: 3vh; z-index: 300; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+        .title-bg { position: absolute; background: rgba(0, 0, 0, 0.7); width: 120%; height: 120%; border-radius: 1.5vh; filter: blur(0.5vh); z-index: -1; }
+        .header-title { font-size: 5vh; font-weight: bold; letter-spacing: 1.2vh; text-shadow: 0 0 2vh currentColor; animation: neonShift 10s infinite alternate linear; text-align: center; margin: 0; padding: 1vh 4vh; }
         
         @keyframes neonShift { 0% { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 2vh var(--cyan); } 100% { color: var(--purple); border-color: var(--purple); box-shadow: 0 0 2vh var(--purple); } }
         @keyframes neonShiftBg { 0% { background-color: var(--cyan); box-shadow: 0 0 1.5vh var(--cyan); } 100% { background-color: var(--purple); box-shadow: 0 0 1.5vh var(--purple); } }
@@ -90,19 +79,12 @@
         .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; animation: neonShiftBg 10s infinite alternate linear; margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
         .setup-btn:hover:not(:disabled) { transform: scale(1.02); filter: brightness(1.2); }
         .setup-btn:active:not(:disabled) { transform: scale(0.98); }
-        .setup-btn:disabled { 
-            opacity: 0.8; 
-            cursor: not-allowed; 
-            animation: none; 
-            background: #111; 
-            color: var(--red); 
-            border: 0.3vh solid var(--red); 
-            box-shadow: 0 0 2vh var(--red);
-        }
+        .setup-btn:disabled { opacity: 0.3; cursor: not-allowed; animation: none; background: #444; color: #888; }
 
         .tutorial-btn { font-family: 'Bebas Neue', cursive; width: 35vh; background: #444; color: #fff; font-weight: 700; height: 5vh; font-size: 2.5vh; border-radius: 1.5vh; cursor: pointer; border: 0.2vh solid #666; margin-bottom: 1vh; transition: 0.2s; letter-spacing: 0.1vh; }
         .tutorial-btn:hover { background: #555; transform: scale(1.02); }
         .tutorial-btn:active { transform: scale(0.98); }
+        .tutorial-btn.highlight-start { border: 0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); animation: neonShift 2s infinite alternate linear; }
 
         .new-keyhole { width: 35vh; height: auto; margin-top: 1.5vh; animation: keyholeNeonShift 10s infinite alternate linear; }
 
@@ -299,6 +281,12 @@
         @keyframes slide-h { from { transform: translateX(-150%); } to { transform: translateX(150vw); } }
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
+        /* 화면 1000px 이하일 때 제목 크기 고정 */
+        @media screen and (max-width: 1000px) {
+            .header-title { width: 400px; font-size: 4vh; letter-spacing: 0.5vh; padding: 1vh 0; }
+            .title-bg { width: 400px; }
+        }
+
         @media screen and (max-width: 768px) {
             #setup { width: 90vw; }
             #game-box, #info-panel { 
@@ -356,8 +344,8 @@
         <div class="setup-box-container">
             <img src="Neon cat.gif" class="setup-cat">
         </div>
-        <button onclick="_0x1d2e()" class="tutorial-btn">How to Play</button>
-        <button id="start-btn" onclick="_0x4c5b()" class="setup-btn" disabled>Start Single Mode</button>
+        <button id="main-tutorial-btn" onclick="_0x1d2e()" class="tutorial-btn">How to Play</button>
+        <button id="main-start-btn" onclick="_0x4c5b()" class="setup-btn">Start Single Mode</button>
         <img src="Aview.png" class="new-keyhole">
     </div>
     <div id="setup-footer">
@@ -425,6 +413,7 @@
 
     let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 7;
     let _0xtotalStartCount = parseInt(localStorage.getItem('totalStartCount')) || 0; 
+    let _0xtutorialClickCount = parseInt(localStorage.getItem('tutorialClickCount')) || 0; // 튜토리얼 클릭 카운터
     let _0xisTutorial = false, _0xtutorialStep = 0, _0xcurrentTipType = "";
     let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
     let _0xcurrentVolume = 0.15;
@@ -433,9 +422,6 @@
     let _0xmeowLoopInterval = null; 
     let _0xmeowCount = 0; 
     
-    // 튜토리얼 버튼 클릭 카운터
-    let tutorialClickCount = 0;
-
     let _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
     _0xbgm.loop = true;
     _0xbgm.playbackRate = 2.0;
@@ -452,6 +438,20 @@
     const _0xoriginalBodyContent = document.body.innerHTML;
 
     let _0xpoisonInterval = null;
+
+    // 튜토리얼 카운터에 따른 버튼 상태 초기화
+    function _0xinitBtns() {
+        const tutBtn = document.getElementById('main-tutorial-btn');
+        const startBtn = document.getElementById('main-start-btn');
+        if (_0xtutorialClickCount === 0) {
+            tutBtn.classList.add('highlight-start');
+            startBtn.disabled = true;
+        } else {
+            tutBtn.classList.remove('highlight-start');
+            startBtn.disabled = false;
+        }
+    }
+    window.onload = _0xinitBtns;
 
     function _0x3f2a(val) { 
         _0xcurrentVolume = parseFloat(val);
@@ -514,7 +514,6 @@
     }
 
     function _0x4c5b() {
-        if (tutorialClickCount <= 1) return; // 카운터 체크
         _0xplayClick();
         _0xtotalStartCount++; 
         localStorage.setItem('totalStartCount', _0xtotalStartCount);
@@ -559,27 +558,16 @@
     }
 
     function _0x1d2e() {
-        tutorialClickCount++; // 카운터 증가
-        const startBtn = document.getElementById('start-btn');
-        if (tutorialClickCount > 1) {
-            startBtn.disabled = false;
-        }
-        
         if(!_0xtextData) return;
+        _0xtutorialClickCount++;
+        localStorage.setItem('tutorialClickCount', _0xtutorialClickCount);
+        _0xinitBtns(); // 카운터 증가 후 버튼 상태 업데이트
+
         _0xisTutorial = true; _0xcurrentTipType = ""; _0xtutorialStep = 1;
-        _0x4c5b_internal(); // 튜토리얼 내부용으로 게임 시작
+        _0x4c5b();
         document.getElementById('obs-btn').disabled = true;
         document.getElementById('tutorial-overlay').style.display = 'flex';
         _0xappTut();
-    }
-
-    // 튜토리얼 진입을 위한 내부 함수 (카운터 무시)
-    function _0x4c5b_internal() {
-        document.getElementById('setup').style.display = 'none';
-        document.getElementById('setup-footer').style.display = 'none';
-        document.getElementById('game-box').style.display = 'flex';
-        document.getElementById('info-panel').style.display = 'flex';
-        _0xresGm();
     }
 
     window.showTips = function(type) {
@@ -1115,7 +1103,7 @@
         const turnCounter = document.getElementById('turn-counter');
         if(turnCounter) {
             if (_0xturnCount > 0) {
-                const intensity = 25; 
+                const intensity = 15; // 턴 카운터 계수 15 반영
                 const tMoveX = (Math.random()-0.5) * intensity;
                 const tMoveY = (Math.random()-0.5) * intensity;
                 turnCounter.style.transform = `translate(${tMoveX}px, ${tMoveY}px)`;
