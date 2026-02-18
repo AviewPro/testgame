@@ -279,18 +279,15 @@
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
         @media screen and (max-width: 768px) {
-            .title-wrapper {
-                display: none !important;
-            }
-            #setup { width: 90vw; max-width: 50vh; }
+            .title-wrapper { display: none; }
+            #setup { width: 90vw; }
             #game-box, #info-panel { 
                 width: 90vw; 
-                max-width: 50vh;
                 height: auto; 
                 min-height: 80vh; 
                 flex-shrink: 0;
             }
-            .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; max-width: 35vh; }
+            .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; }
             .header-title { font-size: 4vh; letter-spacing: 0.5vh; }
             .panel-center { width: 90vw; padding: 3vh; }
             
@@ -967,7 +964,7 @@
         
         let emojiLanes = "";
         if(isParadox) {
-            const longLane = "🐈 ".repeat(22);
+            const long lane = "🐈 ".repeat(22);
             emojiLanes = `
                 <div class="emoji-lane" style="top:15vh; animation: slide-h 24s linear infinite; animation-delay: -3s;">${longLane}</div>
                 <div class="emoji-lane" style="bottom:15vh; animation: slide-h 29s linear infinite reverse; animation-delay: -7s;">${longLane}</div>
