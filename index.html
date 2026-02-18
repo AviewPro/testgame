@@ -46,6 +46,20 @@
             letter-spacing: 0.1vh;
             z-index: 500;
         }
+
+        #how-counter {
+            position: fixed;
+            top: 2vh;
+            right: 10vh;
+            color: var(--cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2vh;
+            background: rgba(0,0,0,0.5);
+            padding: 1vh 2vh;
+            border-radius: 1vh;
+            border: 0.1vh solid var(--cyan);
+            z-index: 1000;
+        }
         
         #sound-control { position: fixed; right: 2vh; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; gap: 1vh; background: rgba(0,0,0,0.7); padding: 1.5vh 1vh; border-radius: 3vh; border: 0.1vh solid var(--cyan); z-index: 10000; }
         #sound-control input[type=range] { -webkit-appearance: slider-vertical; width: 0.8vh; height: 15vh; cursor: pointer; }
@@ -92,6 +106,7 @@
         .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; animation: neonShiftBg 10s infinite alternate linear; margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
         .setup-btn:hover { transform: scale(1.02); filter: brightness(1.2); }
         .setup-btn:active { transform: scale(0.98); }
+        .setup-btn:disabled { opacity: 0.3; cursor: not-allowed; animation: none; background: #444; color: #888; box-shadow: none; }
 
         .tutorial-btn { font-family: 'Bebas Neue', cursive; width: 35vh; background: #444; color: #fff; font-weight: 700; height: 5vh; font-size: 2.5vh; border-radius: 1.5vh; cursor: pointer; border: 0.2vh solid #666; margin-bottom: 1vh; transition: 0.2s; letter-spacing: 0.1vh; }
         .tutorial-btn:hover { background: #555; transform: scale(1.02); }
@@ -172,6 +187,7 @@
         
         .btn-clr { font-family: 'Bebas Neue', cursive; background: var(--cyan) !important; color: #000 !important; font-weight: bold; border: 0.2vh solid rgba(255,255,255,0.4); box-shadow: inset 0 0 1vh rgba(255,255,255,0.5), 0 0 1.5vh var(--cyan); font-size: 2.5vh !important; }
         .btn-obs { font-family: 'Bebas Neue', cursive; background: var(--purple); color: #000; font-weight: bold; border: 0.2vh solid rgba(255,255,255,0.2); box-shadow: inset 0 0 1.5vh rgba(0,0,0,0.5), 0 0 1.5vh var(--purple); font-size: 2.5vh !important; }
+        .btn-obs:disabled { filter: grayscale(1) brightness(0.5) !important; opacity: 0.5 !important; }
         .btn-ent { font-family: 'Bebas Neue', cursive; background: var(--green); color: #000; font-weight: bold; grid-row: span 2; border: 0.2vh solid rgba(0,0,0,0.2); box-shadow: inset 0 0 1.5vh rgba(255,255,255,0.3), 0 0 1.5vh var(--green); font-size: 2.5vh !important; }
         
         .overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
@@ -305,13 +321,16 @@
         }
 
         @media screen and (max-width: 1000px) {
-            .title-wrapper, .title-bg { display: none !important; }
+            .title-wrapper { display: none; }
+            #game-box, #info-panel { width: 100vw !important; }
+        }
+
+        @media screen and (max-width: 768px) {
             #setup { width: 90vw; }
             #game-box, #info-panel { 
-                width: 100vw; 
-                height: 75vh; 
+                height: auto; 
+                min-height: 80vh; 
                 flex-shrink: 0;
-                border-radius: 0;
             }
             .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; }
             .header-title { font-size: 4vh; letter-spacing: 0.5vh; }
@@ -327,6 +346,7 @@
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
 <div id="version-tag">0.7 Version</div>
+<div id="how-counter">HOW버튼 카운터: 0</div>
 <div id="flash-overlay"></div>
 
 <div id="sound-control">
@@ -365,7 +385,7 @@
             <img src="귀여운고양이도트4.jpg" class="setup-cat">
         </div>
         <button onclick="_0vHTP()" class="tutorial-btn">How to Play</button>
-        <button id="main-start-btn" onclick="_0vStart()" class="setup-btn" disabled>Start Single Mode</button>
+        <button id="start-btn" onclick="_0vStart()" class="setup-btn" disabled>Start Single Mode</button>
         <img src="Aview.png" class="new-keyhole">
     </div>
     <div id="setup-footer">
@@ -510,7 +530,6 @@
             _0vClrIn(true);
         }
         if(type === 'ENT') {
-            if(_0vTC <= 0) return;
             _0vSimB('ent-btn');
             _0vPlayS();
             _0vEntCli(true);
@@ -518,7 +537,7 @@
     }
 
     function _0vStart() {
-        if(_0vHowCnt <= 0) return;
+        if(_0vHowCnt < 1) return;
         _0vPlayC();
         _0vPCnt++;
         if(_0vFInt) { clearInterval(_0vFInt); _0vFInt = null; }
@@ -528,6 +547,7 @@
         document.getElementById('setup-footer').style.display = 'none';
         document.getElementById('game-box').style.display = 'flex';
         document.getElementById('info-panel').style.display = 'flex';
+        document.getElementById('how-counter').style.display = 'none';
         _0vResGm();
     }
 
@@ -567,10 +587,14 @@
     }
 
     function _0vHTP() {
-        if(!_0vTData) return;
         _0vHowCnt++;
-        const startBtn = document.getElementById('main-start-btn');
-        if(startBtn) startBtn.disabled = false;
+        document.getElementById('how-counter').innerText = "HOW버튼 카운터: " + _0vHowCnt;
+        const startBtn = document.getElementById('start-btn');
+        if(_0vHowCnt >= 1) {
+            startBtn.disabled = false;
+        }
+
+        if(!_0vTData) return;
         _0vIsTut = true; _0vTType = ""; _0vTStep = 1;
         _0vStart();
         document.getElementById('obs-btn').disabled = true;
@@ -697,8 +721,8 @@
         }
         if (e.key === 'Enter') {
             e.preventDefault();
-            if (document.getElementById('game-box').style.display === 'flex') {
-                if(_0vTC > 0) _0vCmd('ENT');
+            if (document.getElementById('game-box').style.display === 'flex' && _0vTC > 0) {
+                _0vCmd('ENT');
             }
             return;
         }
@@ -797,6 +821,13 @@
         const logWindow = document.getElementById('log-window');
         const obsBtn = document.getElementById('obs-btn');
         
+        // 4턴 이상 진행되어야 OBS 활성화
+        if(_0vHist.length < 4) {
+            obsBtn.disabled = true;
+        } else {
+            obsBtn.disabled = false;
+        }
+
         if(_0vAiC.length === 0) {
             if(!_0vZeroTrig) {
                 if(_0vBgm) _0vBgm.pause();
@@ -914,12 +945,6 @@
             statusEl.innerText = "고양이 위치 관측 중...";
             statusEl.style.animation = "neonShift 10s infinite alternate linear";
         }
-        
-        if(_0vTC > 2) {
-            obsBtn.disabled = true;
-        } else {
-            obsBtn.disabled = false;
-        }
     }
 
     function _0vRPfC() {
@@ -942,7 +967,7 @@
 
     function _0vOBS() {
         if(_0vIsTut || !_0vTData || document.getElementById('game-box').style.display !== 'flex') return;
-        if(_0vTC > 2) return;
+        if(_0vHist.length < 4) return; // 4턴 제약 안전장치
         _0vPlayS();
         if(_0vAiC.length === 0) {
             _0vMCnt = 0; 
