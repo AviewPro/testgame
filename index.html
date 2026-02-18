@@ -77,14 +77,12 @@
         .setup-cat { width: 35vh; height: 35vh; border-radius: 4vh; border: 0.4vh solid var(--green); object-fit: cover; animation: neonShift 10s infinite alternate linear; display: block; }
         
         .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; animation: neonShiftBg 10s infinite alternate linear; margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
-        .setup-btn:hover:not(:disabled) { transform: scale(1.02); filter: brightness(1.2); }
-        .setup-btn:active:not(:disabled) { transform: scale(0.98); }
-        .setup-btn:disabled { opacity: 0.3; cursor: not-allowed; animation: none; background: #444; color: #888; }
+        .setup-btn:hover { transform: scale(1.02); filter: brightness(1.2); }
+        .setup-btn:active { transform: scale(0.98); }
 
         .tutorial-btn { font-family: 'Bebas Neue', cursive; width: 35vh; background: #444; color: #fff; font-weight: 700; height: 5vh; font-size: 2.5vh; border-radius: 1.5vh; cursor: pointer; border: 0.2vh solid #666; margin-bottom: 1vh; transition: 0.2s; letter-spacing: 0.1vh; }
         .tutorial-btn:hover { background: #555; transform: scale(1.02); }
         .tutorial-btn:active { transform: scale(0.98); }
-        .tutorial-btn.highlight-start { border: 0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); animation: neonShift 2s infinite alternate linear; }
 
         .new-keyhole { width: 35vh; height: auto; margin-top: 1.5vh; animation: keyholeNeonShift 10s infinite alternate linear; }
 
@@ -281,13 +279,8 @@
         @keyframes slide-h { from { transform: translateX(-150%); } to { transform: translateX(150vw); } }
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
-        /* 화면 1000px 이하일 때 제목 크기 고정 */
         @media screen and (max-width: 1000px) {
-            .header-title { width: 400px; font-size: 4vh; letter-spacing: 0.5vh; padding: 1vh 0; }
-            .title-bg { width: 400px; }
-        }
-
-        @media screen and (max-width: 768px) {
+            .header-title { font-size: 2vh; letter-spacing: 0.5vh; }
             #setup { width: 90vw; }
             #game-box, #info-panel { 
                 width: 90vw; 
@@ -344,8 +337,8 @@
         <div class="setup-box-container">
             <img src="Neon cat.gif" class="setup-cat">
         </div>
-        <button id="main-tutorial-btn" onclick="_0x1d2e()" class="tutorial-btn">How to Play</button>
-        <button id="main-start-btn" onclick="_0x4c5b()" class="setup-btn">Start Single Mode</button>
+        <button onclick="_0x1d2e()" class="tutorial-btn">How to Play</button>
+        <button onclick="_0x4c5b()" class="setup-btn">Start Single Mode</button>
         <img src="Aview.png" class="new-keyhole">
     </div>
     <div id="setup-footer">
@@ -413,7 +406,6 @@
 
     let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 7;
     let _0xtotalStartCount = parseInt(localStorage.getItem('totalStartCount')) || 0; 
-    let _0xtutorialClickCount = parseInt(localStorage.getItem('tutorialClickCount')) || 0; // 튜토리얼 클릭 카운터
     let _0xisTutorial = false, _0xtutorialStep = 0, _0xcurrentTipType = "";
     let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
     let _0xcurrentVolume = 0.15;
@@ -438,20 +430,6 @@
     const _0xoriginalBodyContent = document.body.innerHTML;
 
     let _0xpoisonInterval = null;
-
-    // 튜토리얼 카운터에 따른 버튼 상태 초기화
-    function _0xinitBtns() {
-        const tutBtn = document.getElementById('main-tutorial-btn');
-        const startBtn = document.getElementById('main-start-btn');
-        if (_0xtutorialClickCount === 0) {
-            tutBtn.classList.add('highlight-start');
-            startBtn.disabled = true;
-        } else {
-            tutBtn.classList.remove('highlight-start');
-            startBtn.disabled = false;
-        }
-    }
-    window.onload = _0xinitBtns;
 
     function _0x3f2a(val) { 
         _0xcurrentVolume = parseFloat(val);
@@ -559,10 +537,6 @@
 
     function _0x1d2e() {
         if(!_0xtextData) return;
-        _0xtutorialClickCount++;
-        localStorage.setItem('tutorialClickCount', _0xtutorialClickCount);
-        _0xinitBtns(); // 카운터 증가 후 버튼 상태 업데이트
-
         _0xisTutorial = true; _0xcurrentTipType = ""; _0xtutorialStep = 1;
         _0x4c5b();
         document.getElementById('obs-btn').disabled = true;
@@ -1103,7 +1077,7 @@
         const turnCounter = document.getElementById('turn-counter');
         if(turnCounter) {
             if (_0xturnCount > 0) {
-                const intensity = 15; // 턴 카운터 계수 15 반영
+                const intensity = 25; 
                 const tMoveX = (Math.random()-0.5) * intensity;
                 const tMoveY = (Math.random()-0.5) * intensity;
                 turnCounter.style.transform = `translate(${tMoveX}px, ${tMoveY}px)`;
