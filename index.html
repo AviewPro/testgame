@@ -76,7 +76,7 @@
         .setup-box-container { position: relative; width: 35vh; margin-bottom: 2vh; }
         .setup-cat { width: 35vh; height: 35vh; border-radius: 4vh; border: 0.4vh solid var(--green); object-fit: cover; animation: neonShift 10s infinite alternate linear; display: block; }
         
-        .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; animation: neonShiftBg 10s infinite alternate linear; margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
+        .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; background-color: var(--green); box-shadow: 0 0 1.5vh var(--green); margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
         .setup-btn:hover { transform: scale(1.02); filter: brightness(1.2); }
         .setup-btn:active { transform: scale(0.98); }
 
@@ -279,7 +279,8 @@
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
         @media screen and (max-width: 768px) {
-            #setup { width: 90vw; }
+            .title-wrapper { display: none; }
+            #setup { width: 90vw; margin-top: 5vh; }
             #game-box, #info-panel { 
                 width: 90vw; 
                 height: auto; 
@@ -287,15 +288,6 @@
                 flex-shrink: 0;
             }
             .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; }
-            
-            /* 모바일 제목 폰트 및 박스 크기 50% 축소 */
-            .header-title { font-size: 2.5vh; letter-spacing: 0.6vh; padding: 0.5vh 2vh 0.25vh 2vh; }
-            .header-subtitle { font-size: 0.9vh; letter-spacing: 0.25vh; }
-            .title-bg { border-radius: 0.75vh; }
-
-            /* 모바일 디스플레이 가로폭을 입력패널(keypad) 가로폭과 일치시킴 */
-            .input-view { width: 100%; box-sizing: border-box; }
-
             .panel-center { width: 90vw; padding: 3vh; }
             
             .game-container > div[style*="flex-wrap: wrap"] {
@@ -378,7 +370,7 @@
                     <div id="chance-val" class="chance-value">--.--%</div>
                 </div>
                 <div class="prob-cat-container">
-                    <div id="turn-counter">6</div>
+                    <div id="turn-counter">8</div>
                     <img id="prob-cat-img" src="귀여운고양이도트4.jpg" class="prob-cat">
                 </div>
             </div>
@@ -412,7 +404,7 @@
 
     const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
 
-    let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 6;
+    let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 8;
     let _0xisTutorial = false, _0xtutorialStep = 0, _0xcurrentTipType = "";
     let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
     let _0xcurrentVolume = 0.15;
@@ -513,7 +505,7 @@
     }
 
     function _0xresGm() {
-        _0xaiCandidates = []; _0xhistory = []; _0xinputStr = ""; _0xturnCount = 6; _0xmeowCount = 0;
+        _0xaiCandidates = []; _0xhistory = []; _0xinputStr = ""; _0xturnCount = 8; _0xmeowCount = 0;
         _0xparadoxMusicTriggered = false; _0xalarmTriggered = false; _0xzeroOverlayTriggered = false;
         if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
         for(let i=0; i<=999; i++){
@@ -882,7 +874,7 @@
             statusEl.style.textShadow = "0 0 1vh var(--red)";
         } else {
             entBtn.disabled = false;
-            statusEl.innerText = "고양이 위치 관측 중...";
+            statusEl.innerText = "양자고양이 위치 관측 중...";
             statusEl.style.animation = "neonShift 10s infinite alternate linear";
         }
     }
