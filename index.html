@@ -278,9 +278,9 @@
         @keyframes slide-h { from { transform: translateX(-150%); } to { transform: translateX(150vw); } }
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
-        /* 모바일 세로 환경 (너비 768px 이하) 대응 */
-        @media screen and (max-width: 768px) {
-            /* 제목 표시 상자 자체를 아예 안보이게 처리 */
+        /* 모바일 및 저해상도 환경 (1000px 이하) 대응 */
+        @media screen and (max-width: 1000px) {
+            /* 1000px 아래부터는 제목 표시 상자 자체를 아예 안보이게 처리 */
             .title-wrapper { display: none !important; }
 
             #version-tag, #setup-footer { display: none !important; }
