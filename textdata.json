@@ -1,4 +1,5 @@
 {
+  "dev_story": [],
   "endings": {
     "paradox": {
       "type": "Training Complete",
@@ -50,7 +51,7 @@
       },
       {
         "title": "성공 시 참고팁 (5/5)",
-        "desc": "당신은 고양이 추적자 자격 시험을 통과하기 위해 <br><span style='color:var(--green); font-weight:bold;'>진심</span>으로 도전을 해보겠다는 건가요?<br> 그런분은 정말 환영입니다. "
+        "desc": "당신은 고양이 추적자 역량을 기르기 위해 <span style='color:var(--green); font-weight:bold;'>진심으로 도전</span>을 해보겠다는 건가요?<br> 그런분은 정말 환영입니다. "
       }
     ]
   },
@@ -69,7 +70,7 @@
       {
         "step": 3,
         "title": "3. 결과 표시 판넬",
-        "desc": "S는 숫자와 위치가 모두 맞는 숫자의 개수이며<br>B는 숫자는 맞지만 위치는 틀린 숫자의 개수입니다."
+        "desc": "<span style='color:var(--green); font-weight:bold;'>S</span>(strike)는 숫자와 자릿수 위치가 모두 맞는 숫자의 개수이며<br><span style='color:var(--cyan); font-weight:bold;'>B</span>(ball)는 숫자가 포함되지만 자릿수 위치는 틀린 숫자의 개수입니다.<br><span style='color:var(--red); font-weight:bold;'>예를들어 1<span style='color:var(--cyan); font-weight:bold;'>2</span><span style='color:var(--green); font-weight:bold;'>3</span>측정했는데 고양이가 있는 좌표가 <span style='color:var(--cyan); font-weight:bold;'>2</span>0<span style='color:var(--green); font-weight:bold;'>3</span>이라면 1S1B가 됩니다.</span>"
       },
       {
         "step": 4,
