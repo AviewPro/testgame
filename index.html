@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Schrödinger Baseball - Single Mode</title>
-    <link rel="icon" href="Neoncat Icon.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <link rel="icon" type="image/jpeg" href="귀여운고양이도트4.jpg">
+    <link rel="shortcut icon" href="귀여운고양이도트4.jpg">
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -13,6 +17,8 @@
         
         html {
             height: 100%;
+            /* 기본 커서를 고양이 발바닥으로 설정 */
+            cursor: url('cursor.png'), auto;
         }
 
         body { 
@@ -32,7 +38,35 @@
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
+            /* 세로 스크롤 허용 설정 추가 */
+            overflow-x: hidden;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            /* 기본 커서 설정 */
+            cursor: url('cursor.png'), auto;
+        }
+
+        /* 클릭(액티브) 시 고양이 발바닥 클릭 모양으로 변경 */
+        body:active {
+            cursor: url('cursor_click.png'), auto;
+        }
+
+        /* 버튼 및 클릭 가능한 요소에도 커서 적용 */
+        button, a, input, [onclick] {
+            cursor: url('cursor.png'), pointer !important;
+        }
+        button:active, a:active, input:active, [onclick]:active {
+            cursor: url('cursor_click.png'), pointer !important;
+        }
+
+        /* 터치 반응성 및 하이라이트 제거 */
+        canvas, button, .game-element {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button {
+            touch-action: manipulation;
         }
 
         #version-tag {
@@ -45,56 +79,46 @@
             letter-spacing: 0.1vh;
             z-index: 500;
         }
+
+        #how-counter {
+            position: fixed;
+            top: 2vh;
+            right: 10vh;
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2vh;
+            background: rgba(0,0,0,0.5);
+            padding: 1vh 2vh;
+            border-radius: 1vh;
+            border: none;
+            z-index: 1000;
+            display: none; 
+        }
         
         #sound-control { position: fixed; right: 2vh; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; gap: 1vh; background: rgba(0,0,0,0.7); padding: 1.5vh 1vh; border-radius: 3vh; border: 0.1vh solid var(--cyan); z-index: 10000; }
-        #sound-control input[type=range] { -webkit-appearance: slider-vertical; width: 0.8vh; height: 15vh; cursor: pointer; }
+        #sound-control input[type=range] { -webkit-appearance: slider-vertical; width: 0.8vh; height: 15vh; cursor: inherit; }
         .sound-icon { font-size: 1.5vh; color: var(--cyan); }
 
-        #test-reset-btn {
-            position: fixed;
-            right: 2vh;
-            top: 2vh;
-            z-index: 10001;
-            background: rgba(255, 75, 43, 0.2);
-            border: 0.2vh solid var(--red);
-            color: var(--red);
-            padding: 1vh 1.5vh;
-            border-radius: 1vh;
-            cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.4vh;
-            font-weight: bold;
-            transition: 0.3s;
-            text-transform: uppercase;
-            display: none;
+        @media screen and (max-width: 768px) {
+            #sound-control { display: none !important; }
         }
-        #test-reset-btn:hover { background: var(--red); color: #000; box-shadow: 0 0 2vh var(--red); }
 
-        #tut-reset-btn {
-            position: fixed;
-            right: 18vh;
-            top: 2vh;
-            z-index: 10001;
-            background: rgba(0, 242, 255, 0.2);
-            border: 0.2vh solid var(--cyan);
-            color: var(--cyan);
-            padding: 1vh 1.5vh;
-            border-radius: 1vh;
-            cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.4vh;
-            font-weight: bold;
-            transition: 0.3s;
-            text-transform: uppercase;
-            display: none;
-        }
-        #tut-reset-btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 2vh var(--cyan); }
-
-        .title-wrapper { position: relative; margin-top: 5vh; margin-bottom: 3vh; z-index: 300; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+        .title-wrapper { position: relative; margin-top: 2vh; margin-bottom: 2vh; z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; flex-shrink: 0; }
         .title-bg { position: absolute; background: rgba(0, 0, 0, 0.7); width: 120%; height: 120%; border-radius: 1.5vh; filter: blur(0.5vh); z-index: -1; }
-        .header-title { font-size: 5vh; font-weight: bold; letter-spacing: 1.2vh; text-shadow: 0 0 2vh currentColor; animation: neonShift 10s infinite alternate linear; text-align: center; margin: 0; padding: 1vh 4vh; }
+        .header-title { font-size: 5vh; font-weight: bold; letter-spacing: 1.2vh; text-shadow: 0 0 2vh currentColor; animation: neonShift 10s infinite alternate linear; text-align: center; margin: 0; padding: 1vh 4vh 0.5vh 4vh; }
+        
+        .header-subtitle { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 3vh; 
+            font-weight: 900;
+            letter-spacing: 0.5vh; 
+            margin-top: 0.5vh; 
+            margin-bottom: 1.5vh; 
+            animation: neonColorShift 10s infinite alternate linear; 
+        }
         
         @keyframes neonShift { 0% { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 2vh var(--cyan); } 100% { color: var(--purple); border-color: var(--purple); box-shadow: 0 0 2vh var(--purple); } }
+        @keyframes neonColorShift { 0% { color: var(--cyan); text-shadow: 0 0 1.5vh var(--cyan); } 100% { color: var(--purple); text-shadow: 0 0 1.5vh var(--purple); } }
         @keyframes neonShiftBg { 0% { background-color: var(--cyan); box-shadow: 0 0 1.5vh var(--cyan); } 100% { background-color: var(--purple); box-shadow: 0 0 1.5vh var(--purple); } }
 
         @keyframes keyholeNeonShift { 
@@ -112,34 +136,41 @@
             padding-bottom: 5vh;
         }
         
-        #setup { width: 50vh; height: auto; padding: 4vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--cyan); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1vh; }
+        #setup { width: 50vh; height: auto; padding: 3vh; border-radius: 2.5vh; background: rgba(10, 10, 15, 0.95); border: 0.4vh solid var(--cyan); z-index: 200; text-align: center; box-sizing: border-box; box-shadow: 0 0 3vh rgba(0, 242, 255, 0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1vh; }
         
         .setup-box-container { position: relative; width: 35vh; margin-bottom: 2vh; }
         .setup-cat { width: 35vh; height: 35vh; border-radius: 4vh; border: 0.4vh solid var(--green); object-fit: cover; animation: neonShift 10s infinite alternate linear; display: block; }
         
-        .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; animation: neonShiftBg 10s infinite alternate linear; margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
-        .setup-btn:hover:not(:disabled) { transform: scale(1.02); filter: brightness(1.2); }
-        .setup-btn:active:not(:disabled) { transform: scale(0.98); }
-        .setup-btn:disabled { background: #333 !important; color: #666 !important; box-shadow: none !important; animation: none !important; cursor: not-allowed; opacity: 0.5; }
+        .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; border: none; animation: neonShiftBg 10s infinite alternate linear; margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
+        .setup-btn:hover { transform: scale(1.02); filter: brightness(1.2); }
+        .setup-btn:active { transform: scale(0.98); }
+        .setup-btn:disabled { opacity: 0.3; cursor: not-allowed !important; animation: none; background: #444; color: #888; box-shadow: none; }
 
-        .tutorial-btn { font-family: 'Bebas Neue', cursive; width: 35vh; background: #444; color: #fff; font-weight: 700; height: 5vh; font-size: 2.5vh; border-radius: 1.5vh; cursor: pointer; border: 0.2vh solid #666; margin-bottom: 1vh; transition: 0.2s; letter-spacing: 0.1vh; }
+        .tutorial-btn { font-family: 'Bebas Neue', cursive; width: 35vh; background: #444; color: #fff; font-weight: 700; height: 5vh; font-size: 2.5vh; border-radius: 1.5vh; border: 0.2vh solid #666; margin-bottom: 1vh; transition: 0.2s; letter-spacing: 0.1vh; }
         .tutorial-btn:hover { background: #555; transform: scale(1.02); }
         .tutorial-btn:active { transform: scale(0.98); }
-        
-        .tutorial-btn.highlight {
-            border: 0.3vh solid var(--green);
-            box-shadow: 0 0 1.5vh var(--green);
-            animation: highlightPulse 2s infinite;
-        }
-        @keyframes highlightPulse {
-            0% { transform: scale(1); box-shadow: 0 0 1vh var(--green); }
-            50% { transform: scale(1.05); box-shadow: 0 0 3vh var(--green); }
-            100% { transform: scale(1); box-shadow: 0 0 1vh var(--green); }
-        }
 
         .new-keyhole { width: 35vh; height: auto; margin-top: 1.5vh; animation: keyholeNeonShift 10s infinite alternate linear; }
 
-        #game-box, #info-panel { width: 50vh; height: 75vh; padding: 2.5vh; border-radius: 2.5vh; box-sizing: border-box; display: flex; flex-direction: column; flex-shrink: 0; margin-bottom: 3vh; }
+        .panels-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3vh;
+            justify-content: center;
+            width: 100%;
+        }
+
+        #game-box, #info-panel { 
+            width: 50vh; 
+            height: 75vh; 
+            padding: 2.5vh; 
+            border-radius: 2.5vh; 
+            box-sizing: border-box; 
+            display: flex; 
+            flex-direction: column; 
+            flex-shrink: 0; 
+            margin-bottom: 3vh; 
+        }
         #game-box { background: rgba(17, 17, 17, 0.9); border: 0.1vh solid #333; position: relative; display: none; }
         #info-panel { background: rgba(10, 10, 15, 0.9); border: 0.1vh solid #333; display: none; position: relative; }
         
@@ -150,10 +181,9 @@
         .log-n { font-family: 'Orbitron', sans-serif; font-size: 3vh; font-weight: 900; display: block; letter-spacing: 0.2vh; color: #fff; }
         .log-sb { font-weight: bold; font-size: 1.8vh; color: var(--purple); margin-top: 0.2vh; }
         .log-out { color: #bc13fe; text-shadow: 0 0 1vh #bc13fe; }
-
-        #log-window.paradox-mode { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(0, 255, 65, 0.05); border: 0.2vh solid var(--green); color: var(--green); overflow: hidden; }
-        .paradox-count { font-family: 'Orbitron', sans-serif; font-size: 6.5vh; font-weight: 900; text-shadow: 0 0 2vh var(--green); margin-bottom: 1vh; }
-        .paradox-msg { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; font-size: 2vh; line-height: 1.4; font-weight: bold; }
+        
+        .training-clear-msg { grid-column: span 2; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 24vh; color: var(--green); font-size: 2.2vh; font-weight: bold; text-align: center; text-shadow: 0 0 1vh var(--green); line-height: 1.6; }
+        .count-highlight { font-size: 4vh; margin-bottom: 0.5vh; display: block; }
 
         .chance-area { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5vh; gap: 2vh; height: 16vh; position: relative; }
         #chance-box { background: rgba(0,0,0,0.6); padding: 1vh; border-radius: 2vh; border: 0.2vh solid var(--purple); text-align: center; flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; transition: border-color 0.5s; z-index: 5; }
@@ -206,13 +236,14 @@
 
         .keypad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1vh; flex-grow: 1; }
         .key-btn, #zero-btn, #obs-btn, #clr-btn, #ent-btn { height: 100%; min-height: 5vh; }
-        button { background: #222; border: none; color: #fff; padding: 1vh 0; border-radius: 1vh; cursor: pointer; font-size: 2.4vh; box-shadow: 0.2vh 0.2vh 0.5vh rgba(0,0,0,0.5); transition: background 0.2s, transform 0.1s, filter 0.2s; }
+        button { background: #222; border: none; color: #fff; padding: 1vh 0; border-radius: 1vh; font-size: 2.4vh; box-shadow: 0.2vh 0.2vh 0.5vh rgba(0,0,0,0.5); transition: background 0.2s, transform 0.1s, filter 0.2s; }
         button:hover:not(:disabled) { filter: brightness(1.3); transform: translateY(-0.2vh); }
         button:active:not(:disabled), button.active { transform: translateY(0.2vh); filter: brightness(0.8); }
-        button:disabled { opacity: 0.1; cursor: not-allowed; }
+        button:disabled { opacity: 0.1; cursor: not-allowed !important; }
         
         .btn-clr { font-family: 'Bebas Neue', cursive; background: var(--cyan) !important; color: #000 !important; font-weight: bold; border: 0.2vh solid rgba(255,255,255,0.4); box-shadow: inset 0 0 1vh rgba(255,255,255,0.5), 0 0 1.5vh var(--cyan); font-size: 2.5vh !important; }
         .btn-obs { font-family: 'Bebas Neue', cursive; background: var(--purple); color: #000; font-weight: bold; border: 0.2vh solid rgba(255,255,255,0.2); box-shadow: inset 0 0 1.5vh rgba(0,0,0,0.5), 0 0 1.5vh var(--purple); font-size: 2.5vh !important; }
+        .btn-obs:disabled { filter: grayscale(1) brightness(0.5) !important; opacity: 0.5 !important; }
         .btn-ent { font-family: 'Bebas Neue', cursive; background: var(--green); color: #000; font-weight: bold; grid-row: span 2; border: 0.2vh solid rgba(0,0,0,0.2); box-shadow: inset 0 0 1.5vh rgba(255,255,255,0.3), 0 0 1.5vh var(--green); font-size: 2.5vh !important; }
         
         .overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
@@ -250,7 +281,7 @@
         .tutorial-msg-box h3 { color: #ccc; font-size: 2.5vh; margin-top: 0; margin-bottom: 0; }
         .tutorial-msg-box p { font-size: 1.8vh; color: #ddd; line-height: 1.6; margin: 0.2vh 0 0.75vh 0; }
         .tutorial-msg-box .esc-guide { font-size: 1.2vh; color: #888; margin-top: 1.5vh; }
-        .tutorial-msg-box button { background: #444; color: #fff; padding: 1vh 3vh; border: 0.1vh solid #666; border-radius: 1vh; font-weight: bold; cursor: pointer; }
+        .tutorial-msg-box button { background: #444; color: #fff; padding: 1vh 3vh; border: 0.1vh solid #666; border-radius: 1vh; font-weight: bold; }
         .tutorial-msg-box button:hover { background: #555; }
         
         .tutorial-msg-box button.btn-cyan { background: var(--cyan); color: #000; border: none; box-shadow: 0 0 1.5vh var(--cyan); }
@@ -283,7 +314,6 @@
             opacity: 1; box-shadow: 0 1vh 3vh rgba(0,0,0,0.8), 0 0 2vh rgba(255,255,255,0.3);
             transform: translateZ(50px);
             animation: floatingCat 4s infinite ease-in-out;
-            cursor: pointer;
             pointer-events: auto;
         }
         
@@ -332,50 +362,58 @@
         @keyframes slide-h { from { transform: translateX(-150%); } to { transform: translateX(150vw); } }
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
+        .paradox-stamp {
+            position: fixed;
+            right: 5vh;
+            top: 5vh;
+            width: 25vh;
+            height: auto;
+            z-index: 100000;
+            filter: grayscale(1) brightness(0.5) sepia(1) hue-rotate(-50deg) saturate(10) contrast(1.5);
+            transform: rotate(15deg);
+            pointer-events: none;
+            opacity: 0.9;
+        }
+
         @media screen and (max-width: 1000px) {
-            .title-wrapper { display: none !important; }
+            .title-wrapper { display: none; }
         }
 
         @media screen and (max-width: 768px) {
-            #sound-control { display: none !important; }
             #setup { width: 90vw; }
+            .panels-wrapper {
+                flex-direction: column !important;
+                align-items: center !important;
+            }
             #game-box, #info-panel { 
-                width: 90vw; 
-                height: auto; 
-                min-height: 80vh; 
+                width: 90vw !important; 
+                height: 75vh !important; 
                 flex-shrink: 0;
             }
             .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; }
             .header-title { font-size: 4vh; letter-spacing: 0.5vh; }
             .panel-center { width: 90vw; padding: 3vh; }
-            
-            .game-container > div[style*="flex-wrap: wrap"] {
-                flex-direction: column !important;
-                align-items: center !important;
-            }
         }
     </style>
 </head>
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
-<div id="version-tag">1.5 Version</div>
+<div id="version-tag">0.7 Version</div>
+<div id="how-counter">0</div>
 <div id="flash-overlay"></div>
-
-<button id="test-reset-btn" onclick="localStorage.setItem('totalStartCount', 0); location.reload();">Reset Counter</button>
-<button id="tut-reset-btn" onclick="localStorage.setItem('tutorialClickCount', 0); location.reload();">Tutorial Reset</button>
 
 <div id="sound-control">
     <span class="sound-icon">♪</span>
-    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.15" oninput="_0x3f2a(this.value)">
+    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.15" oninput="_0vVol(this.value)">
     <span class="sound-icon" style="font-size:1vh;">VOL</span>
 </div>
 
 <div id="credit-overlay">
-    <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img" onclick="_0xplayNyaBgm()"></div>
-    <div id="credit-container" onmousedown="_0x8c21(event)" onmouseup="_0x7d4e(event)">
+    <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img" onclick="_0vNya()"></div>
+    <div id="credit-container" onmousedown="_0vCrD(event)" onmouseup="_0vCrU(event)">
         <div id="credit-content"></div>
     </div>
-    <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;" onclick="_0xplayNyaBgm()"></div>
+    <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;" onclick="_0vNya()"></div>
     <div class="credit-esc">Press ESC to Close</div>
 </div>
 
@@ -383,7 +421,7 @@
     <div class="tutorial-msg-box">
         <h3 id="tut-title">튜토리얼</h3>
         <p id="tut-desc">내용</p>
-        <button id="tut-next-btn" onclick="_0x5a1b()">확인</button>
+        <button id="tut-next-btn" onclick="_0vTNext()">확인</button>
         <div id="tut-esc-guide" class="esc-guide">ESC를 누르면 언제든지 메인화면으로 돌아갑니다.</div>
     </div>
 </div>
@@ -391,15 +429,16 @@
 <div class="title-wrapper">
     <div class="title-bg"></div>
     <div class="header-title">SCHRÖDINGER BASEBALL</div>
+    <div class="header-subtitle">-Train Field-</div>
 </div>
 
 <div class="game-container">
     <div id="setup">
         <div class="setup-box-container">
-            <img src="Neon cat.gif" class="setup-cat">
+            <img src="귀여운고양이도트4.jpg" class="setup-cat">
         </div>
-        <button id="main-tutorial-btn" onclick="_0x1d2e()" class="tutorial-btn">How to Play</button>
-        <button id="main-start-btn" onclick="_0x4c5b()" class="setup-btn">Start Single Mode</button>
+        <button onclick="_0vHTP()" class="tutorial-btn">How to Play</button>
+        <button id="start-btn" onclick="_0vStart()" class="setup-btn" disabled>Start Single Mode</button>
         <img src="Aview.png" class="new-keyhole">
     </div>
     <div id="setup-footer">
@@ -407,19 +446,19 @@
         저작권은 나한테 있나? 잘 모르겠습니다. 그냥 가볍게 즐겨주세요.
     </div>
 
-    <div style="display: flex; flex-wrap: wrap; gap: 3vh; justify-content: center; width: 100%;">
+    <div class="panels-wrapper">
         <div id="game-box">
             <div class="status" id="status">준비 완료</div>
             <div id="log-window"></div>
-            <div class="input-view" id="display">----</div>
+            <div class="input-view" id="display">---</div>
             <div class="keypad" id="main-keypad">
-                <button class="key-btn" data-key="7" onclick="_0x9b8a('7')">7</button><button class="key-btn" data-key="8" onclick="_0x9b8a('8')">8</button><button class="key-btn" data-key="9" onclick="_0x9b8a('9')">9</button>
-                <button id="obs-btn" class="btn-obs" onclick="_0x2f1e()">OBS</button>
-                <button class="key-btn" data-key="4" onclick="_0x9b8a('4')">4</button><button class="key-btn" data-key="5" onclick="_0x9b8a('5')">5</button><button class="key-btn" data-key="6" onclick="_0x9b8a('6')">6</button>
-                <button id="clr-btn" class="btn-clr" onclick="_0x7c3d('CLR')">CLR</button>
-                <button class="key-btn" data-key="1" onclick="_0x9b8a('1')">1</button><button class="key-btn" data-key="2" onclick="_0x9b8a('2')">2</button><button class="key-btn" data-key="3" onclick="_0x9b8a('3')">3</button>
-                <button id="ent-btn" class="btn-ent" onclick="_0x7c3d('ENT')">ENT</button>
-                <button id="zero-btn" data-key="0" style="grid-column: span 3" onclick="_0x9b8a('0')">0</button>
+                <button class="key-btn" data-key="7" onclick="_0vNum('7')">7</button><button class="key-btn" data-key="8" onclick="_0vNum('8')">8</button><button class="key-btn" data-key="9" onclick="_0vNum('9')">9</button>
+                <button id="obs-btn" class="btn-obs" onclick="_0vOBS()">OBS</button>
+                <button class="key-btn" data-key="4" onclick="_0vNum('4')">4</button><button class="key-btn" data-key="5" onclick="_0vNum('5')">5</button><button class="key-btn" data-key="6" onclick="_0vNum('6')">6</button>
+                <button id="clr-btn" class="btn-clr" onclick="_0vCmd('CLR')">CLR</button>
+                <button class="key-btn" data-key="1" onclick="_0vNum('1')">1</button><button class="key-btn" data-key="2" onclick="_0vNum('2')">2</button><button class="key-btn" data-key="3" onclick="_0vNum('3')">3</button>
+                <button id="ent-btn" class="btn-ent" onclick="_0vCmd('ENT')">ENT</button>
+                <button id="zero-btn" data-key="0" style="grid-column: span 3" onclick="_0vNum('0')">0</button>
             </div>
         </div>
 
@@ -431,8 +470,8 @@
                     <div id="chance-val" class="chance-value">--.--%</div>
                 </div>
                 <div class="prob-cat-container">
-                    <div id="turn-counter">7</div>
-                    <img id="prob-cat-img" src="Neon cat.gif" class="prob-cat">
+                    <div id="turn-counter">6</div>
+                    <img id="prob-cat-img" src="귀여운고양이도트4.jpg" class="prob-cat">
                 </div>
             </div>
             <div id="candidates-box">
@@ -449,102 +488,102 @@
     <div id="obs-input-container" class="panel-center">
         <h2 style="font-family: 'Bebas Neue', cursive; color:var(--purple); font-size:7vh; margin-bottom:0; letter-spacing:0.5vh;">Observation</h2>
         <p style="color:var(--purple); font-size:2vh;"><b>양자고양이의 좌표를 관측하세요!</b></p>
-        <input type="tel" id="obs-num" maxlength="4" autocomplete="off"
+        <input type="tel" id="obs-num" maxlength="3" autocomplete="off"
                oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                style="background:#000; color:#fff; font-family: 'Orbitron', sans-serif; font-size: 5vh; text-align:center; width:35vh; margin:4vh 0; border:0.3vh solid var(--purple); border-radius:1.5vh; letter-spacing:1.5vh; text-shadow: 0 0 1vh var(--purple);">
-        <button onclick="_0x6f5a()" style="padding:1.5vh 8vh; background:var(--purple); color:#fff; font-weight:bold; font-size:4vh; border-radius:1.5vh; letter-spacing:0.2vh;">관측 실행</button>
+        <button onclick="_0vDoObs()" style="padding:1.5vh 8vh; background:var(--purple); color:#fff; font-weight:bold; font-size:4vh; border-radius:1.5vh; letter-spacing:0.2vh;">관측 실행</button>
     </div>
 </div>
 
 <script>
-    let _0xtextData = null;
+    window.oncontextmenu = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    };
+
+    // 모바일 스크롤 차단 로직 제거됨
+
+    let _0vTData = null;
     fetch('textdata.json')
         .then(response => response.json())
-        .then(data => { _0xtextData = data; _0xcheckTutorialStatus(); })
+        .then(data => { _0vTData = data; })
         .catch(error => console.error('Error loading textdata:', error));
 
-    const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
+    const _0vFb = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
 
-    let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 7;
-    let _0xtotalStartCount = parseInt(localStorage.getItem('totalStartCount')) || 0; 
-    let _0xtutorialClickCount = parseInt(localStorage.getItem('tutorialClickCount')) || 0;
-    let _0xisTutorial = false, _0xtutorialStep = 0, _0xcurrentTipType = "";
-    let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
-    let _0xcurrentVolume = 0.15;
-    let _0xfailLoopInterval = null; 
-    let _0xsuccessLoopInterval = null; 
-    let _0xmeowLoopInterval = null; 
-    let _0xmeowCount = 0; 
+    let _0vAiC = [], _0vHist = [], _0vInS = "", _0vTC = 6;
+    let _0vIsTut = false, _0vTStep = 0, _0vTType = "";
+    let _0vPMTrig = false, _0vAlmTrig = false, _0vZeroTrig = false;
+    let _0vCurVol = 0.15;
+    let _0vFInt = null; 
+    let _0vSInt = null; 
+    let _0vMInt = null; 
+    let _0vMCnt = 0; 
+    let _0vPCnt = 0;
     
-    let _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
-    _0xbgm.loop = true;
-    _0xbgm.playbackRate = 2.0;
-    const _0xclickSfx = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
-    const _0xspecialClickSfx = new Audio("Click.mp3");
-    const _0xmeowSfx = new Audio("moeeza3-kitten-cat-meow-437244.mp3");
-    const _0xemergencySfx = new Audio("비상알람.mp3");
-    const _0xfailSfx = new Audio("띠용.mp3");
-    const _0xsuccessSfx = new Audio("고양이 코골이_[cut_5sec].mp3");
-    const _0xnyaBgmSfx = new Audio("냥이 브금.mp3");
-    _0xnyaBgmSfx.loop = true; 
-    const _0xlightsOffSfx = new Audio("소등.mp3");
+    let _0vHowCnt = parseInt(localStorage.getItem('sb_how_count')) || 0;
 
-    const _0xoriginalBodyContent = document.body.innerHTML;
-    let _0xpoisonInterval = null;
+    let _0vBgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
+    _0vBgm.loop = true;
+    _0vBgm.playbackRate = 2.0;
+    const _0vCSfx = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+    const _0vSSfx = new Audio("Click.mp3");
+    const _0vMSfx = new Audio("moeeza3-kitten-cat-meow-437244.mp3");
+    const _0vESfx = new Audio("비상알람.mp3");
+    const _0vFSfx = new Audio("띠용.mp3");
+    const _0vGSSfx = new Audio("고양이 코골이_[cut_5sec].mp3");
+    const _0vNSfx = new Audio("냥이 브금.mp3");
+    _0vNSfx.loop = true; 
+    const _0vLSfx = new Audio("소등.mp3");
+    const _0vDSfx = new Audio("사망음.mp3");
 
-    function _0xcheckTutorialStatus() {
-        const startBtn = document.getElementById('main-start-btn');
-        const tutorialBtn = document.getElementById('main-tutorial-btn');
-        if(!startBtn || !tutorialBtn) return;
-        if(_0xtutorialClickCount <= 0) {
-            startBtn.disabled = true;
-            tutorialBtn.classList.add('highlight');
-        } else {
-            startBtn.disabled = false;
-            tutorialBtn.classList.remove('highlight');
-        }
+    const _0vBodyOri = document.body.innerHTML;
+    let _0vPoisInt = null;
+
+    window.onload = function() {
+        _0vVol(0.15);
+        const counterEl = document.getElementById('how-counter');
+        const startBtn = document.getElementById('start-btn');
+        if(counterEl) counterEl.innerText = _0vHowCnt;
+        if(startBtn && _0vHowCnt >= 1) startBtn.disabled = false;
+    };
+
+    function _0vVol(val) { 
+        _0vCurVol = parseFloat(val);
+        _0vBgm.volume = _0vCurVol; 
+        _0vMSfx.volume = Math.min(1.0, _0vCurVol * 1.17); 
+        _0vESfx.volume = Math.min(1.0, _0vCurVol * 2.56);
+        _0vFSfx.volume = Math.min(1.0, _0vCurVol * 3.0); 
+        _0vGSSfx.volume = _0vCurVol;
+        _0vSSfx.volume = Math.min(1.0, _0vCurVol * 3.0);
+        _0vNSfx.volume = _0vCurVol * 0.6; 
+        _0vLSfx.volume = Math.min(1.0, _0vCurVol * 1.5);
+        _0vDSfx.volume = Math.min(1.0, _0vCurVol * 1.5);
     }
 
-    function _0x3f2a(val) { 
-        _0xcurrentVolume = parseFloat(val);
-        if (_0xbgm.src.includes("SoundHelix-Song-8.mp3")) {
-            _0xbgm.volume = Math.min(1.0, _0xcurrentVolume * 0.5616);
-        } else {
-            _0xbgm.volume = _0xcurrentVolume; 
-        }
-        _0xmeowSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.17); 
-        _0xemergencySfx.volume = Math.min(1.0, _0xcurrentVolume * 2.56);
-        _0xfailSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0); 
-        _0xsuccessSfx.volume = _0xcurrentVolume;
-        _0xspecialClickSfx.volume = Math.min(1.0, _0xcurrentVolume * 3.0);
-        _0xnyaBgmSfx.volume = _0xcurrentVolume * 0.6;
-        _0xlightsOffSfx.volume = Math.min(1.0, _0xcurrentVolume * 1.5);
-    }
-    
-    _0x3f2a(0.15);
-
-    function _0xplayClick() { 
-        const sc = _0xclickSfx.cloneNode(); 
-        sc.volume = Math.min(1.0, _0xcurrentVolume * 8.0); 
+    function _0vPlayC() { 
+        const sc = _0vCSfx.cloneNode(); 
+        sc.volume = Math.min(1.0, _0vCurVol * 8.0); 
         sc.play().catch(e=>{}); 
-        if(_0xbgm.paused) _0xbgm.play().catch(e=>{}); 
+        if(_0vBgm.paused) _0vBgm.play().catch(e=>{}); 
     }
 
-    function _0xplaySpecialClick() { 
-        const sc = _0xspecialClickSfx.cloneNode(); 
-        sc.volume = Math.min(1.0, _0xcurrentVolume * 3.0);
+    function _0vPlayS() { 
+        const sc = _0vSSfx.cloneNode(); 
+        sc.volume = Math.min(1.0, _0vCurVol * 3.0);
         sc.play().catch(e=>{}); 
     }
 
-    function _0xplayNyaBgm() {
-        if(_0xbgm) _0xbgm.pause();
-        _0xbgm = _0xnyaBgmSfx;
-        _0xbgm.volume = _0xcurrentVolume * 0.6;
-        _0xbgm.currentTime = 0;
-        _0xbgm.play().catch(e=>{});
+    function _0vNya() {
+        if(_0vBgm) _0vBgm.pause();
+        _0vBgm = _0vNSfx;
+        _0vBgm.volume = _0vCurVol * 0.6; 
+        _0vBgm.currentTime = 0;
+        _0vBgm.play().catch(e=>{});
     }
 
-    function _0xsimBtn(btnId) {
+    function _0vSimB(btnId) {
         const btn = document.getElementById(btnId);
         if (btn) {
             btn.classList.add('active');
@@ -552,123 +591,137 @@
         }
     }
 
-    function _0x7c3d(type) {
+    function _0vCmd(type) {
         if(type === 'CLR') {
-            _0xsimBtn('clr-btn');
-            _0xplaySpecialClick();
-            _0xclrIn(true);
+            _0vSimB('clr-btn');
+            _0vPlayS();
+            _0vClrIn(true);
         }
         if(type === 'ENT') {
-            _0xsimBtn('ent-btn');
-            _0xplaySpecialClick();
-            _0xentCli(true);
+            _0vSimB('ent-btn');
+            _0vPlayS();
+            _0vEntCli(true);
         }
     }
 
-    function _0x4c5b() {
-        _0xplayClick();
-        _0xtotalStartCount++; 
-        localStorage.setItem('totalStartCount', _0xtotalStartCount);
-        if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
-        if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
-        if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
+    function _0vStart() {
+        if(_0vHowCnt < 1) return;
+        _0vPlayC();
+        _0vPCnt++;
+        if(_0vFInt) { clearInterval(_0vFInt); _0vFInt = null; }
+        if(_0vSInt) { clearInterval(_0vSInt); _0vSInt = null; }
+        if(_0vMInt) { clearInterval(_0vMInt); _0vMInt = null; }
         document.getElementById('setup').style.display = 'none';
         document.getElementById('setup-footer').style.display = 'none';
         document.getElementById('game-box').style.display = 'flex';
         document.getElementById('info-panel').style.display = 'flex';
-        _0xresGm();
+        document.getElementById('how-counter').style.display = 'none';
+        _0vResGm();
     }
 
-    function _0xresGm() {
-        _0xaiCandidates = []; _0xhistory = []; _0xinputStr = ""; _0xturnCount = 7; _0xmeowCount = 0;
-        _0xparadoxMusicTriggered = false; _0xalarmTriggered = false; _0xzeroOverlayTriggered = false;
-        const logWin = document.getElementById('log-window');
-        logWin.classList.remove('paradox-mode');
-        logWin.innerHTML = "";
-        if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
-        for(let i=0; i<=9999; i++){
-            let n = i.toString().padStart(4, '0');
-            if(new Set(n).size === 4) _0xaiCandidates.push(n);
+    function _0vResGm() {
+        _0vAiC = []; _0vHist = []; _0vInS = ""; _0vTC = 6; _0vMCnt = 0;
+        _0vPMTrig = false; _0vAlmTrig = false; _0vZeroTrig = false;
+        if(_0vPoisInt) { clearInterval(_0vPoisInt); _0vPoisInt = null; }
+        for(let i=0; i<=999; i++){
+            let n = i.toString().padStart(3, '0');
+            if(new Set(n).size === 3) _0vAiC.push(n);
         }
-        _0xupUI();
+        _0vUpUI();
     }
 
-    function _0xresDir() {
-        _0xplayClick();
-        _0xtotalStartCount++; 
-        localStorage.setItem('totalStartCount', _0xtotalStartCount);
-        if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
-        if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
-        if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
-        _0xbgm.pause();
-        _0xbgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
-        _0xbgm.loop = true;
-        _0xbgm.playbackRate = 2.0;
-        document.body.innerHTML = _0xoriginalBodyContent;
-        _0x3f2a(document.getElementById('volume-slider')?.value || 0.15);
-        _0x4c5b();
+    function _0vResDir() {
+        _0vPlayC();
+        _0vPCnt++;
+        if(_0vFInt) { clearInterval(_0vFInt); _0vFInt = null; }
+        if(_0vSInt) { clearInterval(_0vSInt); _0vSInt = null; }
+        if(_0vMInt) { clearInterval(_0vMInt); _0vMInt = null; }
+        
+        if(_0vBgm.src.includes("SoundHelix") || _0vBgm.src.includes("nya")) {
+            _0vBgm.pause();
+            _0vBgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
+            _0vBgm.loop = true;
+            _0vBgm.playbackRate = 2.0;
+        }
+        
+        const oldPlayCount = _0vPCnt;
+        document.body.innerHTML = _0vBodyOri;
+        _0vPCnt = oldPlayCount;
+        
+        _0vVol(document.getElementById('volume-slider')?.value || 0.15);
+        const counterEl = document.getElementById('how-counter');
+        const startBtn = document.getElementById('start-btn');
+        if(counterEl) counterEl.innerText = _0vHowCnt;
+        if(startBtn && _0vHowCnt >= 1) startBtn.disabled = false;
+        _0vStart();
     }
 
-    function _0x1d2e() {
-        if(!_0xtextData) return;
-        _0xtutorialClickCount++;
-        localStorage.setItem('tutorialClickCount', _0xtutorialClickCount);
-        _0xisTutorial = true; _0xcurrentTipType = ""; _0xtutorialStep = 1;
-        _0x4c5b();
+    function _0vHTP() {
+        _0vHowCnt++;
+        localStorage.setItem('sb_how_count', _0vHowCnt);
+        const counterEl = document.getElementById('how-counter');
+        if(counterEl) counterEl.innerText = _0vHowCnt;
+        const startBtn = document.getElementById('start-btn');
+        if(_0vHowCnt >= 1 && startBtn) {
+            startBtn.disabled = false;
+        }
+        if(!_0vTData) return;
+        _0vIsTut = true; _0vTType = ""; _0vTStep = 1;
+        _0vStart();
         document.getElementById('obs-btn').disabled = true;
         document.getElementById('tutorial-overlay').style.display = 'flex';
-        _0xappTut();
+        _0vAppTut();
     }
 
     window.showTips = function(type) {
-        if(!_0xtextData) return;
-        _0xplayClick();
-        _0xisTutorial = false;
-        _0xcurrentTipType = type;
-        _0xtutorialStep = 0;
+        if(!_0vTData) return;
+        _0vPlayC();
+        _0vIsTut = false;
+        _0vTType = type;
+        _0vTStep = 0;
         const tutOverlay = document.getElementById('tutorial-overlay');
         if (tutOverlay) {
             tutOverlay.style.display = 'flex';
             document.getElementById('tut-esc-guide').style.display = 'none';
-            _0xappTip();
+            _0vAppTip();
         }
     };
 
-    function _0x5a1b() {
-        _0xplayClick();
-        if (_0xcurrentTipType) {
-            _0xtutorialStep++;
-            if (_0xtutorialStep >= _0xtextData.tips[_0xcurrentTipType].length) {
+    function _0vTNext() {
+        _0vPlayC();
+        if (_0vTType) {
+            _0vTStep++;
+            if (_0vTStep >= _0vTData.tips[_0vTType].length) {
                 document.getElementById('tutorial-overlay').style.display = 'none';
                 return;
             }
-            _0xappTip();
+            _0vAppTip();
         } else {
-            _0xnxtTut();
+            _0vNxtTut();
         }
     }
 
-    function _0xappTip() {
+    function _0vAppTip() {
         const title = document.getElementById('tut-title');
         const desc = document.getElementById('tut-desc');
         if (title && desc) {
-            const tip = _0xtextData.tips[_0xcurrentTipType][_0xtutorialStep];
+            const tip = _0vTData.tips[_0vTType][_0vTStep];
             title.innerText = tip.title;
             desc.innerHTML = tip.desc.replace(/\n/g, "<br>"); 
         }
     }
 
-    function _0xnxtTut() {
-        if (_0xtutorialStep === 1 || _0xtutorialStep === 2) {
+    function _0vNxtTut() {
+        if (_0vTStep === 1 || _0vTStep === 2) {
             document.getElementById('tutorial-overlay').style.display = 'none';
             return;
         }
-        _0xtutorialStep++;
-        if (_0xtutorialStep > 6) { location.reload(); return; }
-        _0xappTut();
+        _0vTStep++;
+        if (_0vTStep > 6) { location.reload(); return; }
+        _0vAppTut();
     }
 
-    function _0xappTut() {
+    function _0vAppTut() {
         const title = document.getElementById('tut-title');
         const desc = document.getElementById('tut-desc');
         const nextBtn = document.getElementById('tut-next-btn');
@@ -681,139 +734,138 @@
         turnCounter.classList.remove('tutorial-highlight-turn');
         nextBtn.classList.remove('btn-cyan');
 
-        const stepData = _0xtextData.tutorial.steps.find(s => s.step === _0xtutorialStep);
+        const stepData = _0vTData.tutorial.steps.find(s => s.step === _0vTStep);
         if (stepData) {
             title.innerText = stepData.title;
             desc.innerHTML = stepData.desc;
         }
 
-        if (_0xtutorialStep === 1) {
+        if (_0vTStep === 1) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.querySelectorAll('.key-btn, #zero-btn, #display').forEach(el => el.classList.add('tutorial-highlight'));
-        } else if (_0xtutorialStep === 2) {
+        } else if (_0vTStep === 2) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.getElementById('ent-btn').classList.add('tutorial-highlight');
             document.getElementById('clr-btn').classList.add('tutorial-highlight');
-        } else if (_0xtutorialStep === 3) {
+        } else if (_0vTStep === 3) {
             document.getElementById('game-box').classList.remove('tutorial-dim');
             const firstLog = document.querySelector('.log-item');
             if(firstLog) firstLog.classList.add('tutorial-highlight');
-        } else if (_0xtutorialStep === 4) {
+        } else if (_0vTStep === 4) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             document.getElementById('candidates-box').classList.add('tutorial-highlight');
-        } else if (_0xtutorialStep === 5) {
+        } else if (_0vTStep === 5) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             chanceBox.classList.add('tutorial-highlight');
             document.getElementById('game-box').classList.remove('tutorial-dim');
             document.getElementById('obs-btn').classList.add('tutorial-highlight');
-        } else if (_0xtutorialStep === 6) {
+        } else if (_0vTStep === 6) {
             document.getElementById('info-panel').classList.remove('tutorial-dim');
             turnCounter.classList.add('tutorial-highlight-turn');
             nextBtn.classList.add('btn-cyan');
-            nextBtn.innerText = _0xtextData.tutorial.button_finish;
+            nextBtn.innerText = _0vTData.tutorial.button_finish;
         }
     }
 
     window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            if (document.getElementById('credit-overlay')?.style.display === 'flex') { _0xclsCr(); return; }
-            if (_0xisTutorial) {
-                if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
-                location.reload();
-            }
-            if (document.getElementById('obs-overlay')?.style.display === 'flex') { document.getElementById('obs-overlay').style.display = 'none'; }
-            return;
-        }
         if (e.key === 'Shift') {
-            if (document.querySelector('button[onclick*="_0xresDir()"]')) {
-                _0xresDir();
+            const restartBtn = document.querySelector('button[onclick="_0vResDir()"]');
+            if (restartBtn) {
+                _0vResDir();
                 return;
             }
         }
+        if (e.key === 'Escape') {
+            if (document.getElementById('credit-overlay')?.style.display === 'flex') { _0vClsCr(); return; }
+            if (_0vIsTut) location.reload();
+            if (document.getElementById('obs-overlay')?.style.display === 'flex') { document.getElementById('obs-overlay').style.display = 'none'; }
+            return;
+        }
         if (document.getElementById('obs-overlay')?.style.display === 'flex') {
-            if (e.key === 'Enter') _0x6f5a(); return;
+            if (e.key === 'Enter') _0vDoObs(); return;
+        }
+        if (e.key === '-' || e.key === '_') {
+            if (document.getElementById('game-box').style.display === 'flex') {
+                _0vOBS();
+            }
+            return;
         }
         if (e.key === 'Enter') {
             e.preventDefault();
-            if (document.getElementById('game-box').style.display === 'flex') {
-                _0x7c3d('ENT');
+            if (document.getElementById('game-box').style.display === 'flex' && _0vTC > 0) {
+                _0vCmd('ENT');
             }
             return;
         }
-        if (e.key === '-') {
-            if (!document.getElementById('obs-btn').disabled) {
-                _0x2f1e();
-            }
-            return;
-        }
-        if (e.key === '0' || (e.key >= '1' && e.key <= '9')) {
+        if (e.key >= '0' && e.key <= '9') {
             const btn = document.querySelector(e.key === '0' ? '#zero-btn' : `.key-btn[data-key="${e.key}"]`);
             if(btn) { btn.classList.add('active'); setTimeout(() => btn.classList.remove('active'), 100); }
-            _0x9b8a(e.key);
+            _0vNum(e.key);
             return;
         }
         if (e.key === 'Delete' || e.key === 'Backspace') {
-            _0x7c3d('CLR');
+            _0vCmd('CLR');
             return;
         }
     });
 
-    function _0x9b8a(n) { 
-        _0xplayClick(); 
-        if(_0xinputStr.length < 4 && !_0xinputStr.includes(n)) { 
-            _0xinputStr += n; 
-            document.getElementById('display').innerText = _0xinputStr; 
-            if (_0xisTutorial && _0xtutorialStep === 1 && _0xinputStr.length === 4) {
-                setTimeout(() => { _0xtutorialStep = 2; document.getElementById('tutorial-overlay').style.display = 'flex'; _0xappTut(); }, 300);
+    function _0vNum(n) { 
+        _0vPlayC(); 
+        if(_0vInS.length < 3 && !_0vInS.includes(n)) { 
+            _0vInS += n; 
+            document.getElementById('display').innerText = _0vInS; 
+            if (_0vIsTut && _0vTStep === 1 && _0vInS.length === 3) {
+                setTimeout(() => { _0vTStep = 2; document.getElementById('tutorial-overlay').style.display = 'flex'; _0vAppTut(); }, 300);
             }
         } 
     }
 
-    function _0xclrIn(isSpecial) { if(!isSpecial) _0xplayClick(); _0xinputStr = ""; document.getElementById('display').innerText = "----"; }
+    function _0vClrIn(isSpecial) { if(!isSpecial) _0vPlayC(); _0vInS = ""; document.getElementById('display').innerText = "---"; }
     
-    function _0xentCli(isSpecial) {
-        if(_0xinputStr.length === 4 && _0xturnCount > 0) {
-            if(!isSpecial) _0xplayClick();
-            const res = _0xaiRes(_0xinputStr);
-            _0xhistory.push({ n: _0xinputStr, s: res.s, b: res.b });
-            _0xturnCount--; _0xclrIn(true); _0xupUI();
-            if (_0xisTutorial && _0xtutorialStep === 2) {
-                setTimeout(() => { _0xtutorialStep = 3; document.getElementById('tutorial-overlay').style.display = 'flex'; _0xappTut(); }, 500);
+    function _0vEntCli(isSpecial) {
+        if(_0vInS.length === 3 && _0vTC > 0) {
+            if(!isSpecial) _0vPlayC();
+            const res = _0vAiR(_0vInS);
+            _0vHist.push({ n: _0vInS, s: res.s, b: res.b });
+            _0vTC--; _0vClrIn(true); _0vUpUI();
+            if (_0vIsTut && _0vTStep === 2) {
+                setTimeout(() => { _0vTStep = 3; document.getElementById('tutorial-overlay').style.display = 'flex'; _0vAppTut(); }, 500);
             }
         }
     }
 
-    function _0xaiRes(guess) {
+    function _0vAiR(guess) {
         const outcomes = {};
-        _0xaiCandidates.forEach(cand => {
+        _0vAiC.forEach(cand => {
             let s=0, b=0;
-            for(let i=0; i<4; i++){ if(guess[i] === cand[i]) s++; else if(cand.includes(guess[i])) b++; }
+            for(let i=0; i<3; i++){ if(guess[i] === cand[i]) s++; else if(cand.includes(guess[i])) b++; }
             const key = `${s}S${b}B`;
             if(!outcomes[key]) outcomes[key] = [];
             outcomes[key].push(cand);
         });
         let bestKey = ""; let maxCount = -1;
         for(let key in outcomes) {
-            if(key === "4S0B") continue; 
+            if(key === "3S0B") continue; 
             if(outcomes[key].length > maxCount) { maxCount = outcomes[key].length; bestKey = key; }
         }
-        if(!bestKey || _0xaiCandidates.length <= 1) {
-            const fakeS = Math.floor(Math.random() * 3);
-            const fakeB = Math.floor(Math.random() * 3);
+        if(!bestKey || _0vAiC.length <= 1) {
+            const fakeS = Math.floor(Math.random() * 2);
+            const fakeB = Math.floor(Math.random() * 2);
             bestKey = `${fakeS}S${fakeB}B`;
-            _0xaiCandidates = _0xaiCandidates.filter(c => c !== guess); 
-        } else { _0xaiCandidates = outcomes[bestKey]; }
+            _0vAiC = _0vAiC.filter(c => c !== guess); 
+        } else { _0vAiC = outcomes[bestKey]; }
         const match = bestKey.match(/(\d)S(\d)B/);
         return { s: parseInt(match[1]), b: parseInt(match[2]) };
     }
 
-    function _0xstPsL() {
-        if(_0xpoisonInterval) return;
-        const targetText = "Cat is Poisoned in the Box";
+    function _0vStPL() {
+        if(_0vPoisInt) return;
+        const targetText = "Your Training is Completed";
         const el = document.getElementById('chance-val');
         let index = targetText.length;
         let isDeleting = true;
-        _0xpoisonInterval = setInterval(() => {
+
+        _0vPoisInt = setInterval(() => {
             if (isDeleting) {
                 el.innerHTML = `<span class="poison-text" style="color:var(--green); text-shadow: 0 0 1.5vh var(--green);">${targetText.substring(0, index)}</span>`;
                 index--;
@@ -826,10 +878,10 @@
         }, 150);
     }
 
-    function _0xupUI() {
+    function _0vUpUI() {
         const turnCounter = document.getElementById('turn-counter');
-        turnCounter.innerText = _0xturnCount;
-        const prob = _0xaiCandidates.length === 0 ? 0 : (1 / _0xaiCandidates.length * 100);
+        turnCounter.innerText = _0vTC;
+        const prob = _0vAiC.length === 0 ? 0 : (1 / _0vAiC.length * 100);
         const chanceValEl = document.getElementById('chance-val');
         const chanceTitleEl = document.getElementById('chance-title');
         const chanceBoxEl = document.getElementById('chance-box');
@@ -837,76 +889,92 @@
         const deadX = document.getElementById('dead-x');
         const flashOverlay = document.getElementById('flash-overlay');
         const paradoxOverlay = document.getElementById('paradox-cat-overlay');
-        const logWin = document.getElementById('log-window');
+        const logWindow = document.getElementById('log-window');
         const obsBtn = document.getElementById('obs-btn');
-        if(_0xaiCandidates.length === 0) {
-            logWin.classList.add('paradox-mode');
-            logWin.innerHTML = `
-                <div class="paradox-count">${_0xtotalStartCount}회</div>
-                <div class="paradox-msg">시도 끝에 패러독스를 찾으셨습니다.<br>축하합니다!</div>
-            `;
-            if(!_0xparadoxMusicTriggered) {
-                _0xbgm.pause();
+        
+        if(_0vHist.length < 4) {
+            obsBtn.disabled = true;
+        } else {
+            obsBtn.disabled = false;
+        }
+
+        if(_0vAiC.length === 0) {
+            if(!_0vZeroTrig) {
+                if(_0vBgm) _0vBgm.pause();
+                _0vLSfx.currentTime = 0;
+                _0vLSfx.play().catch(e=>{});
+                
                 setTimeout(() => {
-                    _0xbgm = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3");
-                    _0xbgm.loop = true;
-                    _0xbgm.volume = Math.min(1.0, _0xcurrentVolume * 0.5616);
-                    _0xbgm.play().catch(e => {});
-                }, 4000);
-                _0xparadoxMusicTriggered = true;
-            }
-            if(!_0xzeroOverlayTriggered) {
-                _0xlightsOffSfx.currentTime = 0;
-                _0xlightsOffSfx.play().catch(e=>{});
-                flashOverlay.style.transition = 'none';
+                    _0vDSfx.currentTime = 0;
+                    _0vDSfx.play().catch(e=>{});
+                }, 200);
+
+                flashOverlay.style.display = 'block';
+                flashOverlay.style.transition = 'none'; 
                 flashOverlay.style.background = '#000';
                 flashOverlay.style.opacity = '1';
+                
                 setTimeout(() => { 
-                    flashOverlay.style.transition = 'opacity 1.5s ease';
+                    flashOverlay.style.transition = 'opacity 3.0s ease-in-out'; 
                     flashOverlay.style.opacity = '0'; 
-                }, 3000);
+                    setTimeout(() => { flashOverlay.style.display = 'none'; }, 3000);
+                }, 2000); 
+                
                 if(paradoxOverlay) {
                     paradoxOverlay.style.display = 'block';
                     paradoxOverlay.style.opacity = '1';
                     paradoxOverlay.style.animation = "fadeOutLong 16s forwards";
                 }
-                _0xzeroOverlayTriggered = true;
-                _0xstPsL();
+
+                _0vZeroTrig = true;
+                _0vStPL();
             }
             chanceTitleEl.style.display = 'none';
             chanceBoxEl.style.borderColor = 'var(--green)';
             catImg.style.opacity = '0'; catImg.style.filter = 'blur(2vh)';
             turnCounter.style.color = 'var(--green)'; turnCounter.style.textShadow = '0 0 2vh var(--green)';
             deadX.style.display = 'block'; 
+            
+            logWindow.innerHTML = `
+                <div class="training-clear-msg">
+                    <span class="count-highlight">${_0vPCnt}회 만에</span>
+                    훈련을 통과하셨습니다
+                </div>`;
         } else {
             deadX.style.display = 'none';
             if(paradoxOverlay) { paradoxOverlay.style.display = 'none'; paradoxOverlay.style.animation = 'none'; }
-            if(_0xpoisonInterval) { clearInterval(_0xpoisonInterval); _0xpoisonInterval = null; }
+            if(_0vPoisInt) { clearInterval(_0vPoisInt); _0vPoisInt = null; }
+
             let currentColor = 'var(--purple)';
             let currentShadow = '0 0 2.5vh var(--purple)';
+
             if (prob === 100) {
                 currentColor = 'var(--red)';
                 currentShadow = '0 0 2.5vh var(--red)';
-                if(!_0xalarmTriggered) {
-                    _0xemergencySfx.play().catch(e=>{});
+                if(!_0vAlmTrig) {
+                    _0vESfx.play().catch(e=>{});
+                    flashOverlay.style.display = 'block';
                     flashOverlay.style.transition = 'opacity 1.5s ease';
                     flashOverlay.style.background = 'radial-gradient(circle, rgba(255, 0, 0, 0) 70%, rgba(255, 0, 0, 0.4) 100%)';
                     flashOverlay.style.opacity = '1';
-                    setTimeout(() => { flashOverlay.style.opacity = '0'; }, 1500);
-                    _0xalarmTriggered = true;
+                    setTimeout(() => { flashOverlay.style.opacity = '0'; setTimeout(() => { flashOverlay.style.display = 'none'; }, 1500); }, 1500);
+                    _0vAlmTrig = true;
                 }
             } else if (prob >= 10 && prob <= 51) {
                 currentColor = 'var(--cyan)';
                 currentShadow = '0 0 2.5vh var(--cyan)';
-                _0xalarmTriggered = false;
+                _0vAlmTrig = false;
             } else {
-                _0xalarmTriggered = false;
+                _0vAlmTrig = false;
             }
+
             chanceValEl.style.color = currentColor;
             chanceValEl.style.textShadow = currentShadow;
+            
             chanceTitleEl.style.display = 'block';
             chanceTitleEl.style.color = currentColor;
             chanceTitleEl.style.textShadow = currentShadow;
+            
             chanceValEl.innerText = prob.toFixed(2) + "%";
             chanceBoxEl.style.borderColor = currentColor;
             turnCounter.style.color = currentColor;
@@ -915,42 +983,45 @@
             catImg.style.display = 'block'; catImg.style.opacity = opacityAmount;
             catImg.style.filter = `blur(${blurAmount}vh)`; 
             catImg.style.borderColor = currentColor;
-            logWin.innerHTML = _0xhistory.map(h => {
+            
+            logWindow.innerHTML = _0vHist.map(h => {
                 const resultText = (h.s === 0 && h.b === 0) ? `<span class="log-out">OUT</span>` : `${h.s}S / ${h.b}B`;
                 return `<div class="log-item"><span class="log-n">${h.n}</span><span class="log-sb">${resultText}</span></div>`;
             }).join('');
-            logWin.scrollTop = logWin.scrollHeight;
         }
-        const slice = [..._0xaiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
+        
+        logWindow.scrollTop = logWindow.scrollHeight;
+
+        const slice = [..._0vAiC].sort(() => 0.5 - Math.random()).slice(0, 100);
+        
         let pixelateStrength = 0;
-        if (prob >= 25) { pixelateStrength = 0; }
-        else if (prob >= 5) { pixelateStrength = 0.05; }
-        else if (prob >= 1) { pixelateStrength = 0.15; }
+        if (prob >= 25) { pixelateStrength = 0; } 
+        else if (prob >= 5) { pixelateStrength = 0.05; } 
+        else if (prob >= 1) { pixelateStrength = 0.15; } 
         else { pixelateStrength = 0.25; }
+
         document.getElementById('cand-list').innerHTML = slice.map(c => `<div class="cand-item" style="filter: blur(${pixelateStrength}vh) contrast(180%);">${c}</div>`).join('');
+
         const statusEl = document.getElementById('status');
         const entBtn = document.getElementById('ent-btn');
-        if(_0xturnCount <= 0) {
+        if(_0vTC <= 0) {
             entBtn.disabled = true;
             statusEl.innerText = "측정 완료 (관측만 가능)";
             statusEl.style.animation = "none";
             statusEl.style.color = "var(--red)";
             statusEl.style.textShadow = "0 0 1vh var(--red)";
-            obsBtn.disabled = false;
         } else {
             entBtn.disabled = false;
-            statusEl.innerText = "양자고양이 위치 관측 중...";
+            statusEl.innerText = "고양이 위치 관측 중...";
             statusEl.style.animation = "neonShift 10s infinite alternate linear";
-            if (_0xturnCount > 3) { obsBtn.disabled = true; }
-            else { obsBtn.disabled = false; }
         }
     }
 
-    function _0xrndPrCl() {
+    function _0vRPfC() {
         const field = document.getElementById('quantum-field');
         field.innerHTML = "";
         const neons = ['var(--cyan)', 'var(--purple)', 'var(--green)', 'var(--red)'];
-        const list = _0xaiCandidates.length > 0 ? _0xaiCandidates : ["ERROR", "VOID", "0000"];
+        const list = _0vAiC.length > 0 ? _0vAiC : ["ERR", "VOID", "000"];
         list.slice(0, 80).forEach(num => {
             const span = document.createElement('span');
             span.className = 'bg-candidate';
@@ -964,67 +1035,54 @@
         });
     }
 
-    function _0x2f1e() {
-        if(_0xisTutorial || !_0xtextData) return;
-        _0xplaySpecialClick();
-        if(_0xaiCandidates.length === 0) {
-            _0xmeowCount = 0; 
-            _0xmeowSfx.play().catch(e=>{}); 
-            _0xmeowCount++;
-            if(_0xmeowLoopInterval) clearInterval(_0xmeowLoopInterval);
-            _0xmeowLoopInterval = setInterval(() => {
-                if(_0xmeowCount < 10) {
-                    _0xmeowSfx.currentTime = 0;
-                    _0xmeowSfx.play().catch(e=>{});
-                    _0xmeowCount++;
-                } else {
-                    clearInterval(_0xmeowLoopInterval);
-                }
-            }, 6000);
-            const ed = _0xtextData.endings.paradox;
-            _0xrnEG(ed.type, ed.result, ed.message, 'var(--green)', true, true);
+    function _0vOBS() {
+        if(_0vIsTut || !_0vTData || document.getElementById('game-box').style.display !== 'flex') return;
+        if(_0vHist.length < 4) return;
+        _0vPlayS();
+        if(_0vAiC.length === 0) {
+            // 패러독스 상황: 효과음을 반복 없이 1회만 재생하도록 수정
+            _0vMSfx.currentTime = 0;
+            _0vMSfx.play().catch(e=>{}); 
+
+            const ed = _0vTData.endings.paradox;
+            _0vRendE(ed.type, ed.result, ed.message, 'var(--green)', true, true);
             return;
         }
-        _0xrndPrCl();
+        _0vRPfC();
         document.getElementById('obs-overlay').style.display = 'flex';
         setTimeout(() => { const obsInput = document.getElementById('obs-num'); if(obsInput){ obsInput.value = ""; obsInput.focus(); } }, 10);
     }
 
-    function _0x6f5a() {
+    function _0vDoObs() {
         const guess = document.getElementById('obs-num').value;
-        if(guess.length === 4) {
-            _0xplayClick();
-            let realSecret = _0xaiCandidates[Math.floor(Math.random() * _0xaiCandidates.length)];
-            const prob = 1 / _0xaiCandidates.length * 100;
-            if(guess === realSecret && prob === 100) {
-                _0xsuccessSfx.play().catch(e=>{});
-                if(_0xsuccessLoopInterval) clearInterval(_0xsuccessLoopInterval);
-                _0xsuccessLoopInterval = setInterval(() => {
-                    _0xsuccessSfx.currentTime = 0;
-                    _0xsuccessSfx.play().catch(e=>{});
-                }, 6000);
-                const ed = _0xtextData.endings.win;
-                _0xrnEG(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
+        if(guess.length === 3) {
+            _0vPlayC();
+            let realSecret = _0vAiC[Math.floor(Math.random() * _0vAiC.length)];
+            if(guess === realSecret) {
+                _0vGSSfx.play().catch(e=>{});
+                if(_0vSInt) clearInterval(_0vSInt);
+                _0vSInt = setInterval(() => { _0vGSSfx.currentTime = 0; _0vGSSfx.play().catch(e=>{}); }, 6000);
+                const ed = _0vTData.endings.win;
+                _0vRendE(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
             } else {
-                if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
-                _0xfailSfx.currentTime = 0;
-                _0xfailSfx.play().catch(e=>{});
-                _0xfailLoopInterval = setInterval(() => {
-                    _0xfailSfx.currentTime = 0;
-                    _0xfailSfx.play().catch(e=>{});
-                }, 6000);
-                const ed = _0xtextData.endings.lose;
-                _0xrnEG(ed.type, ed.result, ed.message, 'var(--red)', false, false);
+                _0vRPfC(); 
+                _0vFSfx.play().catch(e=>{});
+                if(_0vFInt) clearInterval(_0vFInt);
+                _0vFInt = setInterval(() => { _0vFSfx.currentTime = 0; _0vFSfx.play().catch(e=>{}); }, 6000);
+                const ed = _0vTData.endings.lose;
+                _0vRendE(ed.type, ed.result, ed.message, 'var(--red)', false, false);
             }
         }
     }
 
-    function _0xrnEG(type, result, msg, color, isWin, isParadox) {
+    function _0vRendE(type, result, msg, color, isWin, isParadox) {
         const winGif = "cat in the box.gif";
-        const paradoxGif = "Neon cat 2.gif";
+        const paradoxGif = "Neon cat box.gif";
         const loseImg = "box.gif";
         let mediaUrl = isParadox ? paradoxGif : (isWin ? winGif : loseImg);
+        
         let emojiLanes = "";
+        let stampHtml = "";
         if(isParadox) {
             const longLane = "🐈 ".repeat(22);
             emojiLanes = `
@@ -1033,42 +1091,46 @@
                 <div class="emoji-lane" style="left:10vw; animation: slide-v 22s linear infinite; animation-delay: -12s;">${longLane.split(' ').join('<br>')}</div>
                 <div class="emoji-lane" style="right:10vw; animation: slide-v 26s linear infinite reverse; animation-delay: -1s;">${longLane.split(' ').join('<br>')}</div>
             `;
+            stampHtml = `<img src="Aview.png" class="paradox-stamp">`;
         }
+
         let subButtons = "";
         if (isParadox) {
-            subButtons = `<button onclick="localStorage.setItem('totalStartCount', 0); _0xtotalStartCount = 0; window.showCredits()" style="font-family: 'Bebas Neue', cursive; width:65vh; padding:2vh 0; margin-top:5vh; background:#222; color:${color}; border:0.4vh solid ${color}; cursor:pointer; font-size:5vh; border-radius:2vh; font-weight:bold; box-shadow: 0 0 2vh ${color}; z-index:100; letter-spacing:0.3vh;">Credits</button>`;
+            subButtons = `<button onclick="window.open('https://aviewpro.github.io/schrodinger-baseball/', '_blank')" style="font-family: 'Bebas Neue', cursive; width:65vh; padding:2vh 0; margin-top:5vh; background:#222; color:${color}; border:0.4vh solid ${color}; font-size:5vh; border-radius:2vh; font-weight:bold; box-shadow: 0 0 2vh ${color}; z-index:100; letter-spacing:0.3vh;">실전에 도전하기</button>`;
         } else {
             const tipType = isWin ? 'success' : 'fail';
             subButtons = `
                 <div style="display:flex; flex-direction:column; gap: 2vh; align-items: center; margin-top:4vh; width: 62vh; z-index:100;">
-                    <button onclick="window.showTips('${tipType}')" style="font-family: 'Bebas Neue', cursive; width:100%; padding:1.2vh 0; background:#333; color:${color}; border:0.2vh solid ${color}; cursor:pointer; font-size:4vh; border-radius:1.5vh; font-weight:bold; letter-spacing:0.2vh;">TIPS</button>
+                    <button onclick="window.showTips('${tipType}')" style="font-family: 'Bebas Neue', cursive; width:100%; padding:1.2vh 0; background:#333; color:${color}; border:0.2vh solid ${color}; font-size:4vh; border-radius:1.5vh; font-weight:bold; letter-spacing:0.2vh;">TIPS</button>
                     <div style="display:flex; gap: 2.5vh; width: 100%;">
-                        <button onclick="if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; } location.reload()" style="font-family: 'Bebas Neue', cursive; flex:1; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid #444; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Main Menu</button>
-                        <button onclick="_0xresDir()" style="font-family: 'Bebas Neue', cursive; flex:2; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid ${color}; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Restart</button>
+                        <button onclick="location.reload()" style="font-family: 'Bebas Neue', cursive; flex:1; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid #444; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Main Menu</button>
+                        <button id="restart-game-btn" onclick="_0vResDir()" style="font-family: 'Bebas Neue', cursive; flex:2; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid ${color}; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Restart</button>
                     </div>
                 </div>`;
         }
+
         document.body.innerHTML = `
-            <div id="version-tag">1.5 Version</div>
+            <div id="version-tag">0.7 Version</div>
             ${emojiLanes}
+            ${stampHtml}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
-                <input type="range" id="volume-slider-end" min="0" max="1" step="0.01" value="${_0xcurrentVolume}" oninput="_0x3f2a(this.value)">
+                <input type="range" id="volume-slider-end" min="0" max="1" step="0.01" value="${_0vCurVol}" oninput="_0vVol(this.value)">
                 <span class="sound-icon" style="font-size:1vh;">VOL</span>
             </div>
             <div id="credit-overlay">
-                <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img" onclick="_0xplayNyaBgm()"></div>
-                <div id="credit-container" onmousedown="_0x8c21(event)" onmouseup="_0x7d4e(event)">
+                <div class="side-cat-box"><img src="귀여운고양이도트2.jpg" class="side-cat-img" onclick="_0vNya()"></div>
+                <div id="credit-container" onmousedown="_0vCrD(event)" onmouseup="_0vCrU(event)">
                     <div id="credit-content"></div>
                 </div>
-                <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;" onclick="_0xplayNyaBgm()"></div>
+                <div class="side-cat-box"><img src="귀여운고양이도트3.jpg" class="side-cat-img" style="animation-delay: -2s;" onclick="_0vNya()"></div>
                 <div class="credit-esc">Press ESC to Close</div>
             </div>
             <div id="tutorial-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:5000; flex-direction:column; align-items:center; justify-content:center;">
                 <div class="tutorial-msg-box">
                     <h3 id="tut-title"></h3>
                     <p id="tut-desc"></p>
-                    <button id="tut-next-btn" onclick="_0x5a1b()">확인</button>
+                    <button id="tut-next-btn" onclick="_0vTNext()">확인</button>
                     <div id="tut-esc-guide" class="esc-guide" style="display:none;"></div>
                 </div>
             </div>
@@ -1079,42 +1141,39 @@
                 <p style="color:${isParadox ? color : '#aaa'}; font-size:2.2vh; max-width:80vh; line-height:1.4; margin: 1vh 0;">${msg}</p>
                 ${subButtons}
             </div>`;
-        document.getElementById('volume-slider-end').addEventListener('input', (e) => { _0x3f2a(e.target.value); });
+            
+        document.getElementById('volume-slider-end').addEventListener('input', (e) => { _0vVol(e.target.value); });
     }
 
-    let _0xcrdScrInt = null;
-    let _0xcrdY = 0;
-    let _0xcrdSpd = 0.55;
+    let _0vCrSInt = null;
+    let _0vCrY = 0;
+    let _0vCrSpd = 0.55;
+
     window.showCredits = function() {
-        if(!_0xtextData) return;
+        if(!_0vTData) return;
         const overlay = document.getElementById('credit-overlay');
         const content = document.getElementById('credit-content');
         if (!overlay || !content) return;
-        const text = _0xtextData.dev_story.join("\n");
-        content.innerHTML = `
-            <div>${text}</div>
-            <img src="귀여운고양이.jpg" onclick="_0xplayNyaBgm()" style="width:67.5vh; height:auto; margin-top:5vh; border-radius:2vh; border:0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green); cursor:pointer;">
-            <img src="Aview.png" class="credit-logo">
-        `;
+        const text = _0vTData.dev_story.join("\n");
+        content.innerHTML = `<div>${text}</div><img src="귀여운고양이.jpg" onclick="_0vNya()" style="width:67.5vh; height:auto; margin-top:5vh; border-radius:2vh; border:0.4vh solid var(--green); box-shadow: 0 0 2vh var(--green);"><img src="Aview.png" class="credit-logo">`;
         overlay.style.display = 'flex';
-        _0xcrdY = window.innerHeight * 0.1;
-        _0xcrdSpd = 0.55;
-        if (_0xcrdScrInt) clearInterval(_0xcrdScrInt);
-        _0xcrdScrInt = setInterval(() => {
-            _0xcrdY -= _0xcrdSpd;
-            content.style.transform = `translateY(${_0xcrdY}px)`;
-            if (_0xcrdY < -(content.scrollHeight + 25)) { clearInterval(_0xcrdScrInt); }
+        _0vCrY = window.innerHeight * 0.1;
+        _0vCrSpd = 0.55;
+        if (_0vCrSInt) clearInterval(_0vCrSInt);
+        _0vCrSInt = setInterval(() => {
+            _0vCrY -= _0vCrSpd;
+            content.style.transform = `translateY(${_0vCrY}px)`;
+            if (_0vCrY < -(content.scrollHeight + 25)) { clearInterval(_0vCrSInt); }
         }, 16);
     };
-    window._0x8c21 = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 4.5; };
-    window._0x7d4e = function(e) { if(e) e.stopPropagation(); _0xcrdSpd = 0.55; };
-    window._0xclsCr = function() {
+
+    window._0vCrD = function(e) { if(e) e.stopPropagation(); _0vCrSpd = 4.5; };
+    window._0vCrU = function(e) { if(e) e.stopPropagation(); _0vCrSpd = 0.55; };
+    window._0vClsCr = function() {
         const overlay = document.getElementById('credit-overlay');
-        if(overlay) {
-            overlay.style.display = 'none';
-            if (_0xcrdScrInt) clearInterval(_0xcrdScrInt);
-        }
+        if(overlay) { overlay.style.display = 'none'; if (_0vCrSInt) clearInterval(_0vCrSInt); }
     };
+
     setInterval(() => {
         document.querySelectorAll('.cand-item').forEach(item => {
             const moveX = (Math.random()-0.5)*1.5; const moveY = (Math.random()-0.5)*1.5;
@@ -1122,8 +1181,8 @@
         });
         const turnCounter = document.getElementById('turn-counter');
         if(turnCounter) {
-            if (_0xturnCount > 0) {
-                const intensity = 25; 
+            if (_0vTC > 0) {
+                const intensity = 15; 
                 const tMoveX = (Math.random()-0.5) * intensity;
                 const tMoveY = (Math.random()-0.5) * intensity;
                 turnCounter.style.transform = `translate(${tMoveX}px, ${tMoveY}px)`;
