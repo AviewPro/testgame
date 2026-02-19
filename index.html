@@ -327,7 +327,7 @@
 <div id="version-tag">1.5 Version</div>
 <div id="flash-overlay"></div>
 
-<button id="test-reset-btn" onclick="localStorage.setItem('totalStartCount', 0); _0xtotalStartCount = 0; location.reload();">Reset Counter</button>
+<button id="test-reset-btn" onclick="localStorage.setItem('totalStartCount', 0); location.reload();">Reset Counter</button>
 
 <div id="sound-control">
     <span class="sound-icon">♪</span>
@@ -1040,7 +1040,7 @@
         document.body.innerHTML = `
             <div id="version-tag">1.5 Version</div>
             ${emojiLanes}
-            <button id="test-reset-btn" onclick="localStorage.setItem('totalStartCount', 0); _0xtotalStartCount = 0; location.reload();">Reset Counter</button>
+            <button id="test-reset-btn" onclick="localStorage.setItem('totalStartCount', 0); location.reload();">Reset Counter</button>
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
                 <input type="range" id="volume-slider-end" min="0" max="1" step="0.01" value="${_0xcurrentVolume}" oninput="_0x3f2a(this.value)">
