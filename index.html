@@ -135,17 +135,25 @@
 
         .new-keyhole { width: 35vh; height: auto; margin-top: 1.5vh; animation: keyholeNeonShift 10s infinite alternate linear; }
 
-        /* 패널 세로폭을 충분히 확보하여 세로 배치를 강제하고 스크롤 가능하게 수정 */
+        /* 게임 패널 레이아웃 수정 */
+        .panels-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3vh;
+            justify-content: center;
+            width: 100%;
+        }
+
         #game-box, #info-panel { 
             width: 50vh; 
-            min-height: 85vh; /* 세로 공간을 최대한 늘림 */
+            height: 75vh; /* 고정 세로폭 유지 */
             padding: 2.5vh; 
             border-radius: 2.5vh; 
             box-sizing: border-box; 
             display: flex; 
             flex-direction: column; 
             flex-shrink: 0; 
-            margin-bottom: 5vh; /* 패널 사이 간격 확보 */
+            margin-bottom: 3vh; 
         }
         #game-box { background: rgba(17, 17, 17, 0.9); border: 0.1vh solid #333; position: relative; display: none; }
         #info-panel { background: rgba(10, 10, 15, 0.9); border: 0.1vh solid #333; display: none; position: relative; }
@@ -354,23 +362,23 @@
 
         @media screen and (max-width: 1000px) {
             .title-wrapper { display: none; }
-            #game-box, #info-panel { width: 100vw !important; }
         }
 
         @media screen and (max-width: 768px) {
             #setup { width: 90vw; }
+            /* 모바일에서 무조건 세로 배치 및 고정 높이 유지 */
+            .panels-wrapper {
+                flex-direction: column !important;
+                align-items: center !important;
+            }
             #game-box, #info-panel { 
-                min-height: 90vh; /* 모바일에서 더 넉넉하게 세로폭 확보 */
+                width: 90vw !important; 
+                height: 75vh !important; /* 고정 세로폭 유지 */
                 flex-shrink: 0;
             }
             .setup-cat, .setup-btn, .tutorial-btn, .setup-box-container { width: 80vw; }
             .header-title { font-size: 4vh; letter-spacing: 0.5vh; }
             .panel-center { width: 90vw; padding: 3vh; }
-            
-            .game-container > div[style*="flex-wrap: wrap"] {
-                flex-direction: column !important;
-                align-items: center !important;
-            }
         }
     </style>
 </head>
@@ -424,7 +432,7 @@
         저작권은 나한테 있나? 잘 모르겠습니다. 그냥 가볍게 즐겨주세요.
     </div>
 
-    <div style="display: flex; flex-wrap: wrap; gap: 3vh; justify-content: center; width: 100%;">
+    <div class="panels-wrapper">
         <div id="game-box">
             <div class="status" id="status">준비 완료</div>
             <div id="log-window"></div>
@@ -474,14 +482,12 @@
 </div>
 
 <script>
-    // 1. 길게 눌렀을 때 나타나는 컨텍스트 메뉴 방지 (전역 적용)
     window.oncontextmenu = function(e) {
         e.preventDefault();
         e.stopPropagation();
         return false;
     };
 
-    // 2. 핀치 줌 방지 (스크롤은 허용되도록 수정됨)
     document.addEventListener('touchmove', function(e) {
         if (e.scale !== 1) { e.preventDefault(); }
     }, { passive: false });
@@ -504,7 +510,6 @@
     let _0vMCnt = 0; 
     let _0vPCnt = 0;
     
-    // 로컬 스토리지에서 카운트 불러오기
     let _0vHowCnt = parseInt(localStorage.getItem('sb_how_count')) || 0;
 
     let _0vBgm = new Audio("002. ErikMMusic - The Dusty Attic.mp3");
@@ -524,7 +529,6 @@
     const _0vBodyOri = document.body.innerHTML;
     let _0vPoisInt = null;
 
-    // 초기 상태 반영
     window.onload = function() {
         _0vVol(0.15);
         const counterEl = document.getElementById('how-counter');
@@ -633,7 +637,6 @@
         _0vPCnt = oldPlayCount;
         
         _0vVol(document.getElementById('volume-slider')?.value || 0.15);
-        // 상태 복구
         const counterEl = document.getElementById('how-counter');
         const startBtn = document.getElementById('start-btn');
         if(counterEl) counterEl.innerText = _0vHowCnt;
@@ -642,18 +645,14 @@
     }
 
     function _0vHTP() {
-        // 카운트 증가 및 로컬 스토리지 저장
         _0vHowCnt++;
         localStorage.setItem('sb_how_count', _0vHowCnt);
-        
         const counterEl = document.getElementById('how-counter');
         if(counterEl) counterEl.innerText = _0vHowCnt;
-        
         const startBtn = document.getElementById('start-btn');
         if(_0vHowCnt >= 1 && startBtn) {
             startBtn.disabled = false;
         }
-
         if(!_0vTData) return;
         _0vIsTut = true; _0vTType = ""; _0vTStep = 1;
         _0vStart();
