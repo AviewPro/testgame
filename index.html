@@ -50,23 +50,25 @@
         #sound-control input[type=range] { -webkit-appearance: slider-vertical; width: 0.8vh; height: 15vh; cursor: pointer; }
         .sound-icon { font-size: 1.5vh; color: var(--cyan); }
 
-        /* 테스트 버튼 스타일 */
+        /* 튜토리얼 버튼 클릭 카운터 리셋 버튼 스타일 */
         #test-reset-btn {
             position: fixed;
             right: 2vh;
             top: 2vh;
             z-index: 10001;
-            background: rgba(255, 0, 0, 0.2);
-            border: 1px solid var(--red);
+            background: rgba(255, 75, 43, 0.2);
+            border: 0.2vh solid var(--red);
             color: var(--red);
             padding: 1vh 1.5vh;
             border-radius: 1vh;
             cursor: pointer;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.2vh;
+            font-size: 1.4vh;
+            font-weight: bold;
             transition: 0.3s;
+            text-transform: uppercase;
         }
-        #test-reset-btn:hover { background: var(--red); color: #000; }
+        #test-reset-btn:hover { background: var(--red); color: #000; box-shadow: 0 0 2vh var(--red); }
 
         .title-wrapper { position: relative; margin-top: 5vh; margin-bottom: 3vh; z-index: 300; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
         .title-bg { position: absolute; background: rgba(0, 0, 0, 0.7); width: 120%; height: 120%; border-radius: 1.5vh; filter: blur(0.5vh); z-index: -1; }
@@ -304,6 +306,7 @@
 
         @media screen and (max-width: 768px) {
             #sound-control { display: none !important; } /* 모바일에서 음량 조절 숨김 */
+            #test-reset-btn { top: 1vh; right: 1vh; padding: 0.8vh 1.2vh; font-size: 1.2vh; }
             #setup { width: 90vw; }
             #game-box, #info-panel { 
                 width: 90vw; 
