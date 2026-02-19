@@ -38,8 +38,10 @@
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
+            /* 세로 스크롤 허용 설정 추가 */
             overflow-x: hidden;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             /* 기본 커서 설정 */
             cursor: url('cursor.png'), auto;
         }
@@ -500,9 +502,7 @@
         return false;
     };
 
-    document.addEventListener('touchmove', function(e) {
-        if (e.scale !== 1) { e.preventDefault(); }
-    }, { passive: false });
+    // 모바일 스크롤 차단 로직 제거됨
 
     let _0vTData = null;
     fetch('textdata.json')
