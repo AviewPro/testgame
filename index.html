@@ -118,12 +118,25 @@
         .setup-cat { width: 35vh; height: 35vh; border-radius: 4vh; border: 0.4vh solid var(--green); object-fit: cover; animation: neonShift 10s infinite alternate linear; display: block; }
         
         .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; animation: neonShiftBg 10s infinite alternate linear; margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
-        .setup-btn:hover { transform: scale(1.02); filter: brightness(1.2); }
-        .setup-btn:active { transform: scale(0.98); }
+        .setup-btn:hover:not(:disabled) { transform: scale(1.02); filter: brightness(1.2); }
+        .setup-btn:active:not(:disabled) { transform: scale(0.98); }
+        .setup-btn:disabled { background: #333 !important; color: #666 !important; box-shadow: none !important; animation: none !important; cursor: not-allowed; opacity: 0.5; }
 
         .tutorial-btn { font-family: 'Bebas Neue', cursive; width: 35vh; background: #444; color: #fff; font-weight: 700; height: 5vh; font-size: 2.5vh; border-radius: 1.5vh; cursor: pointer; border: 0.2vh solid #666; margin-bottom: 1vh; transition: 0.2s; letter-spacing: 0.1vh; }
         .tutorial-btn:hover { background: #555; transform: scale(1.02); }
         .tutorial-btn:active { transform: scale(0.98); }
+        
+        /* 튜토리얼 안 봤을 때 하우투플레이 버튼 강조 스타일 */
+        .tutorial-btn.highlight {
+            border: 0.3vh solid var(--green);
+            box-shadow: 0 0 1.5vh var(--green);
+            animation: highlightPulse 2s infinite;
+        }
+        @keyframes highlightPulse {
+            0% { transform: scale(1); box-shadow: 0 0 1vh var(--green); }
+            50% { transform: scale(1.05); box-shadow: 0 0 3vh var(--green); }
+            100% { transform: scale(1); box-shadow: 0 0 1vh var(--green); }
+        }
 
         .new-keyhole { width: 35vh; height: auto; margin-top: 1.5vh; animation: keyholeNeonShift 10s infinite alternate linear; }
 
@@ -387,8 +400,8 @@
         <div class="setup-box-container">
             <img src="Neon cat.gif" class="setup-cat">
         </div>
-        <button onclick="_0x1d2e()" class="tutorial-btn">How to Play</button>
-        <button onclick="_0x4c5b()" class="setup-btn">Start Single Mode</button>
+        <button id="main-tutorial-btn" onclick="_0x1d2e()" class="tutorial-btn">How to Play</button>
+        <button id="main-start-btn" onclick="_0x4c5b()" class="setup-btn">Start Single Mode</button>
         <img src="Aview.png" class="new-keyhole">
     </div>
     <div id="setup-footer">
@@ -449,7 +462,7 @@
     let _0xtextData = null;
     fetch('textdata.json')
         .then(response => response.json())
-        .then(data => { _0xtextData = data; })
+        .then(data => { _0xtextData = data; _0xcheckTutorialStatus(); })
         .catch(error => console.error('Error loading textdata:', error));
 
     const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
@@ -481,6 +494,21 @@
     const _0xoriginalBodyContent = document.body.innerHTML;
 
     let _0xpoisonInterval = null;
+
+    // 튜토리얼 완료 여부에 따른 메인 버튼 상태 제어 함수
+    function _0xcheckTutorialStatus() {
+        const startBtn = document.getElementById('main-start-btn');
+        const tutorialBtn = document.getElementById('main-tutorial-btn');
+        if(!startBtn || !tutorialBtn) return;
+
+        if(_0xtutorialClickCount <= 0) {
+            startBtn.disabled = true;
+            tutorialBtn.classList.add('highlight');
+        } else {
+            startBtn.disabled = false;
+            tutorialBtn.classList.remove('highlight');
+        }
+    }
 
     function _0x3f2a(val) { 
         _0xcurrentVolume = parseFloat(val);
