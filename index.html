@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Schrödinger Baseball - Single Mode</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
     <link rel="icon" href="Neoncat Icon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
@@ -32,6 +33,18 @@
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
+            /* 스크롤 방지 및 터치 최적화 */
+            touch-action: none;
+            overflow: hidden;
+        }
+
+        canvas, button, .game-element {
+            touch-action: manipulation; /* 더블 탭 줌 방지 및 반응 속도 향상 */
+            -webkit-tap-highlight-color: transparent; /* 클릭 시 생기는 파란 박스 제거 */
+        }
+
+        button {
+            touch-action: manipulation;
         }
 
         #version-tag {
@@ -76,7 +89,7 @@
         .setup-box-container { position: relative; width: 35vh; margin-bottom: 2vh; }
         .setup-cat { width: 35vh; height: 35vh; border-radius: 4vh; border: 0.4vh solid var(--green); object-fit: cover; animation: neonShift 10s infinite alternate linear; display: block; }
         
-        .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; background: var(--green); box-shadow: 0 0 1.5vh var(--green); margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
+        .setup-btn { font-family: 'Bebas Neue', cursive; width: 35vh; color: #000; font-weight: 900; height: 7vh; font-size: 3.2vh; border-radius: 1.5vh; cursor: pointer; border: none; animation: neonShiftBg 10s infinite alternate linear; margin-top: 1vh; transition: transform 0.1s, filter 0.2s; letter-spacing: 0.1vh; }
         .setup-btn:hover { transform: scale(1.02); filter: brightness(1.2); }
         .setup-btn:active { transform: scale(0.98); }
 
@@ -119,7 +132,7 @@
 
         .prob-cat-container { position: relative; width: 16vh; height: 16vh; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
         .prob-cat { width: 100%; height: 100%; border-radius: 2.5vh; border: 0.2vh solid var(--purple); object-fit: cover; box-sizing: border-box; z-index: 1; }
-        #turn-counter { position: absolute; font-weight: 900; font-size: 8vh; z-index: 20; pointer-events: none; transition: transform 2s ease-in-out, color 0.5s; }
+        #turn-counter { position: absolute; font-weight: 900; font-size: 8vh; z-index: 20; pointer-events: none; transition: transform 2s ease-in-out, color 0.5s; will-change: transform; }
 
         #candidates-box { flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; position: relative; }
         .cand-title { font-family: 'Bebas Neue', cursive; font-size: 3vh; color:#fff; margin-bottom: 1.5vh; font-weight:bold; text-align: center; padding: 1vh 0; border-top: 0.1vh solid #333; border-bottom: 0.1vh solid #333; }
@@ -164,10 +177,7 @@
         
         .overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
         #quantum-field { position: absolute; width: 100%; height: 100%; top: 0; left: 0; overflow: hidden; pointer-events: none; z-index: 1001; }
-        .bg-candidate { 
-            position: absolute; font-family: 'Courier New', monospace; font-size: 6.5vh; font-weight: bold; 
-            text-shadow: 0 0 1.5vh currentColor; animation: blinkSync 4s infinite ease-in-out; opacity: 0; 
-        }
+        .bg-candidate { position: absolute; font-family: 'Courier New', monospace; font-size: 6.5vh; font-weight: bold; text-shadow: 0 0 1.5vh currentColor; animation: blinkSync 4s infinite ease-in-out; opacity: 0; }
         
         @keyframes blinkSync { 0%, 100% { opacity: 0; transform: scale(0.9); } 50% { opacity: 0.7; transform: scale(1.1); } }
 
@@ -282,6 +292,10 @@
         @keyframes slide-h { from { transform: translateX(-150%); } to { transform: translateX(150vw); } }
         @keyframes slide-v { from { transform: translateY(150vh); } to { transform: translateY(-150%); } }
 
+        @media screen and (max-width: 1000px) {
+            .title-wrapper { display: none !important; }
+        }
+
         @media screen and (max-width: 768px) {
             #setup { width: 90vw; }
             #game-box, #info-panel { 
@@ -303,7 +317,7 @@
 </head>
 <body oncontextmenu="return false" oncopy="return false" oncut="return false">
 
-<div id="version-tag">1.4 Version</div>
+<div id="version-tag">1.5 Version</div>
 <div id="flash-overlay"></div>
 
 <div id="sound-control">
@@ -373,7 +387,7 @@
                     <div id="chance-val" class="chance-value">--.--%</div>
                 </div>
                 <div class="prob-cat-container">
-                    <div id="turn-counter" style="right: 0; top: 0;">8</div>
+                    <div id="turn-counter">7</div>
                     <img id="prob-cat-img" src="Neon cat.gif" class="prob-cat">
                 </div>
             </div>
@@ -399,6 +413,18 @@
 </div>
 
 <script>
+    // 1. 길게 눌렀을 때 나타나는 컨텍스트 메뉴(복사/이미지저장) 방지
+    window.oncontextmenu = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    };
+
+    // 2. 화면 스크롤/바운스 방지 (핀치 줌 방지)
+    document.addEventListener('touchmove', function(e) {
+        if (e.scale !== 1) { e.preventDefault(); }
+    }, { passive: false });
+
     let _0xtextData = null;
     fetch('textdata.json')
         .then(response => response.json())
@@ -407,13 +433,12 @@
 
     const firebaseConfig = { apiKey: "AIzaSyCvxUeqc28cRZ8RL4jpAwtakMxRo5d6zbU", authDomain: "aviewpro.firebaseapp.com", databaseURL: "https://aviewpro-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "aviewpro", storageBucket: "aviewpro.firebasestorage.app", messagingSenderId: "592622610945", appId: "1:592622610945:web:7d56b09e966a4faac62e00", measurementId: "G-NZQ5ZFXG2F" };
 
-    let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 8;
+    let _0xaiCandidates = [], _0xhistory = [], _0xinputStr = "", _0xturnCount = 7;
     let _0xtotalStartCount = parseInt(localStorage.getItem('totalStartCount')) || 0; 
     let _0xisTutorial = false, _0xtutorialStep = 0, _0xcurrentTipType = "";
     let _0xparadoxMusicTriggered = false, _0xalarmTriggered = false, _0xzeroOverlayTriggered = false;
     let _0xcurrentVolume = 0.15;
     let _0xfailLoopInterval = null; 
-    let _0xfailTimeout = null;
     let _0xsuccessLoopInterval = null; 
     let _0xmeowLoopInterval = null; 
     let _0xmeowCount = 0; 
@@ -500,7 +525,6 @@
         _0xtotalStartCount++; 
         localStorage.setItem('totalStartCount', _0xtotalStartCount);
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
-        if(_0xfailTimeout) { clearTimeout(_0xfailTimeout); _0xfailTimeout = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
         if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
         document.getElementById('setup').style.display = 'none';
@@ -511,7 +535,7 @@
     }
 
     function _0xresGm() {
-        _0xaiCandidates = []; _0xhistory = []; _0xinputStr = ""; _0xturnCount = 8; _0xmeowCount = 0;
+        _0xaiCandidates = []; _0xhistory = []; _0xinputStr = ""; _0xturnCount = 7; _0xmeowCount = 0;
         _0xparadoxMusicTriggered = false; _0xalarmTriggered = false; _0xzeroOverlayTriggered = false;
         const logWin = document.getElementById('log-window');
         logWin.classList.remove('paradox-mode');
@@ -529,7 +553,6 @@
         _0xtotalStartCount++; 
         localStorage.setItem('totalStartCount', _0xtotalStartCount);
         if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
-        if(_0xfailTimeout) { clearTimeout(_0xfailTimeout); _0xfailTimeout = null; }
         if(_0xsuccessLoopInterval) { clearInterval(_0xsuccessLoopInterval); _0xsuccessLoopInterval = null; }
         if(_0xmeowLoopInterval) { clearInterval(_0xmeowLoopInterval); _0xmeowLoopInterval = null; }
         _0xbgm.pause();
@@ -649,12 +672,19 @@
             if (document.getElementById('credit-overlay')?.style.display === 'flex') { _0xclsCr(); return; }
             if (_0xisTutorial) {
                 if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
-                if(_0xfailTimeout) { clearTimeout(_0xfailTimeout); _0xfailTimeout = null; }
                 location.reload();
             }
             if (document.getElementById('obs-overlay')?.style.display === 'flex') { document.getElementById('obs-overlay').style.display = 'none'; }
             return;
         }
+
+        if (e.key === 'Shift') {
+            if (document.querySelector('button[onclick*="_0xresDir()"]')) {
+                _0xresDir();
+                return;
+            }
+        }
+
         if (document.getElementById('obs-overlay')?.style.display === 'flex') {
             if (e.key === 'Enter') _0x6f5a(); return;
         }
@@ -663,6 +693,13 @@
             e.preventDefault();
             if (document.getElementById('game-box').style.display === 'flex') {
                 _0x7c3d('ENT');
+            }
+            return;
+        }
+
+        if (e.key === '-') {
+            if (!document.getElementById('obs-btn').disabled) {
+                _0x2f1e();
             }
             return;
         }
@@ -719,15 +756,12 @@
             if(key === "4S0B") continue; 
             if(outcomes[key].length > maxCount) { maxCount = outcomes[key].length; bestKey = key; }
         }
-        
-        // AI가 한 가지 가능성만 남았을 때도 포기하지 않고 진행 (거짓말 시스템 포함)
-        if(!bestKey || _0xaiCandidates.length === 0) {
+        if(!bestKey || _0xaiCandidates.length <= 1) {
             const fakeS = Math.floor(Math.random() * 3);
             const fakeB = Math.floor(Math.random() * 3);
             bestKey = `${fakeS}S${fakeB}B`;
             _0xaiCandidates = _0xaiCandidates.filter(c => c !== guess); 
         } else { _0xaiCandidates = outcomes[bestKey]; }
-        
         const match = bestKey.match(/(\d)S(\d)B/);
         return { s: parseInt(match[1]), b: parseInt(match[2]) };
     }
@@ -764,6 +798,7 @@
         const flashOverlay = document.getElementById('flash-overlay');
         const paradoxOverlay = document.getElementById('paradox-cat-overlay');
         const logWin = document.getElementById('log-window');
+        const obsBtn = document.getElementById('obs-btn');
         
         if(_0xaiCandidates.length === 0) {
             logWin.classList.add('paradox-mode');
@@ -839,7 +874,6 @@
             chanceValEl.style.color = currentColor;
             chanceValEl.style.textShadow = currentShadow;
             
-            chanceTitleEl.innerText = 'Measuring Energy Level';
             chanceTitleEl.style.display = 'block';
             chanceTitleEl.style.color = currentColor;
             chanceTitleEl.style.textShadow = currentShadow;
@@ -863,10 +897,15 @@
         const slice = [..._0xaiCandidates].sort(() => 0.5 - Math.random()).slice(0, 100);
         
         let pixelateStrength = 0;
-        if (prob >= 25) { pixelateStrength = 0; } 
-        else if (prob >= 5) { pixelateStrength = 0.05; } 
-        else if (prob >= 1) { pixelateStrength = 0.15; } 
-        else { pixelateStrength = 0.25; }
+        if (prob >= 25) {
+            pixelateStrength = 0; 
+        } else if (prob >= 5) {
+            pixelateStrength = 0.05; 
+        } else if (prob >= 1) {
+            pixelateStrength = 0.15; 
+        } else {
+            pixelateStrength = 0.25; 
+        }
 
         document.getElementById('cand-list').innerHTML = slice.map(c => `<div class="cand-item" style="filter: blur(${pixelateStrength}vh) contrast(180%);">${c}</div>`).join('');
 
@@ -878,10 +917,16 @@
             statusEl.style.animation = "none";
             statusEl.style.color = "var(--red)";
             statusEl.style.textShadow = "0 0 1vh var(--red)";
+            obsBtn.disabled = false;
         } else {
             entBtn.disabled = false;
-            statusEl.innerText = "고양이 위치 관측 중...";
+            statusEl.innerText = "양자고양이 위치 관측 중...";
             statusEl.style.animation = "neonShift 10s infinite alternate linear";
+            if (_0xturnCount > 3) {
+                obsBtn.disabled = true;
+            } else {
+                obsBtn.disabled = false;
+            }
         }
     }
 
@@ -934,7 +979,6 @@
         const guess = document.getElementById('obs-num').value;
         if(guess.length === 4) {
             _0xplayClick();
-            // 확률이 남아있는 경우 리스트 내의 랜덤한 숫자를 정답으로 지정하여 판정
             let realSecret = _0xaiCandidates[Math.floor(Math.random() * _0xaiCandidates.length)];
             const prob = 1 / _0xaiCandidates.length * 100;
             
@@ -950,16 +994,13 @@
                 _0xrnEG(ed.type, ed.result, ed.message, 'var(--cyan)', true, false);
             } else {
                 if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; }
-                if(_0xfailTimeout) { clearTimeout(_0xfailTimeout); _0xfailTimeout = null; }
-
-                _0xfailTimeout = setTimeout(() => {
+                
+                _0xfailSfx.currentTime = 0;
+                _0xfailSfx.play().catch(e=>{});
+                _0xfailLoopInterval = setInterval(() => {
                     _0xfailSfx.currentTime = 0;
                     _0xfailSfx.play().catch(e=>{});
-                    _0xfailLoopInterval = setInterval(() => {
-                        _0xfailSfx.currentTime = 0;
-                        _0xfailSfx.play().catch(e=>{});
-                    }, 6000);
-                }, 4500); 
+                }, 6000);
                 
                 const ed = _0xtextData.endings.lose;
                 _0xrnEG(ed.type, ed.result, ed.message, 'var(--red)', false, false);
@@ -993,14 +1034,14 @@
                 <div style="display:flex; flex-direction:column; gap: 2vh; align-items: center; margin-top:4vh; width: 62vh; z-index:100;">
                     <button onclick="window.showTips('${tipType}')" style="font-family: 'Bebas Neue', cursive; width:100%; padding:1.2vh 0; background:#333; color:${color}; border:0.2vh solid ${color}; cursor:pointer; font-size:4vh; border-radius:1.5vh; font-weight:bold; letter-spacing:0.2vh;">TIPS</button>
                     <div style="display:flex; gap: 2.5vh; width: 100%;">
-                        <button onclick="if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; } if(_0xfailTimeout) { clearTimeout(_0xfailTimeout); _0xfailTimeout = null; } location.reload()" style="font-family: 'Bebas Neue', cursive; flex:1; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid #444; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Main Menu</button>
+                        <button onclick="if(_0xfailLoopInterval) { clearInterval(_0xfailLoopInterval); _0xfailLoopInterval = null; } location.reload()" style="font-family: 'Bebas Neue', cursive; flex:1; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid #444; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Main Menu</button>
                         <button onclick="_0xresDir()" style="font-family: 'Bebas Neue', cursive; flex:2; padding:1.2vh 0; background:#222; color:#fff; border:0.2vh solid ${color}; cursor:pointer; font-size:3.2vh; border-radius:1.5vh; letter-spacing:0.1vh;">Restart</button>
                     </div>
                 </div>`;
         }
 
         document.body.innerHTML = `
-            <div id="version-tag">1.4 Version</div>
+            <div id="version-tag">1.5 Version</div>
             ${emojiLanes}
             <div id="sound-control" style="z-index:20000;">
                 <span class="sound-icon">♪</span>
@@ -1085,7 +1126,7 @@
         const turnCounter = document.getElementById('turn-counter');
         if(turnCounter) {
             if (_0xturnCount > 0) {
-                const intensity = 15; // 내 턴 카운터 움직임 계수 15 반영
+                const intensity = 25; 
                 const tMoveX = (Math.random()-0.5) * intensity;
                 const tMoveY = (Math.random()-0.5) * intensity;
                 turnCounter.style.transform = `translate(${tMoveX}px, ${tMoveY}px)`;
