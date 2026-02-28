@@ -140,7 +140,7 @@ function _dHE() {
     if (_c.height - _hy < -_vh(10)) { _x.fillStyle = 'gray'; _x.font = `${_vh(3)}px 'Courier New'`; _x.fillText('Press Any Button to Return', _c.width / 2, _vh(90)); }
 }
 
-/* MEMO: Implemented pulse brightness using globalAlpha & lighter composition for Aview image */
+/* MEMO: Removed all filter/shadow effects. Applied a manual radial gradient glow behind Aview.png that pulses every 1s */
 function _dUI() {
     if (_he) { _dHE(); return; }
     if (_ie && _f < 1) {
@@ -154,13 +154,16 @@ function _dUI() {
         _x.font = `${_vh(5)}px 'Courier New'`; _x.fillText('Press Any Button to Start', _c.width / 2, _vh(50));
         _x.fillStyle = 'yellow'; _x.font = `${_vh(4)}px 'Courier New'`; _x.fillText('Made By Aview / Completed By You', _c.width / 2, _vh(58));
         if (_iA.complete) {
-            const iw = _vh(45), ih = (_iA.height / _iA.width) * iw, ly = _vh(95) - ih, lx = _c.width / 2 - iw / 2;
-            const p = (Math.sin(Date.now() / 318) + 1) / 2; // 0 ~ 1 cycle
+            const iw = _vh(45), ih = (_iA.height / _iA.width) * iw, lx = _c.width / 2 - iw / 2, ly = _vh(95) - ih;
+            const pulse = (Math.sin(Date.now() / 318) + 1) / 2; // 0 ~ 1 cycle in 1s
             _x.save();
-            _x.drawImage(_iA, lx, ly, iw, ih);
-            // 물리적인 밝기 효과 구현 (lighter 합성 사용)
-            _x.globalCompositeOperation = 'lighter';
-            _x.globalAlpha = p * 0.6; // 0% ~ 60% 밝기 변동
+            // 이미지 뒤에 노란색 음영(광채) 그리기
+            const grad = _x.createRadialGradient(_c.width/2, ly + ih/2, 0, _c.width/2, ly + ih/2, iw);
+            grad.addColorStop(0, `rgba(255, 255, 0, ${pulse * 0.5})`);
+            grad.addColorStop(1, `rgba(255, 255, 0, 0)`);
+            _x.fillStyle = grad;
+            _x.fillRect(lx - iw/2, ly - ih/2, iw * 2, ih * 2);
+            // 원본 이미지 출력
             _x.drawImage(_iA, lx, ly, iw, ih);
             _x.restore();
         }
@@ -191,7 +194,7 @@ function _gL() {
     requestAnimationFrame(_gL);
 }
 
-/* MEMO: Strict reset of deathCount only upon exiting Ending Screen (_ie) */
+/* MEMO: Strict logic separation to reset deathCount only when exiting Ending Screen (_ie) */
 function _hI(e) {
     if (e.cancelable) e.preventDefault(); 
     _tF(); 
@@ -222,15 +225,15 @@ function _hI(e) {
                 if (cx > lx && cx < lx + iw && cy > ly && cy < ly + ih) { _he = true; _hy = 0; _uB(); return; } 
             }
             
-            const _isEnding = _ie;
-            
-            _ie = false; _sc = false; _cs = 1; _gs = false; _pe = false; _f = 0; 
-            document.body.style.backgroundImage = "url('space_back1.gif')"; _sa(); _uB(); _bt.r();
-            
-            if (_isEnding) { 
+            // 핵심: 엔딩 화면에서만 데스 카운트 리셋
+            if (_ie) { 
                 _dc = 0; 
                 localStorage.setItem('deathCount', 0); 
             }
+            
+            // 공통 화면 전환 로직
+            _ie = false; _sc = false; _cs = 1; _gs = false; _pe = false; _f = 0; 
+            document.body.style.backgroundImage = "url('space_back1.gif')"; _sa(); _uB(); _bt.r();
         } return;
     }
     if (_tr || _id || _pe) return;
