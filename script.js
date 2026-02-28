@@ -140,7 +140,7 @@ function _dHE() {
     if (_c.height - _hy < -_vh(10)) { _x.fillStyle = 'gray'; _x.font = `${_vh(3)}px 'Courier New'`; _x.fillText('Press Any Button to Return', _c.width / 2, _vh(90)); }
 }
 
-/* MEMO: Added 1s cycle pulse animation to Aview image shadow in credits */
+/* MEMO: Image brightness pulse animation (1s cycle) replaces shadow effect */
 function _dUI() {
     if (_he) { _dHE(); return; }
     if (_ie && _f < 1) {
@@ -155,9 +155,11 @@ function _dUI() {
         _x.fillStyle = 'yellow'; _x.font = `${_vh(4)}px 'Courier New'`; _x.fillText('Made By Aview / Completed By You', _c.width / 2, _vh(58));
         if (_iA.complete) {
             const iw = _vh(45), ih = (_iA.height / _iA.width) * iw, ly = _vh(95) - ih;
-            const p = (Math.sin(Date.now() / 318) + 1) / 2; // 1초 주기 진동 (1000ms / PI*2)
-            _x.shadowBlur = 5 + (p * 20); _x.shadowColor = "yellow"; 
-            _x.drawImage(_iA, _c.width / 2 - iw / 2, ly, iw, ih); _x.shadowBlur = 0;
+            const p = (Math.sin(Date.now() / 318) + 1) / 2; // 1초 주기 진동 (0 ~ 1)
+            _x.save();
+            _x.filter = `brightness(${50 + (p * 150)}%)`; // 50% ~ 200% 밝기 애니메이션
+            _x.drawImage(_iA, _c.width / 2 - iw / 2, ly, iw, ih);
+            _x.restore();
         }
     } else if (_tr && _f >= 1 && !_ie) {
         _x.fillStyle = 'yellow'; _x.font = `bold ${_vh(7)}px 'Courier New'`; _x.textAlign = 'center'; _x.fillText(`STAGE ${_cs}`, _c.width / 2, _c.height / 2);
@@ -186,7 +188,7 @@ function _gL() {
     requestAnimationFrame(_gL);
 }
 
-/* MEMO: Reset death count ONLY when returning from the Ending screen (_ie) */
+/* MEMO: Death count resets ONLY when exiting the Ending screen (_ie) */
 function _hI(e) {
     if (e.cancelable) e.preventDefault(); 
     _tF(); 
@@ -217,8 +219,11 @@ function _hI(e) {
                 if (cx > lx && cx < lx + iw && cy > ly && cy < ly + ih) { _he = true; _hy = 0; _uB(); return; } 
             }
             
-            // 엔딩 화면(_ie)에서 돌아올 때만 데스 카운트 초기화
-            if (_ie) { _dc = 0; localStorage.setItem('deathCount', 0); }
+            // 8스테이지 클리어 후 엔딩 화면(_ie)에서 나올 때만 초기화
+            if (_ie) { 
+                _dc = 0; 
+                localStorage.setItem('deathCount', 0); 
+            }
             
             _ie = false; _sc = false; _cs = 1; _gs = false; _pe = false; _f = 0; 
             document.body.style.backgroundImage = "url('space_back1.gif')"; _sa(); _uB(); _bt.r();
