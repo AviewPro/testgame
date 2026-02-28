@@ -1,10 +1,10 @@
 const _c = document.getElementById('gc');
 const _x = _c.getContext('2d');
 const _HM = "저의 두번째 게임 Start to Press Any Button을 즐겨주셔서 감사합니다";
-const _sB = new Audio('띠용.mp3'), _sD = new Audio('꺼지는소리.mp3');
+const _sB = new Audio('띠용.mp3'), _sD = new Audio('꺼지는소리.mp3'), _sC = new Audio('단체환호.mp3'); // 환호 소리 추가
 const _mB = 0.6;
 const _b1 = new Audio('Air 8-bit.mp3'), _b2 = new Audio('Symphony no. 25 8-bit.mp3'), _b3 = new Audio('Winter, The Four Seasons 8-bit.mp3'), _b4 = new Audio('Moonlight Sonata 8-bit.mp3');
-[_b1, _b2, _b3, _b4].forEach(a => a.loop = true); _b1.volume = 0.1; _b2.volume = 0.3; _b3.volume = 0.3; _b4.volume = 0.25;
+[_b1, _b2, _b3, _b4].forEach(a => a.loop = true); _b1.volume = 0.1; _b2.volume = 0.3; _b3.volume = 0.3; _b4.volume = 0.25; _sC.volume = 0.5;
 const _iA = new Image(); _iA.src = 'Aview.png';
 
 let _gs = false, _dc = parseInt(localStorage.getItem('deathCount')) || 0, _tc = parseInt(localStorage.getItem('totalClears')) || 0, _hc = localStorage.getItem('hasCleared') === 'true';
@@ -128,11 +128,16 @@ function _sNS() {
     }, 16);
 }
 
+/* MEMO: 8 Stage Clear - Plays "단체환호.mp3" after 0.1s delay. */
 function _sEN() {
     _ie = true; _tr = true; _f = 1; _sa(); _hc = true; 
     _tc++; localStorage.setItem('totalClears', _tc); 
     localStorage.setItem('hasCleared', 'true');
     document.body.style.backgroundImage = "url('space_back2.gif')";
+    
+    // Play cheer sound after 0.1s
+    setTimeout(() => { _sC.currentTime = 0; _sC.play().catch(e=>{}); }, 100);
+
     setTimeout(() => { _b4.play().catch(e => {}); const fi = setInterval(() => { if (_f > 0) _f -= 0.005; else { clearInterval(fi); _tr = false; } }, 16); }, 3000); 
 }
 
@@ -165,7 +170,6 @@ function _dHE() {
     if (_c.height - _hy < -_vh(10)) { _x.fillStyle = 'gray'; _x.font = `${_vh(3)}px 'Courier New'`; _x.fillText('Press Any Button to Return', _c.width / 2, _vh(90)); }
 }
 
-/* MEMO: Static yellow shadow applied to Aview.png. Pulse effect removed. */
 function _dUI() {
     if (_he) { _dHE(); return; }
     if (_ie && _f < 1) {
@@ -181,7 +185,9 @@ function _dUI() {
         if (_iA.complete) {
             const iw = _vh(45), ih = (_iA.height / _iA.width) * iw, lx = _c.width / 2 - iw / 2, ly = _vh(95) - ih;
             _x.save();
-            _x.shadowBlur = 40; _x.shadowColor = 'yellow';
+            let isVisible = true;
+            if (_tc >= 2) { isVisible = (Date.now() % 2000 < 1000); }
+            if (isVisible) { _x.shadowBlur = 40; _x.shadowColor = 'yellow'; } else { _x.shadowBlur = 0; }
             _x.drawImage(_iA, lx, ly, iw, ih);
             _x.restore();
         }
@@ -213,8 +219,6 @@ function _gL() {
     requestAnimationFrame(_gL);
 }
 
-/* MEMO: Critical logic: deathCount resets ONLY when exiting the Normal Ending (_ie) screen. 
-   Hidden Ending (_he) and Credits (_sc) maintain the count. */
 function _hI(e) {
     if (e.cancelable) e.preventDefault(); _tF(); 
     if (e.type === 'mousedown' || e.type === 'touchstart') _md = true;
