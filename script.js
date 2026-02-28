@@ -103,12 +103,11 @@ function _sNS() {
     }, 16);
 }
 
-/* MEMO: Reset death count on game clear and update localStorage */
 function _sEN() {
     _ie = true; _tr = true; _f = 1; _sa(); _hc = true; 
-    _dc = 0; localStorage.setItem('deathCount', 0); // 데스 수 초기화 반영
+    _tc++; localStorage.setItem('totalClears', _tc); 
     localStorage.setItem('hasCleared', 'true');
-    _tc++; localStorage.setItem('totalClears', _tc); document.body.style.backgroundImage = "url('space_back2.gif')";
+    document.body.style.backgroundImage = "url('space_back2.gif')";
     setTimeout(() => { _b4.play().catch(e => {}); const fi = setInterval(() => { if (_f > 0) _f -= 0.005; else { clearInterval(fi); _tr = false; } }, 16); }, 3000); 
 }
 
@@ -125,9 +124,8 @@ function _dOB() {
     }
 }
 
-/* MEMO: Hide dashed target boxes during ending or credit screens */
 function _dTB() {
-    if (!_gs || _tr || _ie || _sc || _he) return; // 엔딩/크레딧 중 가이드 박스 숨김 처리 강화
+    if (!_gs || _tr || _ie || _sc || _he) return; 
     _x.setLineDash([10, 10]); _x.lineWidth = _vh(0.3);
     const _dB = (tx, ty, ic) => { _x.strokeStyle = (ic || _pe) ? 'yellow' : 'white'; _x.strokeRect(tx, ty, _bt.w, _bt.h); };
     if (_cs === 8) { _dB(_c.width * 0.1, _vh(10), _s8.t); _dB(_c.width * 0.9 - _bt.w, _vh(90) - _bt.h, _s8.b); }
@@ -142,6 +140,7 @@ function _dHE() {
     if (_c.height - _hy < -_vh(10)) { _x.fillStyle = 'gray'; _x.font = `${_vh(3)}px 'Courier New'`; _x.fillText('Press Any Button to Return', _c.width / 2, _vh(90)); }
 }
 
+/* MEMO: Added 1s cycle pulse animation to Aview image shadow in credits */
 function _dUI() {
     if (_he) { _dHE(); return; }
     if (_ie && _f < 1) {
@@ -156,7 +155,9 @@ function _dUI() {
         _x.fillStyle = 'yellow'; _x.font = `${_vh(4)}px 'Courier New'`; _x.fillText('Made By Aview / Completed By You', _c.width / 2, _vh(58));
         if (_iA.complete) {
             const iw = _vh(45), ih = (_iA.height / _iA.width) * iw, ly = _vh(95) - ih;
-            if (_tc >= 2) { _x.shadowBlur = 15; _x.shadowColor = "yellow"; } _x.drawImage(_iA, _c.width / 2 - iw / 2, ly, iw, ih); _x.shadowBlur = 0;
+            const p = (Math.sin(Date.now() / 318) + 1) / 2; // 1초 주기 진동 (1000ms / PI*2)
+            _x.shadowBlur = 5 + (p * 20); _x.shadowColor = "yellow"; 
+            _x.drawImage(_iA, _c.width / 2 - iw / 2, ly, iw, ih); _x.shadowBlur = 0;
         }
     } else if (_tr && _f >= 1 && !_ie) {
         _x.fillStyle = 'yellow'; _x.font = `bold ${_vh(7)}px 'Courier New'`; _x.textAlign = 'center'; _x.fillText(`STAGE ${_cs}`, _c.width / 2, _c.height / 2);
@@ -185,7 +186,7 @@ function _gL() {
     requestAnimationFrame(_gL);
 }
 
-/* MEMO: Touch response optimized and bug fixed for death count reset & target box visibility */
+/* MEMO: Reset death count ONLY when returning from the Ending screen (_ie) */
 function _hI(e) {
     if (e.cancelable) e.preventDefault(); 
     _tF(); 
@@ -215,7 +216,12 @@ function _hI(e) {
                 const iw = _vh(45), ih = (_iA.height / _iA.width) * iw, lx = _c.width / 2 - iw / 2, ly = _vh(95) - ih; 
                 if (cx > lx && cx < lx + iw && cy > ly && cy < ly + ih) { _he = true; _hy = 0; _uB(); return; } 
             }
-            _ie = false; _sc = false; _cs = 1; _gs = false; _pe = false; _f = 0; document.body.style.backgroundImage = "url('space_back1.gif')"; _sa(); _uB(); _bt.r();
+            
+            // 엔딩 화면(_ie)에서 돌아올 때만 데스 카운트 초기화
+            if (_ie) { _dc = 0; localStorage.setItem('deathCount', 0); }
+            
+            _ie = false; _sc = false; _cs = 1; _gs = false; _pe = false; _f = 0; 
+            document.body.style.backgroundImage = "url('space_back1.gif')"; _sa(); _uB(); _bt.r();
         } return;
     }
     if (_tr || _id || _pe) return;
