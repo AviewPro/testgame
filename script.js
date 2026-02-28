@@ -22,6 +22,31 @@ function _sa() { [_b1, _b2, _b3, _b4].forEach(a => { a.pause(); a.currentTime = 
 function _tF() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e => {}); }
 function _vh(p) { return (_c.height * p) / 100; }
 
+/* MEMO: Independent test functions for clearing data and skipping stages. */
+function _dTestButtons() {
+    if (_gs || _ie || _sc || _he || _tr) return;
+    const bw = _vh(15), bh = _vh(6), gap = _vh(2);
+    const x = _c.width - bw - gap, y1 = _c.height - bh * 2 - gap * 2, y2 = _c.height - bh - gap;
+    _x.font = `bold ${_vh(2.5)}px Arial`; _x.textAlign = 'center'; _x.textBaseline = 'middle';
+    _x.fillStyle = 'rgba(255, 0, 0, 0.7)'; _x.fillRect(x, y1, bw, bh);
+    _x.fillStyle = 'white'; _x.fillText('초기화', x + bw/2, y1 + bh/2);
+    _x.fillStyle = 'rgba(0, 0, 255, 0.7)'; _x.fillRect(x, y2, bw, bh);
+    _x.fillStyle = 'white'; _x.fillText('8강 점프', x + bw/2, y2 + bh/2);
+}
+
+function _hTestClick(cx, cy) {
+    if (_gs || _ie || _sc || _he || _tr) return false;
+    const bw = _vh(15), bh = _vh(6), gap = _vh(2);
+    const x = _c.width - bw - gap, y1 = _c.height - bh * 2 - gap * 2, y2 = _c.height - bh - gap;
+    if (cx > x && cx < x + bw) {
+        if (cy > y1 && cy < y1 + bh) { 
+            localStorage.clear(); location.reload(); return true; 
+        } else if (cy > y2 && cy < y2 + bh) { 
+            _cs = 8; _gs = true; _uB(); _bt.r(); return true; 
+        }
+    } return false;
+}
+
 const _bt = {
     w: 0, h: 0, x: 0, y: 0, vx: 0, vy: 0, g: 0, a: 0, va: 0,
     r: function() {
@@ -140,7 +165,7 @@ function _dHE() {
     if (_c.height - _hy < -_vh(10)) { _x.fillStyle = 'gray'; _x.font = `${_vh(3)}px 'Courier New'`; _x.fillText('Press Any Button to Return', _c.width / 2, _vh(90)); }
 }
 
-/* MEMO: Added static yellow shadow to Aview.png logo in Credit screen */
+/* MEMO: Static yellow shadow applied to Aview.png. Pulse effect removed. */
 function _dUI() {
     if (_he) { _dHE(); return; }
     if (_ie && _f < 1) {
@@ -170,6 +195,7 @@ function _dUI() {
             _x.strokeStyle = 'black'; _x.lineWidth = _vh(0.5); _x.strokeRect(bx, by, _bt.w, _bt.h);
             _x.fillStyle = 'black'; _x.font = `bold ${_vh(4)}px 'Courier New'`; _x.textBaseline = 'middle'; _x.fillText('CREDIT', _c.width / 2, by + _bt.h / 2); _x.textBaseline = 'alphabetic';
         }
+        _dTestButtons();
     }
     if (!_ie && !_sc && !_he) { _x.fillStyle = 'white'; _x.font = `bold ${_vh(3)}px 'Courier New'`; _x.textAlign = 'right'; _x.fillText(`Deaths: ${_dc}`, _c.width - _vh(2), _vh(5)); }
 }
@@ -187,13 +213,20 @@ function _gL() {
     requestAnimationFrame(_gL);
 }
 
-/* MEMO: Strict logic to reset deathCount only when exiting Normal Ending screen (_ie). 
-   Exiting Credit (_sc) or Hidden Ending (_he) preserves deathCount. */
+/* MEMO: Critical logic: deathCount resets ONLY when exiting the Normal Ending (_ie) screen. 
+   Hidden Ending (_he) and Credits (_sc) maintain the count. */
 function _hI(e) {
     if (e.cancelable) e.preventDefault(); _tF(); 
     if (e.type === 'mousedown' || e.type === 'touchstart') _md = true;
     if (e.type === 'mouseup' || e.type === 'mouseleave' || e.type === 'touchend') _md = false;
     
+    let cx, cy; const r = _c.getBoundingClientRect();
+    if (e.type.startsWith('touch')) { 
+        const t = e.touches[0] || e.changedTouches[0]; cx = t.clientX - r.left; cy = t.clientY - r.top; 
+    } else { cx = e.clientX - r.left; cy = e.clientY - r.top; }
+
+    if (_hTestClick(cx, cy)) return;
+
     if (_he) { 
         if (e.type === 'mousedown' || e.type === 'keydown' || e.type === 'touchstart') { 
             _he = false; _sc = false; _cs = 1; _gs = false; 
@@ -201,12 +234,6 @@ function _hI(e) {
         } return; 
     }
     
-    let cx, cy; const r = _c.getBoundingClientRect();
-    if (e.type.startsWith('touch')) { 
-        const t = e.touches[0] || e.changedTouches[0];
-        cx = t.clientX - r.left; cy = t.clientY - r.top; 
-    } else { cx = e.clientX - r.left; cy = e.clientY - r.top; }
-
     if (!_gs && !_id && !_ie && !_sc) {
         if (e.type === 'mousedown' || e.type === 'touchstart' || e.type === 'keydown') {
             if (_hc && _cs === 1 && (e.type !== 'keydown')) { 
