@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Start to Press Any Button</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #000 url('space_back1.gif') no-repeat center center fixed; background-size: cover; transition: background 0.5s; touch-action: none; -webkit-user-select: none; user-select: none; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="c"></canvas>
+    <script>
+        const _cv = document.getElementById('c');
+        const _cx = _cv.getContext('2d');
+        
+        // [메모] 히든 메시지 및 오디오 설정
+        const _HM = "저의 두번째 게임 Start to Press Any Button을 즐겨주셔서 감사합니다";
+        const _auB = new Audio('띠용.mp3'), _auD = new Audio('꺼지는소리.mp3'), 
+              _bg1 = new Audio('Air 8-bit.mp3'), _bg2 = new Audio('Symphony no. 25 8-bit.mp3'), 
+              _bg3 = new Audio('Winter, The Four Seasons 8-bit.mp3'), _bg4 = new Audio('Moonlight Sonata 8-bit.mp3');
+        [_bg1, _bg2, _bg3, _bg4].forEach(a => a.loop = true);
+        _bg1.volume = 0.1; _bg2.volume = 0.3; _bg3.volume = 0.3; _bg4.volume = 0.25;
+
+        const _imA = new Image(); _imA.src = 'Aview.png';
+
+        // [함수/메모] 사운드 제어
+        function _uB() {
+            if (_tr && _isE) return;
+            if (_isE || _isC || _isH) { if (_bg4.paused) { _sB(); _bg4.play().catch(e=>{}); } }
+            else if (_st >= 7) { if (_bg3.paused) { _sB(); _bg3.play().catch(e=>{}); } }
+            else if (_st >= 5) { if (_bg2.paused) { _sB(); _bg2.play().catch(e=>{}); } }
+            else { if (_bg1.paused) { _sB(); _bg1.play().catch(e=>{}); } }
+        }
+        function _sB() { [_bg1, _bg2, _bg3, _bg4].forEach(a => { a.pause(); a.currentTime = 0; }); }
+        function _tF() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>{}); }
+        function _vh(p) { return (_cv.height * p) / 100; }
+
+        // 상태 변수 (난독화)
+        let _gs = false, _dc = parseInt(localStorage.getItem('deathCount')) || 0, 
+            _tc = parseInt(localStorage.getItem('totalClears')) || 0, 
+            _hc = localStorage.getItem('hasCleared') === 'true', 
+            _st = 1, _tr = false, _pf = false, _fa = 0, _isE = false, 
+            _isC = false, _isH = false, _sy = 0, _isD = false, _dt = 0, 
+            _pt = [], _md = false, _ds = 1, _s8 = { t: false, b: false };
+
+        // [객체/메모] 버튼 물리 엔진
+        const _bt = {
+            w: 0, h: 0, x: 0, y: 0, vx: 0, vy: 0, g: 0, a: 0, va: 0,
+            r: function() {
+                this.w = _vh(25); this.h = _vh(10); 
+                this.x = _cv.width / 2 - this.w / 2; this.y = _vh(70);
+                this.vx = 0; this.vy = 0; this.a = 0; this.va = 0;
+                this.g = (_st === 1) ? _vh(0.04) * 0.25 : _vh(0.04);
+                _s8 = { t: false, b: false };
+            },
+            d: function() {
+                const _dS = (px, py) => {
+                    if (_isH) return; _cx.save(); _cx.translate(px + this.w / 2, py + this.h / 2); _cx.rotate(this.a);
+                    if (_md && !_isD && !_pf) { let s = 1 - (_ds * 0.15); _cx.scale(s, s); }
+                    if (_isD && _dt > 0) {
+                        _cx.strokeStyle = 'black'; _cx.lineWidth = 2; _cx.beginPath();
+                        for(let i=0;i<12;i++) { _cx.moveTo(-this.w/2+Math.random()*this.w, -this.h/2); _cx.lineTo(-this.w/2+Math.random()*this.w, this.h/2); }
+                        _cx.stroke();
+                    }
+                    if (!_isD && !_isE && !_isC && !(_tr && _fa > 0.5)) {
+                        _cx.fillStyle = 'white'; _cx.fillRect(-this.w/2, -this.h/2, this.w, this.h);
+                        _cx.strokeStyle = 'black'; _cx.lineWidth = _vh(0.5); _cx.strokeRect(-this.w/2, -this.h/2, this.w, this.h);
+                        _cx.fillStyle = 'black'; _cx.font = `bold ${_vh(4)}px 'Courier New'`; _cx.textAlign = 'center'; _cx.textBaseline = 'middle'; _cx.fillText('START', 0, 0);
+                    }
+                    _cx.restore();
+                };
+                _dS(this.x, this.y);
+                if (this.x < 0) _dS(this.x + _cv.width, this.y); else if (this.x + this.w > _cv.width) _dS(this.x - _cv.width, this.y);
+            }
+        };
+
+        // [함수/메모] 스테이지 관리
+        function _tD() {
+            if (_isD) return; _isD = true; _dt = 10; _auD.play();
+            for(let i=0;i<60;i++) _pt.push({x:_bt.x+_bt.w/2, y:_bt.y+_bt.h/2, vx:(Math.random()-0.5)*40, vy:(Math.random()-0.5)*40, s:Math.random()*15+5, l:1.0});
+            _dc++; localStorage.setItem('deathCount', _dc);
+            setTimeout(() => { _st=1; _gs=false; _isD=false; _pt=[]; _bt.r(); document.body.style.backgroundImage="url('space_back1.gif')"; _uB(); }, 1000);
+        }
+
+        function _pr() {
+            if(_pf) return; _pf = true;
+            setTimeout(() => { if(_st===8) _sE(); else _nS(); }, 500);
+        }
+
+        function _nS() {
+            if(_tr) return; _tr=true; _fa=0;
+            const iv = setInterval(() => {
+                if(_fa < 1) _fa += 0.05;
+                else {
+                    clearInterval(iv); _st++; 
+                    if(_st===7) document.body.style.backgroundImage="url('space_back4.gif')";
+                    else if(_st===8) document.body.style.backgroundImage="url('space_back3.gif')";
+                    _uB(); _gs=false; _pf=false; _bt.r();
+                    setTimeout(() => {
+                        const fi = setInterval(() => { if(_fa > 0) _fa -= 0.05; else { clearInterval(fi); _tr=false; } }, 16);
+                    }, 500);
+                }
+            }, 16);
+        }
+
+        function _sE() {
+            _isE=true; _tr=true; _fa=1; _sB(); _hc=true; localStorage.setItem('hasCleared','true'); 
+            _tc++; localStorage.setItem('totalClears',_tc);
+            document.body.style.backgroundImage="url('space_back2.gif')";
+            setTimeout(() => { _bg4.play(); _tr=false; const fi=setInterval(()=>{ if(_fa>0) _fa-=0.01; else {clearInterval(fi);} },16); }, 3000);
+        }
+
+        // [함수/메모] 드로잉 엔진
+        function _dO() {
+            if([2,5,6].includes(_st) && _gs && !_isD && !_tr) {
+                const w=_vh(2), h=_cv.height*0.46, lx=_cv.width*0.25, rx=_cv.width*0.75, y=(_cv.height-h)/2, t=Date.now()/500;
+                const _dSB = (bx) => {
+                    _cx.fillStyle='#400000'; _cx.fillRect(bx, y, w, h); _cx.strokeStyle='#FF3030'; _cx.lineWidth=_vh(0.8);
+                    for(let j=0;j<3;j++){ _cx.beginPath(); for(let k=0;k<h;k+=5){ const sx=bx+(w/2)+Math.sin(k/30+t+(j*2))*(w/2.5); if(k===0)_cx.moveTo(sx,y+k); else _cx.lineTo(sx,y+k); } _cx.stroke(); }
+                };
+                _dSB(lx); _dSB(rx);
+                const _hit = (bx) => (_bt.x < bx+w && _bt.x+_bt.w > bx && _bt.y < y+h && _bt.y+_bt.h > y);
+                if(_hit(lx) || _hit(rx)) _tD();
+            }
+        }
+
+        function _dUI() {
+            if(_isH) {
+                _cx.fillStyle='black'; _cx.fillRect(0,0,_cv.width,_cv.height);
+                _cx.textAlign='center'; _cx.fillStyle='white'; _cx.font=`${_vh(4)}px 'Courier New'`;
+                _cx.fillText(_HM, _cv.width/2, _cv.height-_sy); _sy+=1.2;
+                if(_cv.height-_sy < -_vh(10)) { _cx.fillStyle='gray'; _cx.font=`${_vh(3)}px 'Courier New'`; _cx.fillText('Press Any Button to Return', _cv.width/2, _vh(90)); }
+                return;
+            }
+            if(!_gs && !_isD && !_isE && !_isC && !_tr) {
+                _cx.fillStyle='white'; _cx.font=`${_vh(5)}px 'Courier New'`; _cx.textAlign='center'; 
+                _cx.fillText('Start to Press Any Button', _cv.width/2, _cv.height/2);
+                if(_hc && _st===1) {
+                    const bx=_cv.width/2-_bt.w/2, by=_bt.y+_vh(12); _cx.fillStyle='white'; _cx.fillRect(bx, by, _bt.w, _bt.h);
+                    _cx.strokeStyle='black'; _cx.lineWidth=_vh(0.5); _cx.strokeRect(bx, by, _bt.w, _bt.h);
+                    _cx.fillStyle='black'; _cx.font=`bold ${_vh(4)}px 'Courier New'`; _cx.textBaseline='middle'; 
+                    _cx.fillText('CREDIT', _cv.width/2, by+_bt.h/2); _cx.textBaseline='alphabetic';
+                }
+            }
+            if(_isE && _fa < 0.5) {
+                _cx.textAlign='center'; _cx.fillStyle='yellow'; _cx.font=`bold ${_vh(6)}px 'Courier New'`; _cx.fillText('Congratulations!', _cv.width/2, _vh(25));
+                _cx.fillStyle='white'; _cx.font=`${_vh(5)}px 'Courier New'`; _cx.fillText('Press Any Button to Start', _cv.width/2, _vh(50));
+                _cx.font=`bold ${_vh(12)}px 'Courier New'`; _cx.fillText(`Deaths: ${_dc}`, _cv.width/2, _vh(70));
+            } else if(_isC && _fa < 0.5) {
+                _cx.textAlign='center'; _cx.fillStyle='white'; _cx.font=`bold ${_vh(6)}px 'Courier New'`; _cx.fillText('ENDING CREDITS', _cv.width/2, _vh(20));
+                if(_imA.complete) {
+                    const iw=_vh(45), ih=(_imA.height/_imA.width)*iw, ly=_vh(95)-ih;
+                    if(_tc>=2){_cx.shadowBlur=15; _cx.shadowColor="yellow";} _cx.drawImage(_imA, _cv.width/2-iw/2, ly, iw, ih); _cx.shadowBlur=0;
+                }
+            }
+            if(!_isE && !_isC && !_isH) { _cx.fillStyle='white'; _cx.font=`bold ${_vh(3)}px 'Courier New'`; _cx.textAlign='right'; _cx.fillText(`Deaths: ${_dc}`, _cv.width-_vh(2), _vh(5)); }
+        }
+
+        // [함수/메모] 메인 루프
+        function _gL() {
+            _cx.clearRect(0,0,_cv.width,_cv.height);
+            // 점선 박스 렌더링 (게임 중일 때만)
+            if(_gs && !_isE && !_isC && !_isH && !_tr) {
+                _cx.setLineDash([10,10]); _cx.lineWidth=_vh(0.3);
+                const _dB = (tx, ty, c) => { _cx.strokeStyle=c?'yellow':'white'; _cx.strokeRect(tx,ty,_bt.w,_bt.h); };
+                if(_st===8) { _dB(_cv.width*0.1, _vh(10), _s8.t); _dB(_cv.width*0.9-_bt.w, _vh(90)-_bt.h, _s8.b); }
+                else { let tx=_cv.width/2-_bt.w/2, ty=_vh(30); if(_st===3||_st===5){tx=_cv.width*0.1; ty=_vh(10);} else if(_st===4||_st===6){tx=_cv.width*0.9-_bt.w; ty=_vh(90)-_bt.h;} _dB(tx, ty, false); }
+                _cx.setLineDash([]); _dO();
+                
+                // 물리 엔진
+                if(!_isD && !_pf) {
+                    _bt.vy+=_bt.g; _bt.x+=_bt.vx; _bt.y+=_bt.vy; _bt.a+=_bt.va; _bt.va*=0.98;
+                    if(_bt.x+_bt.w<0) _bt.x+=_cv.width; else if(_bt.x>_cv.width) _bt.x-=_cv.width;
+                    if(_bt.y>_cv.height) _tD(); 
+                    // 클리어 판정
+                    const _gO = (tx, ty) => {
+                        const x1=Math.max(_bt.x, tx), y1=Math.max(_bt.y, ty), x2=Math.min(_bt.x+_bt.w, tx+_bt.w), y2=Math.min(_bt.y+_bt.h, ty+_bt.h);
+                        return (Math.max(0,x2-x1)*Math.max(0,y2-y1))/(_bt.w*_bt.h);
+                    };
+                    if(_st===8) { if(_gO(_cv.width*0.1, _vh(10))>=0.75) _s8.t=true; if(_gO(_cv.width*0.9-_bt.w, _vh(90)-_bt.h)>=0.75) _s8.b=true; if(_s8.t && _s8.b) _pr(); }
+                    else { let tx=_cv.width/2-_bt.w/2, ty=_vh(30); if(_st===3||_st===5){tx=_cv.width*0.1; ty=_vh(10);} else if(_st===4||_st===6){tx=_cv.width*0.9-_bt.w; ty=_vh(90)-_bt.h;} if(_gO(tx, ty)>=0.75) _pr(); }
+                }
+            }
+            _pt.forEach((p,i)=>{ p.x+=p.vx; p.y+=p.vy; p.l-=0.02; _cx.fillStyle=`rgba(255,255,255,${p.l})`; _cx.fillRect(p.x,p.y,p.s,p.s); if(p.l<=0)_pt.splice(i,1); });
+            if(_dt>0)_dt--; _bt.d(); _dUI();
+            if(_fa>0) { _cx.fillStyle=`rgba(0,0,0,${_fa})`; _cx.fillRect(0,0,_cv.width,_cv.height); if(_tr) { _cx.fillStyle='yellow'; _cx.font=`bold ${_vh(7)}px 'Courier New'`; _cx.textAlign='center'; _cx.fillText(`STAGE ${_st}`, _cv.width/2, _cv.height/2); } }
+            requestAnimationFrame(_gL);
+        }
+
+        // [함수/메모] 통합 입력 처리
+        function _hI(e) {
+            _tF(); if(e.type==='mousedown'||e.type==='touchstart') _md=true; if(e.type==='mouseup'||e.type==='mouseleave'||e.type==='touchend') _md=false;
+            if(_isH) { if(e.type==='mousedown'||e.type==='keydown'||e.type==='touchstart'){ _isH=false; _isC=false; _st=1; _gs=false; _dc=0; localStorage.setItem('deathCount',0); document.body.style.backgroundImage="url('space_back1.gif')"; _sB(); _uB(); _bt.r(); } return; }
+            let mx, my; const rect = _cv.getBoundingClientRect();
+            if(e.type.startsWith('touch')){ mx=e.touches[0]?.clientX-rect.left; my=e.touches[0]?.clientY-rect.top; } else { mx=e.clientX-rect.left; my=e.clientY-rect.top; }
+            if(!_gs && !_isD && !_isE && !_isC && !_tr) {
+                if(e.type==='mousedown'||e.type==='touchstart'){
+                    const bx=_cv.width/2-_bt.w/2, by=_bt.y+_vh(12);
+                    if(_hc && _st===1 && mx>bx && mx<bx+_bt.w && my>by && my<by+_bt.h){ _isC=true; document.body.style.backgroundImage="url('space_back2.gif')"; _uB(); return; }
+                    _gs=true; _uB();
+                } else if(e.type==='keydown'){_gs=true; _uB();} return;
+            }
+            if((_isE||_isC) && !_tr) {
+                if(e.type==='mousedown'||e.type==='touchstart'||e.type==='keydown'){
+                    if(_isC && _tc>=2 && _imA.complete) { const iw=_vh(45), ih=(_imA.height/_imA.width)*iw, lx=_cv.width/2-iw/2, ly=_vh(95)-ih; if(mx>lx && mx<lx+iw && my>ly && my<ly+ih){ _isH=true; _sy=0; _uB(); return; } }
+                    _isE=false; _isC=false; _st=1; _gs=false; _pf=false; _fa=0; document.body.style.backgroundImage="url('space_back1.gif')"; _sB(); _uB(); _bt.r();
+                } return;
+            }
+            if(_tr || _isD || _pf) return;
+            if(e.type==='mousedown' || e.type==='touchstart') {
+                const cx=_bt.x+_bt.w/2, cy=_bt.y+_bt.h/2, dx=mx-cx, dy=my-cy, cos=Math.cos(-_bt.a), sin=Math.sin(-_bt.a), rX=dx*cos-dy*sin, rY=dx*sin+dy*cos;
+                if(Math.abs(rX)<=_bt.w/2 && Math.abs(rY)<=_bt.h/2) {
+                    _ds=Math.min(Math.sqrt(dx*dx+dy*dy)/Math.sqrt(Math.pow(_bt.w/2,2)+Math.pow(_bt.h/2,2)),1);
+                    _auB.currentTime=0; _auB.volume=0.1+(_ds*0.5); _auB.play();
+                    let m=(_st===1)?0.05:0.2, b=(_st===1)?_vh(0.3):_vh(1.2); _bt.vx=(cx-mx)*m; _bt.vy=(cy-my)*m-b;
+                    if(_st>=7) _bt.va+=(dx/_bt.w)*0.15;
+                }
+            }
+        }
+
+        _cv.addEventListener('touchstart', (e)=>{e.preventDefault(); _hI(e);}, {passive:false});
+        _cv.addEventListener('mousedown', _hI); window.addEventListener('mouseup', _hI); document.addEventListener('keydown', _hI);
+        window.addEventListener('resize', ()=>{ _cv.width=window.innerWidth; _cv.height=window.innerHeight; _bt.r(); });
+        _cv.width=window.innerWidth; _cv.height=window.innerHeight; _bt.r(); _gL();
+    </script>
+</body>
+</html>
